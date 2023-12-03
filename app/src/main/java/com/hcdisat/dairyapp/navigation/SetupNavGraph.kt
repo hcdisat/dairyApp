@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationScreen
 
 @Composable
 fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController) {
@@ -18,7 +19,9 @@ fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController
 }
 
 fun NavGraphBuilder.authentication() {
-    composable(route = Screen.Authentication.route) {}
+    composable(route = Screen.Authentication.route) {
+        AuthenticationScreen(loadingState = false) {}
+    }
 }
 
 fun NavGraphBuilder.home() {

@@ -31,8 +31,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hcdisat.dairyapp.R
@@ -99,36 +97,22 @@ fun GoogleButton(
     }
 }
 
-data class GoogleButtonParameters(
-    val primaryText: String,
-    val secondaryText: String,
-    val loadingState: Boolean
-)
-
-class GoogleButtonProvider :
-    PreviewParameterProvider<GoogleButtonParameters> {
-    override val values: Sequence<GoogleButtonParameters> = sequenceOf(
-        GoogleButtonParameters(
-            primaryText = "Sign in with Google",
-            secondaryText = "Please wait...",
-            loadingState = false
-        ),
-        GoogleButtonParameters(
-            primaryText = "Sign in with Google",
-            secondaryText = "Please wait...",
-            loadingState = true
-        ),
-    )
+@Preview
+@Composable
+private fun GoogleButtonPreview() {
+    GoogleButton(
+        primaryText = "Sign in with Google",
+        secondaryText = "Please wait...",
+        loadingState = false
+    ) {}
 }
 
 @Preview
 @Composable
-private fun GoogleButtonPreview(
-    @PreviewParameter(GoogleButtonProvider::class) parameters: GoogleButtonParameters
-) {
+private fun GoogleButtonLoadingPreview() {
     GoogleButton(
-        primaryText = parameters.primaryText,
-        secondaryText = parameters.secondaryText,
-        loadingState = parameters.loadingState
+        primaryText = "Sign in with Google",
+        secondaryText = "Please wait...",
+        loadingState = true
     ) {}
 }
