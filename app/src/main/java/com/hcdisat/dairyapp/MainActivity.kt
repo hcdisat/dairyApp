@@ -3,14 +3,10 @@ package com.hcdisat.dairyapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
+import com.hcdisat.dairyapp.navigation.Screen
+import com.hcdisat.dairyapp.navigation.SetupNavGraph
 import com.hcdisat.dairyapp.ui.theme.DairyAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,7 +15,11 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             DairyAppTheme {
-                //
+                val navController = rememberNavController()
+                SetupNavGraph(
+                    startDestination = Screen.Authentication,
+                    navHostController = navController
+                )
             }
         }
     }
