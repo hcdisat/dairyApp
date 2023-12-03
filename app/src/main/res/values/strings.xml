@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">DairyApp</string>
+    <string name="google_logo_content_description">google logo</string>
+    <string name="auth_greeting">Welcome back</string>
+    <string name="auth_greeting_message">Please sign in to continue.</string>
+    <string name="google_button_primary_text">Sign in with Google</string>
+    <string name="google_button_secondary_text">Please wait...</string>
 </resources>
