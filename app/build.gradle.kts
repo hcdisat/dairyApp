@@ -112,6 +112,9 @@ dependencies {
     // MessageBar - compose
     implementation("com.github.stevdza-san:MessageBarCompose:1.0.8")
 
+    // OneTapCompose
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.9")
+
     // Desugar JDK
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
