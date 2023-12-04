@@ -1,9 +1,14 @@
 package com.hcdisat.dairyapp.feature_auth.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
 import com.hcdisat.dairyapp.feature_auth.ui.components.AuthenticationContent
 import com.hcdisat.dairyapp.settings.Constants.CLIENT_ID
@@ -26,6 +31,10 @@ fun AuthenticationScreen(
 ) {
     val (sessionState, loadingState) = authenticationState
     Scaffold(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+            .navigationBarsPadding(),
         content = {
             ContentWithMessageBar(messageBarState = messageBarState) {
                 AuthenticationContent(
