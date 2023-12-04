@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
-import com.hcdisat.MainViewModel
 import com.hcdisat.dairyapp.abstraction.networking.SessionState
 import com.hcdisat.dairyapp.navigation.Screen
 import com.hcdisat.dairyapp.navigation.SetupNavGraph

@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">DairyApp</string>
     <string name="google_logo_content_description">google logo</string>
+    <string name="app_logo_content_description">Dairy logo</string>
     <string name="auth_greeting">Welcome back</string>
     <string name="auth_greeting_message">Please sign in to continue.</string>
     <string name="google_button_primary_text">Sign in with Google</string>
-    <string name="google_button_secondary_text">Please wait...</string>
+    <string name="google_button_secondary_text">Please wait…</string>
+    <string name="add_new_note_cd">Add new note</string>
+    <string name="home_top_bar_title">Dairy</string>
+    <string name="sort_by_date_icon_cd">Sort by date</string>
+    <string name="drawer_logout_label">logout</string>
 </resources>

@@ -1,7 +1,11 @@
 package com.hcdisat.dairyapp.navigation
 
+import android.util.Log
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -13,14 +17,18 @@ import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationScreen
 import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationViewModel
 import com.hcdisat.dairyapp.feature_home.HomeScreen
 import com.hcdisat.dairyapp.feature_home.HomeViewModel
+import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
+import kotlinx.coroutines.launch
 
 @Composable
 fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = startDestination.route) {
-        home()
         write()
+        home {
+            navHostController.navigate(Screen.Write(it).route)
+        }
         authentication {
             navHostController.navigate(Screen.Home.route)
         }
@@ -49,11 +57,19 @@ fun NavGraphBuilder.authentication(onLoginSuccess: () -> Unit) {
     }
 }
 
-fun NavGraphBuilder.home() {
+fun NavGraphBuilder.home(onAddNewEntry: (String?) -> Unit) {
     composable(route = Screen.Home.route) {
         val viewModel: HomeViewModel = hiltViewModel()
-        HomeScreen {
-            viewModel.logout()
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
+
+        HomeScreen(drawerState = drawerState) {
+            when (this) {
+                is HomeEvent.AddNewEntry -> onAddNewEntry(this.entryId)
+                is HomeEvent.MenuClicked -> Unit
+                is HomeEvent.None -> viewModel.logout()
+                is HomeEvent.OpenDrawer -> scope.launch { drawerState.open() }
+            }
         }
     }
 }
@@ -66,5 +82,10 @@ fun NavGraphBuilder.write() {
             nullable = true
             defaultValue = true
         })
-    ) {}
+    ) {
+        Log.d(
+            "NavGraphBuilder",
+            "write: ${it.arguments?.getString(NavigationConstants.WRITE_ARGUMENT)}"
+        )
+    }
 }

@@ -1,4 +1,4 @@
-package com.hcdisat
+package com.hcdisat.dairyapp
 
 import androidx.lifecycle.ViewModel
 import com.hcdisat.dairyapp.abstraction.networking.Session
