@@ -5,7 +5,11 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -18,6 +22,8 @@ import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationViewModel
 import com.hcdisat.dairyapp.feature_home.HomeScreen
 import com.hcdisat.dairyapp.feature_home.HomeViewModel
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
+import com.hcdisat.dairyapp.presentation.components.AppAlertDialog
+import com.hcdisat.dairyapp.presentation.components.DialogEvent
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import kotlinx.coroutines.launch
@@ -26,12 +32,11 @@ import kotlinx.coroutines.launch
 fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = startDestination.route) {
         write()
-        home {
-            navHostController.navigate(Screen.Write(it).route)
-        }
-        authentication {
-            navHostController.navigate(Screen.Home.route)
-        }
+        authentication { navHostController.navigate(Screen.Home.route) }
+        home(
+            onAddNewEntry = { navHostController.navigate(Screen.Write(it).route) },
+            onLoggedOut = { navHostController.navigate(Screen.Authentication.route) }
+        )
     }
 }
 
@@ -57,20 +62,41 @@ fun NavGraphBuilder.authentication(onLoginSuccess: () -> Unit) {
     }
 }
 
-fun NavGraphBuilder.home(onAddNewEntry: (String?) -> Unit) {
+fun NavGraphBuilder.home(
+    onAddNewEntry: (String?) -> Unit,
+    onLoggedOut: () -> Unit
+) {
     composable(route = Screen.Home.route) {
         val viewModel: HomeViewModel = hiltViewModel()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        var isDialogDismissed by remember { mutableStateOf(true) }
         val scope = rememberCoroutineScope()
 
         HomeScreen(drawerState = drawerState) {
             when (this) {
                 is HomeEvent.AddNewEntry -> onAddNewEntry(this.entryId)
                 is HomeEvent.MenuClicked -> Unit
-                is HomeEvent.None -> viewModel.logout()
                 is HomeEvent.OpenDrawer -> scope.launch { drawerState.open() }
+                is HomeEvent.Logout -> {
+                    isDialogDismissed = false
+                }
             }
         }
+
+        AppAlertDialog(
+            isDismissed = isDialogDismissed,
+            message = "You are about to logout from the Dairy... Do you want to proceeded?",
+            title = "Login out",
+            confirmButtonText = "Yes",
+            dismissButtonText = "No",
+            onEvent = {
+                isDialogDismissed = true
+                if (it == DialogEvent.POSITIVE) {
+                    viewModel.logout()
+                    onLoggedOut()
+                }
+            }
+        )
     }
 }
 

@@ -31,7 +31,7 @@ fun HomeTopBar(onEvent: HomeEventAction) {
             }
         },
         actions = {
-            IconButton(onClick = { HomeEvent.None.onEvent() }) {
+            IconButton(onClick = { HomeEvent.Logout.onEvent() }) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = stringResource(R.string.sort_by_date_icon_cd),

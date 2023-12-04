@@ -29,7 +29,7 @@ fun HomeScreen(
         drawerState = drawerState,
         onEvent = {
             when (this) {
-                NavigationDrawerEvent.Logout -> HomeEvent.None.onEvent()
+                NavigationDrawerEvent.Logout -> HomeEvent.Logout.onEvent()
             }
         }
     ) {
@@ -44,7 +44,7 @@ fun HomeScreen(
                 }
             }
         ) {
-            Logout { HomeEvent.None.onEvent() }
+            Logout { HomeEvent.Logout.onEvent() }
         }
     }
 }
