@@ -1,9 +1,9 @@
 package com.hcdisat.dairyapp.dataaccess.di
 
+import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabaseImpl
 import com.hcdisat.dairyapp.dataaccess.realm.QueryProvider
 import com.hcdisat.dairyapp.dataaccess.realm.QueryProviderImpl
-import com.hcdisat.dairyapp.dataaccess.realm.repository.MongoDatabase
 import com.hcdisat.dairyapp.settings.Constants.APP_ID
 import dagger.Binds
 import dagger.Module
