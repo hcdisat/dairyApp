@@ -8,6 +8,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.time.Duration
 
+fun Instant.toLocalDate(): LocalDate {
+    return atZone(ZoneId.systemDefault()).toLocalDate()
+}
+
 fun LocalDate.toPresentationDate(): DairyPresentationDate {
     requireNotNull(this.dayOfMonth)
     requireNotNull(this.dayOfWeek)

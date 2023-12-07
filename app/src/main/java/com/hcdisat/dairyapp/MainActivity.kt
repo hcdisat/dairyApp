@@ -9,7 +9,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.hcdisat.dairyapp.abstraction.networking.SessionState
-import com.hcdisat.dairyapp.dataaccess.realm.repository.MongoDatabase
+import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
 import com.hcdisat.dairyapp.navigation.Screen
 import com.hcdisat.dairyapp.navigation.SetupNavGraph
 import com.hcdisat.dairyapp.ui.theme.DairyAppTheme

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.hcdisat.dairyapp.feature_home.model
+package com.hcdisat.dairyapp.feature_home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +25,7 @@ import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true)
 @Composable
 fun HomeContent(
