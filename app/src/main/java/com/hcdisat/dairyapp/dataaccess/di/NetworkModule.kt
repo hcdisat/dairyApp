@@ -1,11 +1,11 @@
-package com.hcdisat.dairyapp.networking.di
+package com.hcdisat.dairyapp.dataaccess.di
 
 import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
 import com.hcdisat.dairyapp.abstraction.networking.SessionService
-import com.hcdisat.dairyapp.networking.atlas.CreateAccountServiceImpl
-import com.hcdisat.dairyapp.networking.atlas.LogoutAccountServiceImpl
-import com.hcdisat.dairyapp.networking.atlas.SessionServiceImpl
+import com.hcdisat.dairyapp.dataaccess.realm.services.CreateAccountServiceImpl
+import com.hcdisat.dairyapp.dataaccess.realm.services.LogoutAccountServiceImpl
+import com.hcdisat.dairyapp.dataaccess.realm.services.SessionServiceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

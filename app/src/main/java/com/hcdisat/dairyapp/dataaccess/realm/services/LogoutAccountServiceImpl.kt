@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.networking.atlas
+package com.hcdisat.dairyapp.dataaccess.realm.services
 
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
 import com.hcdisat.dairyapp.abstraction.networking.LogoutResult

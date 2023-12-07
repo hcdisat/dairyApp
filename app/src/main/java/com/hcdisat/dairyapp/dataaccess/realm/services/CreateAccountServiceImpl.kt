@@ -1,6 +1,5 @@
-package com.hcdisat.dairyapp.networking.atlas
+package com.hcdisat.dairyapp.dataaccess.realm.services
 
-import android.util.Log
 import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
 import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
 import io.realm.kotlin.mongodb.App
@@ -19,7 +18,6 @@ class CreateAccountServiceImpl @Inject constructor(
                 AccountSessionState.LOGGED_OUT
         }.getOrElse {
             if (it is CancellationException) throw it
-            Log.d("CreateAccountServiceImpl", "createWithGoogle: $it")
             it.printStackTrace()
             AccountSessionState.ERROR
         }
