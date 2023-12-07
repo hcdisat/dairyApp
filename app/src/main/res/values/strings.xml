@@ -13,4 +13,6 @@
     <string name="image_gallery_cd">Image Gallery</string>
     <string name="show_gallery_label">Show Gallery</string>
     <string name="hide_gallery_label">Hide Gallery</string>
+    <string name="empty_diary_title">Empty Diary</string>
+    <string name="write_something_title">Write Something</string>
 </resources>

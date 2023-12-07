@@ -13,11 +13,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.hcdisat.dairyapp.R
+import com.hcdisat.dairyapp.feature_home.model.HomeContent
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 import com.hcdisat.dairyapp.presentation.components.AppNavigationDrawer
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
-import com.hcdisat.dairyapp.presentation.components.Logout
 import com.hcdisat.dairyapp.presentation.components.NavigationDrawerEvent
 
 @Composable
@@ -44,11 +44,13 @@ fun HomeScreen(
                 }
             }
         ) {
-            Logout { HomeEvent.Logout.onEvent() }
+            HomeContent(
+                diaries = mapOf(),
+                onClick = {}
+            )
         }
     }
 }
-
 
 data class HomeScreenProvider(
     override val values: Sequence<DrawerValue> = sequenceOf(
