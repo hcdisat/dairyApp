@@ -10,4 +10,7 @@
     <string name="home_top_bar_title">Dairy</string>
     <string name="sort_by_date_icon_cd">Sort by date</string>
     <string name="drawer_logout_label">logout</string>
+    <string name="image_gallery_cd">Image Gallery</string>
+    <string name="show_gallery_label">Show Gallery</string>
+    <string name="hide_gallery_label">Hide Gallery</string>
 </resources>
