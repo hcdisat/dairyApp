@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.presentation.components.extensions
+package com.hcdisat.dairyapp.presentation.extensions
 
 import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
 import java.time.Instant
@@ -6,11 +6,6 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlin.time.Duration
-
-fun Instant.toLocalDate(): LocalDate {
-    return atZone(ZoneId.systemDefault()).toLocalDate()
-}
 
 fun LocalDate.toPresentationDate(): DairyPresentationDate {
     requireNotNull(this.dayOfMonth)
@@ -33,6 +28,3 @@ fun Instant.toTimeString(format: String = "hh:mm a"): String {
 
     return runCatching { formatter.format(this) }.getOrElse { "" }
 }
-
-fun Duration.toTimeString(format: String = "hh:mm a"): String =
-    Instant.ofEpochMilli(this.inWholeMilliseconds).toTimeString(format)

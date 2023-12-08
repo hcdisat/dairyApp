@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.presentation.components.extensions.toPresentationDate
 import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
+import com.hcdisat.dairyapp.presentation.extensions.toPresentationDate
 import java.time.LocalDate
 
 @Composable

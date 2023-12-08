@@ -36,10 +36,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.presentation.components.extensions.toTimeString
 import com.hcdisat.dairyapp.presentation.components.model.DiaryHeaderPresentation
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import com.hcdisat.dairyapp.presentation.extensions.toTimeString
 import com.hcdisat.dairyapp.ui.theme.Elevation
 import java.time.Instant
 
@@ -106,7 +106,7 @@ fun DiaryHolder(
                     }
 
                     AnimatedVisibility(visible = isGalleryOpen) {
-                        Gallery(images = listOf("", "", "", "", "", "", ""))
+                        Gallery(images = diary.images)
                     }
                 }
             }

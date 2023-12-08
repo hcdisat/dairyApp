@@ -4,7 +4,7 @@ import com.hcdisat.dairyapp.abstraction.domain.model.DomainDiaryState
 import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
 import com.hcdisat.dairyapp.dataaccess.realm.model.RequestState
-import com.hcdisat.dairyapp.domain.extensions.toDomainDiary
+import com.hcdisat.dairyapp.domain.extensions.toDiaryResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -17,7 +17,7 @@ class MongoRepositoryImpl @Inject constructor(
             when (requestState) {
                 is RequestState.Error -> DomainDiaryState.Failed(requestState.throwable)
                 is RequestState.Success -> DomainDiaryState.Completed(
-                    requestState.diaries.map { it.toDomainDiary() }
+                    diaries = requestState.diaries.toDiaryResponse()
                 )
             }
         }

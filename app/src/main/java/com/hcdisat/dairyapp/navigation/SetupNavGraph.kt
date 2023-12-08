@@ -71,8 +71,12 @@ fun NavGraphBuilder.home(
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var isDialogDismissed by remember { mutableStateOf(true) }
         val scope = rememberCoroutineScope()
+        val homeState by viewModel.homeState
 
-        HomeScreen(drawerState = drawerState) {
+        HomeScreen(
+            drawerState = drawerState,
+            diaryResult = homeState,
+        ) {
             when (this) {
                 is HomeEvent.AddNewEntry -> onAddNewEntry(this.entryId)
                 is HomeEvent.MenuClicked -> Unit

@@ -12,6 +12,6 @@ interface QueryProvider {
 class QueryProviderImpl @Inject constructor() : QueryProvider {
     override fun filterQuery(): QueryDetails = QueryDetails(
         query = "ownerId == $0",
-        name = "All Diaries"
+        name = "diary-list"
     )
 }
