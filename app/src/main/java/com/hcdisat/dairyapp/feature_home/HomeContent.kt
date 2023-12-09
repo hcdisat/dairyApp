@@ -3,11 +3,13 @@
 package com.hcdisat.dairyapp.feature_home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -87,7 +89,10 @@ private fun LoadedContent(
             stickyHeader(key = date.toString()) {
                 DiaryDate(
                     date = date,
-                    modifier = Modifier.padding(vertical = 14.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colorScheme.surface)
+                        .padding(vertical = 14.dp)
                 )
             }
 

@@ -148,7 +148,6 @@ private fun GalleryToggle(
 @Composable
 private fun DiaryHeader(diaryHeader: DiaryHeaderPresentation) {
     val (mood, time) = diaryHeader
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
