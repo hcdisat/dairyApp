@@ -81,7 +81,7 @@ private fun LoadedContent(
         modifier = Modifier
             .padding(horizontal = 24.dp)
             .navigationBarsPadding()
-            .padding(top = paddingValues.calculateTopPadding())
+            .padding(top = paddingValues.calculateTopPadding()),
     ) {
         diaries.forEach { (date, diaries) ->
             stickyHeader(key = date.toString()) {

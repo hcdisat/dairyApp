@@ -88,7 +88,7 @@ fun DiaryHolder(
                     )
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(vertical = 16.dp)
                 ) {
                     Text(
@@ -106,7 +106,10 @@ fun DiaryHolder(
                     }
 
                     AnimatedVisibility(visible = isGalleryOpen) {
-                        Gallery(images = diary.images)
+                        Gallery(
+                            images = diary.images,
+                            modifier = Modifier.padding(start = 12.dp)
+                        )
                     }
                 }
             }
@@ -126,7 +129,7 @@ private fun GalleryToggle(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clickable { onToggle() },
-        style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
+        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface)
     )
 }
 
@@ -169,7 +172,7 @@ private fun MoodInHeader(mood: Mood = Mood.Neutral, withTextStyle: TextStyle? = 
 
 @Preview(showBackground = true)
 @Composable
-fun DiaryHeaderPreview() {
+private fun DiaryHeaderPreview() {
     DiaryHeader(
         DiaryHeaderPresentation(
             mood = Mood.Neutral,
@@ -180,7 +183,7 @@ fun DiaryHeaderPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun DiaryHolderPreview() {
+private fun DiaryHolderPreview() {
     val singleDiary = PresentationDiary(
         id = "5631",
         title = "Good relations with the Wookiees, I have.",
@@ -193,14 +196,16 @@ fun DiaryHolderPreview() {
     val diaries = sequenceOf(
         singleDiary,
         singleDiary.copy(
-            images = listOf("", "", "", "", "", "", "", "", "", ""),
+            images = listOf("", "", "", "", "", "", ""),
             mood = Mood.Angry
         )
     )
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
         diaries.forEach {
             DiaryHolder(diary = it)
         }

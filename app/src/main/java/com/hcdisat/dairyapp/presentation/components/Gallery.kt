@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.MaterialTheme
@@ -55,11 +54,7 @@ fun Gallery(
         }
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                spaceBetween,
-                alignment = Alignment.CenterHorizontally
-            ),
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.spacedBy(spaceBetween)
         ) {
             images.take(imageCount).forEach { image ->
                 AsyncImage(

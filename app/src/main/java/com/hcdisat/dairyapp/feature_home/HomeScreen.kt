@@ -67,7 +67,16 @@ private fun getLoadedState(): Map<DairyPresentationDate, List<PresentationDiary>
         description = "My new Diary",
         id = "123",
         time = "04:30 PM",
-        mood = Mood.Happy
+        mood = Mood.Happy,
+        images = listOf(
+            "https://najlepszamuzyka.pl/43036-large_default/korn-issues-2lp-mov-edition-180-gram-pressing.jpg",
+            "https://cdn.afew-store.com/assets/40/402366/1200/adidas-originals-x-korn-campus-00s-cblack-ftwwht-ricpur-ig0792-footwear%20%3E%20sneaker-packshots-30.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLcjoT9_OPx7rvI4JcNXd9XR0hPjKGBzsOuXpdGJiiWYfVjmdDwDH4BOP18CCfkLcL65A&usqp=CAU",
+            "https://upload.wikimedia.org/wikipedia/en/thumb/1/16/Korn-Korn.jpg/220px-Korn-Korn.jpg",
+            "https://w0.peakpx.com/wallpaper/858/333/HD-wallpaper-korn-rock-band.jpg",
+            "https://w0.peakpx.com/wallpaper/858/333/HD-wallpaper-korn-rock-band.jpg",
+            "https://w0.peakpx.com/wallpaper/858/333/HD-wallpaper-korn-rock-band.jpg",
+        )
     )
 
     val date = DairyPresentationDate(

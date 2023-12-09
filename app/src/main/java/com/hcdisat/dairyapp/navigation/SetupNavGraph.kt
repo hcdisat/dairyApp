@@ -10,7 +10,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -71,7 +74,10 @@ fun NavGraphBuilder.home(
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var isDialogDismissed by remember { mutableStateOf(true) }
         val scope = rememberCoroutineScope()
-        val homeState by viewModel.homeState
+        val homeState by viewModel.homeState.collectAsStateWithLifecycle(
+            lifecycle = LocalLifecycleOwner.current.lifecycle,
+            minActiveState = Lifecycle.State.RESUMED
+        )
 
         HomeScreen(
             drawerState = drawerState,
