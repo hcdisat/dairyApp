@@ -15,4 +15,6 @@
     <string name="hide_gallery_label">Hide Gallery</string>
     <string name="empty_diary_title">Empty Diary</string>
     <string name="write_something_title">Write Something</string>
+    <string name="back_navigation_icon_cd">Navigate back</string>
+    <string name="select_date_cd">Select date</string>
 </resources>
