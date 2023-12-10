@@ -2,7 +2,6 @@
 
 package com.hcdisat.dairyapp.navigation
 
-import android.util.Log
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -29,6 +28,7 @@ import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationViewModel
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.ui.HomeScreen
 import com.hcdisat.dairyapp.feature_home.ui.HomeViewModel
+import com.hcdisat.dairyapp.feature_write.ui.WriteScreen
 import com.hcdisat.dairyapp.presentation.components.AppAlertDialog
 import com.hcdisat.dairyapp.presentation.components.DialogEvent
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = startDestination.route) {
-        write()
+        write { navHostController.popBackStack() }
         authentication { navHostController.navigate(Screen.Home.route) }
         home(
             onAddNewEntry = { navHostController.navigate(Screen.Write.route) },
@@ -119,7 +119,7 @@ fun NavGraphBuilder.home(
     }
 }
 
-fun NavGraphBuilder.write() {
+fun NavGraphBuilder.write(onBackPressed: () -> Unit) {
     composable(
         route = Screen.Write.route,
         arguments = listOf(navArgument(name = NavigationConstants.WRITE_ARGUMENT) {
@@ -128,9 +128,6 @@ fun NavGraphBuilder.write() {
             defaultValue = null
         })
     ) {
-        Log.d(
-            "NavGraphBuilder",
-            "write: ${it.arguments?.getString(NavigationConstants.WRITE_ARGUMENT)}"
-        )
+        WriteScreen(onBackPressed = onBackPressed)
     }
 }
