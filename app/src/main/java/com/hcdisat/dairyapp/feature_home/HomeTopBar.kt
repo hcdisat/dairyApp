@@ -9,17 +9,26 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopBar(onEvent: HomeEventAction) {
+fun HomeTopBar(
+    modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    onEvent: HomeEventAction = {}
+) {
     TopAppBar(
+        modifier = modifier,
+        scrollBehavior = scrollBehavior,
         title = { Text(text = stringResource(R.string.home_top_bar_title)) },
         navigationIcon = {
             IconButton(onClick = { HomeEvent.MenuClicked.onEvent() }) {
@@ -40,10 +49,4 @@ fun HomeTopBar(onEvent: HomeEventAction) {
             }
         }
     )
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun HomeTopBarPreview() {
-    HomeTopBar {}
 }
