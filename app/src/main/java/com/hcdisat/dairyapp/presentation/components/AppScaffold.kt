@@ -1,10 +1,6 @@
 package com.hcdisat.dairyapp.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,10 +18,7 @@ fun AppScaffold(
 ) {
     Scaffold(
         topBar = topBar,
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+        modifier = modifier,
         floatingActionButton = floatingAction,
         content = { paddingValues ->
             messageBarState?.let { messageBarState ->
@@ -39,6 +32,6 @@ fun AppScaffold(
 
 @Preview
 @Composable
-fun AppScaffoldPreview() {
+private fun AppScaffoldPreview() {
     AppScaffold { Logout {} }
 }
