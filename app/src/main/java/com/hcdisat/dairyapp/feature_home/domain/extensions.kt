@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_home
+package com.hcdisat.dairyapp.feature_home.domain
 
 import com.hcdisat.dairyapp.abstraction.domain.model.DomainDiary
 import com.hcdisat.dairyapp.presentation.components.model.Mood

@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_home
+package com.hcdisat.dairyapp.feature_home.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange

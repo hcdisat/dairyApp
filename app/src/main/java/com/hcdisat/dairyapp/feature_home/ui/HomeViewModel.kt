@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_home
+package com.hcdisat.dairyapp.feature_home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

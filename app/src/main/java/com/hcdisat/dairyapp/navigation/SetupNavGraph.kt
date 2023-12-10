@@ -26,9 +26,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationScreen
 import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationViewModel
-import com.hcdisat.dairyapp.feature_home.HomeScreen
-import com.hcdisat.dairyapp.feature_home.HomeViewModel
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
+import com.hcdisat.dairyapp.feature_home.ui.HomeScreen
+import com.hcdisat.dairyapp.feature_home.ui.HomeViewModel
 import com.hcdisat.dairyapp.presentation.components.AppAlertDialog
 import com.hcdisat.dairyapp.presentation.components.DialogEvent
 import com.stevdzasan.messagebar.rememberMessageBarState
