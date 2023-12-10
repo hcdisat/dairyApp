@@ -41,7 +41,7 @@ fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController
         write()
         authentication { navHostController.navigate(Screen.Home.route) }
         home(
-            onAddNewEntry = { navHostController.navigate(Screen.Write(it).route) },
+            onAddNewEntry = { navHostController.navigate(Screen.Write.route) },
             onLoggedOut = { navHostController.navigate(Screen.Authentication.route) }
         )
     }
@@ -125,7 +125,7 @@ fun NavGraphBuilder.write() {
         arguments = listOf(navArgument(name = NavigationConstants.WRITE_ARGUMENT) {
             type = NavType.StringType
             nullable = true
-            defaultValue = true
+            defaultValue = null
         })
     ) {
         Log.d(
