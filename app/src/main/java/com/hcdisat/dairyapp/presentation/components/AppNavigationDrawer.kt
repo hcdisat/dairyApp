@@ -35,11 +35,13 @@ sealed interface NavigationDrawerEvent {
 
 @Composable
 fun AppNavigationDrawer(
+    modifier: Modifier = Modifier,
     drawerState: DrawerState,
     onEvent: NavigationDrawerEvent.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
+        modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {

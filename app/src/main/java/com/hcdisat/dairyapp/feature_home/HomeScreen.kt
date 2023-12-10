@@ -1,12 +1,20 @@
 package com.hcdisat.dairyapp.feature_home
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -22,10 +30,13 @@ import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
     drawerState: DrawerState,
     diaryResult: DiaryResult,
+    topBarScrollBehavior: TopAppBarScrollBehavior? = null,
     onEvent: HomeEventAction,
 ) {
     AppNavigationDrawer(
@@ -37,7 +48,17 @@ fun HomeScreen(
         }
     ) {
         AppScaffold(
-            topBar = { HomeTopBar(onEvent = { HomeEvent.OpenDrawer.onEvent() }) },
+            modifier = modifier
+                .addNestedScrollBehavior(topBarScrollBehavior)
+                .background(MaterialTheme.colorScheme.background)
+                .statusBarsPadding()
+                .navigationBarsPadding(),
+            topBar = {
+                HomeTopBar(
+                    onEvent = { HomeEvent.OpenDrawer.onEvent() },
+                    scrollBehavior = topBarScrollBehavior
+                )
+            },
             floatingAction = {
                 FloatingActionButton(onClick = { HomeEvent.AddNewEntry().onEvent() }) {
                     Icon(
@@ -55,6 +76,10 @@ fun HomeScreen(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+private fun Modifier.addNestedScrollBehavior(behavior: TopAppBarScrollBehavior?) =
+    behavior?.let { nestedScroll(it.nestedScrollConnection) } ?: this
 
 data class HomeParameters(
     val drawerValue: DrawerValue,
@@ -117,11 +142,12 @@ class HomeScreenProvider : PreviewParameterProvider<HomeParameters> {
         }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun HomeScreenPreview(@PreviewParameter(HomeScreenProvider::class) state: HomeParameters) {
+private fun HomeScreenPreview(@PreviewParameter(HomeScreenProvider::class) state: HomeParameters) {
     HomeScreen(
-        DrawerState(state.drawerValue),
+        drawerState = DrawerState(state.drawerValue),
         diaryResult = state.diaryResult
     ) {}
 }
