@@ -19,7 +19,8 @@ class GetDiariesUseCaseImpl @Inject constructor(
         mongoRepository.getAllDiaries().map { result ->
             result.mapCatching { domainMap ->
                 val mapped = domainMap.map { (key, value) ->
-                    key.toPresentationDate() to value.map { it.toPresentationDiary() }
+                    val date = key.toPresentationDate()
+                    date to value.map { it.toPresentationDiary().copy(date = date) }
                 }.toMap()
                 Result.success(mapped)
             }.getOrElse {
