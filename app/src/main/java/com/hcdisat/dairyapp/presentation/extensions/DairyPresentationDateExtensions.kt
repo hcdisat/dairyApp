@@ -8,16 +8,14 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 fun LocalDate.toPresentationDate(): DairyPresentationDate {
-    requireNotNull(this.dayOfMonth)
-    requireNotNull(this.dayOfWeek)
-    requireNotNull(this.month)
-    requireNotNull(this.year)
+    requireNotNull(dayOfWeek)
+    requireNotNull(month)
 
     return DairyPresentationDate(
         dayOfMonth = String.format("%02d", dayOfMonth),
         dayOfWeek = dayOfWeek.toString().take(3),
         month = month.toString().lowercase().replaceFirstChar { it.uppercase() },
-        year = this.year.toString()
+        year = year.toString()
     )
 }
 

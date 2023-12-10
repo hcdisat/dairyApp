@@ -6,3 +6,7 @@ data class DairyPresentationDate(
     val month: String,
     val year: String
 )
+
+val DairyPresentationDate.date
+    get() =
+        "$dayOfWeek $month $dayOfMonth $year"

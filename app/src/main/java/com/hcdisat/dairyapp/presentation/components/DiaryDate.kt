@@ -63,7 +63,7 @@ fun DiaryDate(
                 style = TextStyle(
                     fontSize = MaterialTheme.typography.bodySmall.fontSize,
                     fontWeight = FontWeight.Light,
-                    color = MaterialTheme.typography.bodySmall.color.copy(alpha = .38f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
                 )
             )
         }
