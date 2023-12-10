@@ -1,8 +1,8 @@
 package com.hcdisat.dairyapp.dataaccess.realm
 
-import com.hcdisat.dairyapp.core.extensions.toLocalDate
+import android.util.Log
 import com.hcdisat.dairyapp.dataaccess.realm.model.Diary
-import com.hcdisat.dairyapp.dataaccess.realm.model.RequestState
+import com.hcdisat.dairyapp.dataaccess.realm.model.RealmGenericException
 import com.hcdisat.dairyapp.dataaccess.realm.model.UserNotAuthenticatedException
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
@@ -26,22 +26,21 @@ class MongoDatabaseImpl @Inject constructor(
         realmApp.currentUser?.let(::config)
     }
 
-    override fun getAllDiaries(): Flow<RequestState> {
+    override fun getAllDiaries(): Flow<Result<List<Diary>>> {
         val user = realmApp.currentUser
         return if (user == null) {
-            flowOf(RequestState.Error(UserNotAuthenticatedException()))
+            flowOf(Result.failure(UserNotAuthenticatedException()))
         } else {
             runCatching {
                 realm.query<Diary>()
                     .sort(property = "date", sortOrder = Sort.DESCENDING)
                     .asFlow()
                     .map { results ->
-                        RequestState.Success(
-                            diaries = results.list.groupBy { it.date.toLocalDate() }
-                        )
+                        Result.success(results.list.toList())
                     }
             }.getOrElse {
-                flowOf(RequestState.Error(UserNotAuthenticatedException()))
+                Log.e("MongoDatabaseImpl", "${it.message}", it)
+                flowOf(Result.failure(RealmGenericException(it)))
             }
         }
     }
