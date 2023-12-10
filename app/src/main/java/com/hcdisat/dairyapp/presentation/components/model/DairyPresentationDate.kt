@@ -7,6 +7,6 @@ data class DairyPresentationDate(
     val year: String = ""
 )
 
-val DairyPresentationDate.date
+val DairyPresentationDate.inlineDate
     get() =
         "$dayOfWeek $month $dayOfMonth $year"

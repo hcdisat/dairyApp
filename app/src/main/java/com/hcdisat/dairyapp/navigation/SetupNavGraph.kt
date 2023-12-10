@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,6 +24,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationScreen
 import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationViewModel
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
@@ -104,10 +106,10 @@ fun NavGraphBuilder.home(
 
         AppAlertDialog(
             isDismissed = isDialogDismissed,
-            message = "You are about to logout from the Dairy... Do you want to proceeded?",
-            title = "Login out",
-            confirmButtonText = "Yes",
-            dismissButtonText = "No",
+            message = stringResource(R.string.logout_dialog_message),
+            title = stringResource(R.string.login_out_dialog_title),
+            confirmButtonText = stringResource(R.string.yes_btn),
+            dismissButtonText = stringResource(R.string.no_btn),
             onEvent = {
                 isDialogDismissed = true
                 if (it == DialogEvent.POSITIVE) {
@@ -128,6 +130,10 @@ fun NavGraphBuilder.write(onBackPressed: () -> Unit) {
             defaultValue = null
         })
     ) {
-        WriteScreen(onBackPressed = onBackPressed)
+        WriteScreen(
+            onBackPressed = onBackPressed,
+            diary = null,
+            onDelete = {}
+        )
     }
 }

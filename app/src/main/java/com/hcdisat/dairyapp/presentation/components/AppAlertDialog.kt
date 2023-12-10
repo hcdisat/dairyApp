@@ -54,7 +54,7 @@ fun AppAlertDialog(
 
 @Preview(showSystemUi = true)
 @Composable
-fun AppAlertDialogPreview() {
+private fun AppAlertDialogPreview() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         AppAlertDialog(
             isDismissed = false,

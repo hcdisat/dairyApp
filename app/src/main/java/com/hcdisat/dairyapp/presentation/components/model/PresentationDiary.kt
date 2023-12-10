@@ -11,3 +11,5 @@ data class PresentationDiary(
     val mood: Mood = Mood.Neutral,
     val images: List<String> = listOf()
 )
+
+val PresentationDiary.dateTime get() = "${date.inlineDate}, $time"
