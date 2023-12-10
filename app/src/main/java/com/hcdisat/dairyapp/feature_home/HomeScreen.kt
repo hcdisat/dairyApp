@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.feature_home.model.DiaryResult
+import com.hcdisat.dairyapp.feature_home.model.DiaryState
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 import com.hcdisat.dairyapp.presentation.components.AppNavigationDrawer
@@ -35,7 +35,7 @@ import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 fun HomeScreen(
     modifier: Modifier = Modifier,
     drawerState: DrawerState,
-    diaryResult: DiaryResult,
+    diaryResult: DiaryState,
     topBarScrollBehavior: TopAppBarScrollBehavior? = null,
     onEvent: HomeEventAction,
 ) {
@@ -83,7 +83,7 @@ private fun Modifier.addNestedScrollBehavior(behavior: TopAppBarScrollBehavior?)
 
 data class HomeParameters(
     val drawerValue: DrawerValue,
-    val diaryResult: DiaryResult,
+    val diaryResult: DiaryState,
 )
 
 private fun getLoadedState(): Map<DairyPresentationDate, List<PresentationDiary>> {
@@ -121,22 +121,22 @@ class HomeScreenProvider : PreviewParameterProvider<HomeParameters> {
                 // Drawer Open
                 HomeParameters(
                     drawerValue = DrawerValue.Open,
-                    diaryResult = DiaryResult.Loading
+                    diaryResult = DiaryState.Loading
                 ),
                 // Loading
                 HomeParameters(
                     drawerValue = DrawerValue.Closed,
-                    diaryResult = DiaryResult.Loading
+                    diaryResult = DiaryState.Loading
                 ),
                 // Error
                 HomeParameters(
                     drawerValue = DrawerValue.Closed,
-                    diaryResult = DiaryResult.Error(Exception())
+                    diaryResult = DiaryState.Error(Exception())
                 ),
                 // With Content
                 HomeParameters(
                     drawerValue = DrawerValue.Closed,
-                    diaryResult = DiaryResult.Loaded(getLoadedState())
+                    diaryResult = DiaryState.Loaded(getLoadedState())
                 )
             )
         }

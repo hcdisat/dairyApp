@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.feature_home.model.DiaryResult
+import com.hcdisat.dairyapp.feature_home.model.DiaryState
 import com.hcdisat.dairyapp.presentation.components.DiaryDate
 import com.hcdisat.dairyapp.presentation.components.DiaryHolder
 import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
@@ -36,18 +36,18 @@ import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
 @Composable
 fun HomeContent(
-    homeState: DiaryResult = DiaryResult.Loaded(mapOf()),
+    homeState: DiaryState = DiaryState.Loaded(mapOf()),
     paddingValues: PaddingValues = PaddingValues(all = 0.dp),
     onClick: (String) -> Unit = {}
 ) {
     when (homeState) {
-        is DiaryResult.Loading -> LoadingContent()
-        is DiaryResult.Error -> EmptyPage(
+        is DiaryState.Loading -> LoadingContent()
+        is DiaryState.Error -> EmptyPage(
             title = "An error has occurred",
             subtitle = "We can't find any diaries, please login again."
         )
 
-        is DiaryResult.Loaded -> LoadedContent(
+        is DiaryState.Loaded -> LoadedContent(
             diaries = homeState.diaries,
             onClick = onClick,
             paddingValues = paddingValues
@@ -122,17 +122,17 @@ private fun EmptyPage(title: String, subtitle: String) {
     }
 }
 
-class HomeContentProvider : PreviewParameterProvider<DiaryResult> {
-    override val values: Sequence<DiaryResult>
+class HomeContentProvider : PreviewParameterProvider<DiaryState> {
+    override val values: Sequence<DiaryState>
         get() = sequenceOf(
-            DiaryResult.Loading,
-            DiaryResult.Error(Exception("Some Error")),
-            DiaryResult.Loaded(mapOf()),
+            DiaryState.Loading,
+            DiaryState.Error(Exception("Some Error")),
+            DiaryState.Loaded(mapOf()),
         )
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun HomeContentPreview(@PreviewParameter(HomeContentProvider::class) diaryResult: DiaryResult) {
+fun HomeContentPreview(@PreviewParameter(HomeContentProvider::class) diaryResult: DiaryState) {
     HomeContent(diaryResult) {}
 }

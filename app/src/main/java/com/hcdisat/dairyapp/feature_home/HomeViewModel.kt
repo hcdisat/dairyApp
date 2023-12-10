@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCase
-import com.hcdisat.dairyapp.feature_home.model.DiaryResult
+import com.hcdisat.dairyapp.feature_home.model.DiaryState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val logoutAccountService: LogoutAccountService,
     private val getDiaries: GetDiariesUseCase
 ) : ViewModel() {
-    private val _homeState: MutableStateFlow<DiaryResult> = MutableStateFlow(DiaryResult.Loading)
+    private val _homeState: MutableStateFlow<DiaryState> = MutableStateFlow(DiaryState.Loading)
     val homeState = _homeState.asStateFlow()
 
     init {
@@ -35,7 +35,12 @@ class HomeViewModel @Inject constructor(
 
     private fun observeDiaries() {
         viewModelScope.launch(dispatcher) {
-            getDiaries().collect { _homeState.value = it }
+            getDiaries().collect { result ->
+                _homeState.value = result.fold(
+                    onSuccess = { DiaryState.Loaded(it) },
+                    onFailure = { DiaryState.Error(it) }
+                )
+            }
         }
     }
 }
