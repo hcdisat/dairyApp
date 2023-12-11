@@ -7,30 +7,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.feature_auth.ui.AuthenticationScreen
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.ui.HomeScreen
-import com.hcdisat.dairyapp.feature_home.ui.HomeViewModel
 import com.hcdisat.dairyapp.feature_write.ui.WriteScreen
-import com.hcdisat.dairyapp.presentation.components.AppAlertDialog
-import com.hcdisat.dairyapp.presentation.components.DialogEvent
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,21 +46,12 @@ fun NavGraphBuilder.home(
     onLoggedOut: () -> Unit
 ) {
     composable(route = Screen.Home.route) {
-        val viewModel: HomeViewModel = hiltViewModel()
-        val homeState by viewModel.homeState.collectAsStateWithLifecycle(
-            lifecycle = LocalLifecycleOwner.current.lifecycle,
-            minActiveState = Lifecycle.State.STARTED
-        )
-
-        var isDialogDismissed by remember { mutableStateOf(true) }
         val scope = rememberCoroutineScope()
-
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         HomeScreen(
             drawerState = drawerState,
-            diaryResult = homeState,
             topBarScrollBehavior = scrollBehavior
         ) {
             when (this) {
@@ -81,26 +59,9 @@ fun NavGraphBuilder.home(
                 is HomeEvent.EditEntry -> onAddNewEntry(entryId)
                 is HomeEvent.MenuClicked -> Unit
                 is HomeEvent.OpenDrawer -> scope.launch { drawerState.open() }
-                is HomeEvent.Logout -> {
-                    isDialogDismissed = false
-                }
+                is HomeEvent.Logout -> onLoggedOut()
             }
         }
-
-        AppAlertDialog(
-            isDismissed = isDialogDismissed,
-            message = stringResource(R.string.logout_dialog_message),
-            title = stringResource(R.string.login_out_dialog_title),
-            confirmButtonText = stringResource(R.string.yes_btn),
-            dismissButtonText = stringResource(R.string.no_btn),
-            onEvent = {
-                isDialogDismissed = true
-                if (it == DialogEvent.POSITIVE) {
-                    viewModel.logout()
-                    onLoggedOut()
-                }
-            }
-        )
     }
 }
 

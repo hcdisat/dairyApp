@@ -10,7 +10,8 @@ sealed interface HomeEvent {
     data object MenuClicked : HomeEvent
     data object Logout : HomeEvent
     data object OpenDrawer : HomeEvent
-    data class AddNewEntry(val entryId: String? = null) : HomeEvent
+    data object AddNewEntry : HomeEvent
+    data class EditEntry(val entryId: String) : HomeEvent
 }
 
 sealed class DiaryState(open val diaries: DiaryResult? = null) {
