@@ -26,7 +26,7 @@ fun WriteScreen(
             )
         }
     ) {
-
+        WriteContent(paddingValues = this)
     }
 }
 
