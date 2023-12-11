@@ -3,28 +3,30 @@ package com.hcdisat.dairyapp.feature_auth.ui
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
 import com.hcdisat.dairyapp.feature_auth.ui.components.AuthenticationContent
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
 import com.hcdisat.dairyapp.settings.Constants.CLIENT_ID
-import com.stevdzasan.messagebar.MessageBarState
-import com.stevdzasan.onetap.OneTapSignInState
+import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
+import com.stevdzasan.onetap.rememberOneTapSignInState
 import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AuthenticationScreen(
-    authenticationState: AuthenticationState,
-    oneTapState: OneTapSignInState,
-    messageBarState: MessageBarState,
-    onButtonClick: () -> Unit,
-    onTokenIdReceived: (String) -> Unit,
-    onDialogDismissed: (String) -> Unit,
     onLoginSuccess: () -> Unit
 ) {
-    val (sessionState, loadingState) = authenticationState
+    val messageBarState = rememberMessageBarState()
+    val oneTapState = rememberOneTapSignInState()
+
+    val viewModel: AuthenticationViewModel = hiltViewModel()
+    val state = viewModel.userSessionState.collectAsState().value
+    val (sessionState, loadingState) = state
+
     AppScaffold(
         modifier = Modifier,
         messageBarState = messageBarState,
@@ -34,7 +36,7 @@ fun AuthenticationScreen(
                 loadingState = loadingState,
                 onButtonClick = {
                     oneTapState.open()
-                    onButtonClick()
+                    viewModel.setLoading(true)
                 }
             )
         }
@@ -43,8 +45,11 @@ fun AuthenticationScreen(
     OneTapSignInWithGoogle(
         state = oneTapState,
         clientId = CLIENT_ID,
-        onTokenIdReceived = onTokenIdReceived,
-        onDialogDismissed = onDialogDismissed
+        onTokenIdReceived = { token -> viewModel.signInWithAtlas(token) },
+        onDialogDismissed = {
+            messageBarState.addError(Exception(it))
+            viewModel.setLoading(false)
+        }
     )
 
     LaunchedEffect(key1 = sessionState) {
