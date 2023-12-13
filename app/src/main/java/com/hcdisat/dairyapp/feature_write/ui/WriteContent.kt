@@ -20,10 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -31,13 +27,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hcdisat.dairyapp.R
+import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
 import com.hcdisat.dairyapp.presentation.components.MoodPager
+import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
 @Preview(showSystemUi = true)
 @Composable
 fun WriteContent(
+    diary: PresentationDiary = PresentationDiary(),
     paddingValues: PaddingValues = PaddingValues(0.dp),
-    onEvent: EntryContentEvents.() -> Unit = {}
+    onEvent: WriteEntryEvents.() -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -47,10 +46,7 @@ fun WriteContent(
             .padding(bottom = paddingValues.calculateBottomPadding()),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        var titleState by remember { mutableStateOf("") }
-        var descriptionState by remember { mutableStateOf("") }
         val scrollState = rememberScrollState()
-
         val placeHolderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
 
         Column(
@@ -64,12 +60,9 @@ fun WriteContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
-                value = titleState,
+                value = diary.title,
                 placeholder = { Text(text = stringResource(R.string.entry_title_placeholder)) },
-                onValueChange = {
-                    titleState = it
-                    onEvent(EntryContentEvents.OnTitleChanged(it))
-                },
+                onValueChange = { onEvent(WriteEntryEvents.OnTitleChanged(it)) },
                 colors = textFieldColors(placeHolderColor = placeHolderColor),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
@@ -83,12 +76,9 @@ fun WriteContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
-                value = descriptionState,
+                value = diary.description,
                 placeholder = { Text(text = stringResource(R.string.entry_description_placeholder)) },
-                onValueChange = {
-                    descriptionState = it
-                    onEvent(EntryContentEvents.OnDescriptionChanged(it))
-                },
+                onValueChange = { onEvent(WriteEntryEvents.OnDescriptionChanged(it)) },
                 colors = textFieldColors(placeHolderColor = placeHolderColor),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
@@ -129,8 +119,3 @@ private fun textFieldColors(placeHolderColor: Color) = TextFieldDefaults.colors(
     focusedPlaceholderColor = placeHolderColor,
     unfocusedPlaceholderColor = placeHolderColor,
 )
-
-sealed interface EntryContentEvents {
-    data class OnTitleChanged(val newValue: String) : EntryContentEvents
-    data class OnDescriptionChanged(val newValue: String) : EntryContentEvents
-}

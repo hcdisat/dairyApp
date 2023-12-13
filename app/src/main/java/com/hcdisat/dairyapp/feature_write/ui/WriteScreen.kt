@@ -1,54 +1,63 @@
 package com.hcdisat.dairyapp.feature_write.ui
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hcdisat.dairyapp.feature_write.model.EntryActions
+import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
+import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
-import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
+import com.hcdisat.dairyapp.presentation.components.LoadingContent
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.dateTime
 
 @Composable
-fun WriteScreen(
-    diary: PresentationDiary? = null,
-    onDelete: PresentationDiary.() -> Unit,
-    onBackPressed: () -> Unit
+fun WriteScreen(onBackPressed: () -> Unit) {
+    val viewModel: WriteViewModel = hiltViewModel()
+    val state by viewModel.state
+        .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
+
+    when (state.screenState) {
+        EntryScreenState.LOADING -> LoadingContent()
+        EntryScreenState.READY -> {
+            WriteScreen(diary = state.diaryEntry) { event ->
+                when (event) {
+                    is WriteEntryEvents.OnBackPressed -> onBackPressed()
+                    is WriteEntryEvents.OnDelete -> {}
+                    is WriteEntryEvents.OnDescriptionChanged ->
+                        viewModel.receiveAction(EntryActions.UpdateDescription(event.newValue))
+
+                    is WriteEntryEvents.OnTitleChanged ->
+                        viewModel.receiveAction(EntryActions.UpdateTitle(event.newValue))
+                }
+            }
+        }
+
+        EntryScreenState.ERROR -> {
+            throw Exception("UPPS")
+        }
+    }
+}
+
+@Composable
+private fun WriteScreen(
+    diary: PresentationDiary,
+    onEvent: (WriteEntryEvents) -> Unit,
 ) {
     AppScaffold(
         topBar = {
             WriteTopBar(
-                title = diary?.mood?.name ?: "",
-                subtitle = diary?.dateTime ?: "",
-                diaryTitle = diary?.title,
-                onBackPressed = onBackPressed,
-                isEdit = diary != null,
-                onDeletePressed = { diary?.onDelete() }
+                title = diary.mood.name,
+                subtitle = diary.dateTime,
+                diaryTitle = diary.title,
+                onBackPressed = { onEvent(WriteEntryEvents.OnBackPressed) },
+                isEdit = diary.id.isNotBlank(),
+                onDeletePressed = { onEvent(WriteEntryEvents.OnDelete(diary)) }
             )
         }
     ) {
-        WriteContent(paddingValues = this)
+        WriteContent(diary = diary, paddingValues = this) { onEvent(this) }
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-private fun WriteScreenPreview() {
-    MaterialTheme {
-        WriteScreen(
-            diary = WriteScreenDataProvider.diary,
-            onDelete = {}
-        ) {}
-    }
-}
-
-object WriteScreenDataProvider {
-    val diary = PresentationDiary().copy(
-        time = "04:00 PM",
-        date = DairyPresentationDate(
-            dayOfMonth = "16",
-            dayOfWeek = "SAT",
-            month = "FEB",
-            year = "2023"
-        )
-    )
 }

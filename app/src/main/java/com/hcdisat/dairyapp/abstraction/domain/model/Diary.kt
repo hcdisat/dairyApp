@@ -1,7 +1,6 @@
 package com.hcdisat.dairyapp.abstraction.domain.model
 
 import java.time.Instant
-import java.time.LocalDate
 
 data class DomainDiary(
     val id: String = "",
@@ -12,8 +11,3 @@ data class DomainDiary(
     val date: Instant = Instant.now(),
     val mood: String = "Neutral",
 )
-
-sealed interface DomainDiaryState {
-    data class Completed(val diaries: Map<LocalDate, List<DomainDiary>>) : DomainDiaryState
-    data class Failed(val throwable: Throwable) : DomainDiaryState
-}

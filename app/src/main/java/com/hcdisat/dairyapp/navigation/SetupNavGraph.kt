@@ -74,10 +74,6 @@ fun NavGraphBuilder.write(onBackPressed: () -> Unit) {
             defaultValue = null
         })
     ) {
-        WriteScreen(
-            onBackPressed = onBackPressed,
-            diary = null,
-            onDelete = {}
-        )
+        WriteScreen(onBackPressed = onBackPressed)
     }
 }

@@ -13,3 +13,20 @@ data class PresentationDiary(
 )
 
 val PresentationDiary.dateTime get() = "${date.inlineDate}, $time"
+
+data class MutablePresentationDiary(
+    val id: String = "",
+    var title: String = "",
+    var description: String = "",
+    var time: String = "",
+    var date: MutableDairyPresentationDate = MutableDairyPresentationDate(),
+    var mood: Mood = Mood.Neutral,
+    val images: MutableList<String> = mutableListOf()
+)
+
+data class MutableDairyPresentationDate(
+    var dayOfMonth: String = "",
+    var dayOfWeek: String = "",
+    var month: String = "",
+    var year: String = ""
+)
