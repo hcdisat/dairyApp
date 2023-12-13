@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface MongoDatabase {
     fun configureRealm()
     fun getAllDiaries(): Flow<Result<List<Diary>>>
+    fun getSingleDiary(entryId: String): Result<Diary>
 }

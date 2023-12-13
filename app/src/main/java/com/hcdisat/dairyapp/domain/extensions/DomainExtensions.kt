@@ -6,7 +6,7 @@ import io.realm.kotlin.internal.toDuration
 import java.time.Instant
 
 fun Diary.toDomainDiary() = DomainDiary(
-    id = _id.toString(),
+    id = _id.toHexString(),
     ownerId = ownerId,
     title = title,
     description = description,

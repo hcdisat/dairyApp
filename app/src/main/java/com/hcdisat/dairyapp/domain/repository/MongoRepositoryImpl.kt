@@ -15,10 +15,10 @@ class MongoRepositoryImpl @Inject constructor(
     private val mongoDB: MongoDatabase
 ) : MongoRepository {
     override fun getAllDiaries(): Flow<Result<Map<LocalDate, List<DomainDiary>>>> =
-        mongoDB.getAllDiaries().map { result ->
-            result.mapCatching { Result.success(it.toDiaryMap()) }
-                .getOrElse { Result.failure(it) }
-        }
+        mongoDB.getAllDiaries().map { result -> result.mapCatching { it.toDiaryMap() } }
+
+    override fun getSingleDiary(entryId: String): Result<Pair<LocalDate, DomainDiary>> =
+        mongoDB.getSingleDiary(entryId).mapCatching { it.date.toLocalDate() to it.toDomainDiary() }
 
     private fun List<Diary>.toDiaryMap(): Map<LocalDate, List<DomainDiary>> =
         groupBy { it.date.toLocalDate() }
