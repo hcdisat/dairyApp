@@ -50,7 +50,7 @@ private fun WriteScreen(
         topBar = {
             WriteTopBar(
                 title = diary.mood.name,
-                subtitle = diary.dateTime,
+                subtitle = diary.dateTime.orEmpty(),
                 diaryTitle = diary.title,
                 onBackPressed = { onEvent(WriteEntryEvents.OnBackPressed) },
                 isEdit = diary.id.isNotBlank(),

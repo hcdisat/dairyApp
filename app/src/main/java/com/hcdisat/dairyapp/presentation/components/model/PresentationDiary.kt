@@ -12,7 +12,9 @@ data class PresentationDiary(
     val images: List<String> = listOf()
 )
 
-val PresentationDiary.dateTime get() = "${date.inlineDate}, $time"
+val PresentationDiary.dateTime
+    get() =
+        "${date.inlineDate}, $time".takeIf { date.inlineDate.isNotBlank() }
 
 data class MutablePresentationDiary(
     val id: String = "",
