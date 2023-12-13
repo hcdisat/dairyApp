@@ -27,6 +27,9 @@ fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController
         authentication { navHostController.navigate(Screen.Home.route) }
         home(
             onAddNewEntry = {
+                navHostController.navigate(Screen.Write.route)
+            },
+            onEditEntry = {
                 navHostController.navigate(Screen.Write.passDiaryId(it))
             },
             onLoggedOut = { navHostController.navigate(Screen.Authentication.route) }
@@ -42,7 +45,8 @@ fun NavGraphBuilder.authentication(onLoginSuccess: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.home(
-    onAddNewEntry: (String?) -> Unit,
+    onAddNewEntry: () -> Unit,
+    onEditEntry: (String) -> Unit,
     onLoggedOut: () -> Unit
 ) {
     composable(route = Screen.Home.route) {
@@ -55,8 +59,8 @@ fun NavGraphBuilder.home(
             topBarScrollBehavior = scrollBehavior
         ) {
             when (this) {
-                is HomeEvent.AddNewEntry -> onAddNewEntry(null)
-                is HomeEvent.EditEntry -> onAddNewEntry(entryId)
+                is HomeEvent.AddNewEntry -> onAddNewEntry()
+                is HomeEvent.EditEntry -> onEditEntry(entryId)
                 is HomeEvent.MenuClicked -> Unit
                 is HomeEvent.OpenDrawer -> scope.launch { drawerState.open() }
                 is HomeEvent.Logout -> onLoggedOut()

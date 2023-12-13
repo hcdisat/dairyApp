@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,12 +40,16 @@ class WriteViewModel @Inject constructor(
 
     private fun handleLoadEntryEvent() {
         val entryId = savedStateHandle.get<String>(NavigationConstants.WRITE_ARGUMENT)
-        entryId?.let(::loadEntry) ?: DiaryEntryState.newState()
+        entryId?.let {
+            viewModelScope.launch { _state.value = loadEntry(it) }
+        } ?: run {
+            _state.value = DiaryEntryState.newState().copy(screenState = EntryScreenState.READY)
+        }
     }
 
-    private fun loadEntry(entryId: String) {
-        viewModelScope.launch(dispatcher) {
-            _state.value = getSingleDiary(entryId).fold(
+    private suspend fun loadEntry(entryId: String): DiaryEntryState {
+        return withContext(dispatcher) {
+            getSingleDiary(entryId).fold(
                 onSuccess = { it },
                 onFailure = {
                     Log.d("WriteViewModel", "loadEntry: ${it.message}", it)
