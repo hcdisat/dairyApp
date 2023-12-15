@@ -31,6 +31,9 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 
                     is WriteEntryEvents.OnTitleChanged ->
                         viewModel.receiveAction(EntryActions.UpdateTitle(event.newValue))
+
+                    is WriteEntryEvents.OnMoodChanged ->
+                        viewModel.receiveAction(EntryActions.UpdateMood(event.newValue))
                 }
             }
         }

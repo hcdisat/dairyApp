@@ -55,7 +55,7 @@ fun WriteContent(
                 .weight(1f)
                 .scrollable(state = scrollState, orientation = Orientation.Vertical)
         ) {
-            MoodPager(modifier = Modifier.size(120.dp))
+            MoodPager(modifier = Modifier.size(120.dp), diary.mood, onEvent = onEvent)
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()

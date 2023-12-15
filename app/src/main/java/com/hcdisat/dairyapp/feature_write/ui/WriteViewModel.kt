@@ -10,6 +10,7 @@ import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.navigation.NavigationConstants
+import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.extensions.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -34,8 +35,14 @@ class WriteViewModel @Inject constructor(
 
     fun receiveAction(action: EntryActions) {
         when (action) {
+            is EntryActions.UpdateMood -> updateMood(action.newValue)
             is EntryActions.UpdateDescription, is EntryActions.UpdateTitle -> updateText(action)
         }
+    }
+
+    private fun updateMood(newMood: Mood) {
+        val update = _state.value.diaryEntry.update { mood = newMood }
+        _state.value = state.value.copy(diaryEntry = update)
     }
 
     private fun handleLoadEntryEvent() {
