@@ -13,13 +13,13 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 interface GetSingleDiaryUseCase {
-    operator fun invoke(entryId: String): Result<DiaryEntryState>
+    suspend operator fun invoke(entryId: String): Result<DiaryEntryState>
 }
 
 class GetSingleDiaryUseCaseImpl @Inject constructor(
     private val mongoRepository: MongoRepository
 ) : GetSingleDiaryUseCase {
-    override fun invoke(entryId: String): Result<DiaryEntryState> =
+    override suspend fun invoke(entryId: String): Result<DiaryEntryState> =
         mongoRepository.getSingleDiary(entryId).mapCatching { (localDate, domainDiary) ->
             DiaryEntryState(
                 diaryEntry = mapResult(localDate, domainDiary),

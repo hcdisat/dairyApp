@@ -45,7 +45,7 @@ class MongoDatabaseImpl @Inject constructor(
         }
     }
 
-    override fun getSingleDiary(entryId: String): Result<Diary> {
+    override suspend fun getSingleDiary(entryId: String): Result<Diary> {
         if (!isUserLoggedIn()) return Result.failure(UserNotAuthenticatedException())
         val query = queryProvider.getById().query
         val id = ObjectId.invoke(entryId)
