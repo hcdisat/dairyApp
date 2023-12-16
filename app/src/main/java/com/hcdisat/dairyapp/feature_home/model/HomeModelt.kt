@@ -1,10 +1,10 @@
 package com.hcdisat.dairyapp.feature_home.model
 
-import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import java.time.LocalDateTime
 
 typealias HomeEventAction = HomeEvent.() -> Unit
-typealias DiaryResult = Map<DairyPresentationDate, List<PresentationDiary>>
+typealias DiaryResult = Map<LocalDateTime, List<PresentationDiary>>
 
 sealed interface HomeEvent {
     data object MenuClicked : HomeEvent

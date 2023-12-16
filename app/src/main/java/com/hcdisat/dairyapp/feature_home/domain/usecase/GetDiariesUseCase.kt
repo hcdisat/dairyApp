@@ -2,7 +2,6 @@ package com.hcdisat.dairyapp.feature_home.domain.usecase
 
 import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
 import com.hcdisat.dairyapp.feature_home.model.DiaryResult
-import com.hcdisat.dairyapp.presentation.extensions.toPresentationDate
 import com.hcdisat.dairyapp.presentation.extensions.toPresentationDiary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,8 +18,7 @@ class GetDiariesUseCaseImpl @Inject constructor(
         mongoRepository.getAllDiaries().map { result ->
             result.mapCatching { domainMap ->
                 val mapped = domainMap.map { (key, value) ->
-                    val date = key.toPresentationDate()
-                    date to value.map { it.toPresentationDiary().copy(date = date) }
+                    key to value.map { it.toPresentationDiary().copy(dateTime = key) }
                 }.toMap()
                 Result.success(mapped)
             }.getOrElse {

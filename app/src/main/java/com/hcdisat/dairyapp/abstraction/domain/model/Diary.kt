@@ -1,6 +1,6 @@
 package com.hcdisat.dairyapp.abstraction.domain.model
 
-import java.time.Instant
+import java.time.LocalDateTime
 
 data class DomainDiary(
     val id: String = "",
@@ -8,6 +8,6 @@ data class DomainDiary(
     val title: String = "",
     val description: String = "",
     val images: List<String> = listOf(),
-    val date: Instant = Instant.now(),
+    val date: LocalDateTime = LocalDateTime.now(),
     val mood: String = "Neutral",
 )

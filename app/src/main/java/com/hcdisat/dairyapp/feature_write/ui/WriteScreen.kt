@@ -11,7 +11,7 @@ import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
-import com.hcdisat.dairyapp.presentation.components.model.dateTime
+import com.hcdisat.dairyapp.presentation.components.model.formattedDateTime
 
 @Composable
 fun WriteScreen(onBackPressed: () -> Unit) {
@@ -53,7 +53,7 @@ private fun WriteScreen(
         topBar = {
             WriteTopBar(
                 title = diary.mood.name,
-                subtitle = diary.dateTime.orEmpty(),
+                subtitle = diary.formattedDateTime,
                 diaryTitle = diary.title,
                 onBackPressed = { onEvent(WriteEntryEvents.OnBackPressed) },
                 isEdit = diary.id.isNotBlank(),

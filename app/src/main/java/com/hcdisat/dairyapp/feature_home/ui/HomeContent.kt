@@ -29,8 +29,9 @@ import com.hcdisat.dairyapp.feature_home.model.DiaryState
 import com.hcdisat.dairyapp.presentation.components.DiaryDate
 import com.hcdisat.dairyapp.presentation.components.DiaryHolder
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
-import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import com.hcdisat.dairyapp.presentation.extensions.toPresentationDate
+import java.time.LocalDateTime
 
 
 @Composable
@@ -59,7 +60,7 @@ fun HomeContent(
 @ExperimentalFoundationApi
 @Composable
 private fun LoadedContent(
-    diaries: Map<DairyPresentationDate, List<PresentationDiary>> = mapOf(),
+    diaries: Map<LocalDateTime, List<PresentationDiary>> = mapOf(),
     paddingValues: PaddingValues = PaddingValues(all = 0.dp),
     onClick: (String) -> Unit = {}
 ) {
@@ -80,7 +81,7 @@ private fun LoadedContent(
         diaries.forEach { (date, diaries) ->
             stickyHeader(key = date.toString()) {
                 DiaryDate(
-                    date = date,
+                    date = date.toPresentationDate(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = MaterialTheme.colorScheme.surface)

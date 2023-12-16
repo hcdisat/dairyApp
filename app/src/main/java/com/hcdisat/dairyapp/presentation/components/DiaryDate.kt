@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.presentation.components.model.DairyPresentationDate
 import com.hcdisat.dairyapp.presentation.extensions.toPresentationDate
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Composable
 fun DiaryDate(
@@ -71,17 +71,17 @@ fun DiaryDate(
 }
 
 private data class DiaryDateProvider(
-    override val values: Sequence<LocalDate> = sequenceOf(
-        LocalDate.now(),
-        LocalDate.now()
+    override val values: Sequence<LocalDateTime> = sequenceOf(
+        LocalDateTime.now(),
+        LocalDateTime.now()
             .plusYears(1)
             .minusMonths(1)
             .minusDays(10)
     )
-) : PreviewParameterProvider<LocalDate>
+) : PreviewParameterProvider<LocalDateTime>
 
 @Preview(showBackground = true)
 @Composable
-private fun DiaryDatePrev(@PreviewParameter(DiaryDateProvider::class) date: LocalDate) {
+private fun DiaryDatePrev(@PreviewParameter(DiaryDateProvider::class) date: LocalDateTime) {
     DiaryDate(date = date.toPresentationDate())
 }

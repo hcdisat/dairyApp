@@ -43,9 +43,9 @@ import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.presentation.components.model.DiaryHeaderPresentation
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
-import com.hcdisat.dairyapp.presentation.extensions.toTimeString
+import com.hcdisat.dairyapp.presentation.extensions.getFormattedTime
 import com.hcdisat.dairyapp.ui.theme.Elevation
-import java.time.Instant
+import java.time.LocalDateTime
 
 @Composable
 fun DiaryHolder(
@@ -88,7 +88,7 @@ fun DiaryHolder(
                 DiaryHeader(
                     diaryHeader = DiaryHeaderPresentation(
                         mood = diary.mood,
-                        time = diary.time
+                        time = diary.dateTime.getFormattedTime()
                     )
                 )
                 Column(
@@ -200,7 +200,7 @@ private fun DiaryHolderPreview() {
         title = "Good relations with the Wookiees, I have.",
         description =
         "Sem finibus id ubique suas. Errem pulvinar scripta has felis. Utinam mediocrem netus aliquet habeo tamquam suscipiantur eu neque. Mel novum fusce expetendis novum suscipit partiendo tibique. Equidem eirmod suspendisse mattis maluisset dui utroque definiebas interpretaris.",
-        time = Instant.now().toTimeString(),
+        dateTime = LocalDateTime.now(),
         mood = Mood.Happy
     )
 
