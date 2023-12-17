@@ -7,4 +7,5 @@ interface MongoDatabase {
     fun configureRealm()
     fun getAllDiaries(): Flow<Result<List<Diary>>>
     suspend fun getSingleDiary(entryId: String): Result<Diary>
+    suspend fun saveDiary(diary: Diary): Result<Diary>
 }

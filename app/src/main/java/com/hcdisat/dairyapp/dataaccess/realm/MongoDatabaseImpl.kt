@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 class MongoDatabaseImpl @Inject constructor(
     private val realmApp: App,
@@ -55,6 +57,14 @@ class MongoDatabaseImpl @Inject constructor(
         }.mapCatching { it }
     }
 
+    override suspend fun saveDiary(diary: Diary): Result<Diary> = runCatching {
+        checkUser(user)
+        realm.write {
+            val addedDiary = copyToRealm(diary.apply { ownerId = user.id })
+            addedDiary
+        }
+    }
+
     private fun config(user: User) {
         val filterQuery = queryProvider.filterQuery()
         val config = SyncConfiguration.Builder(
@@ -71,4 +81,13 @@ class MongoDatabaseImpl @Inject constructor(
     }
 
     private fun isUserLoggedIn() = user != null
+
+    @OptIn(ExperimentalContracts::class)
+    private fun checkUser(user: User?) {
+        contract {
+            returns() implies (user != null)
+        }
+
+        if (user == null) throw UserNotAuthenticatedException()
+    }
 }
