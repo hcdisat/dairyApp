@@ -5,6 +5,8 @@ import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
 import com.hcdisat.dairyapp.core.extensions.toLocalDateTime
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
 import com.hcdisat.dairyapp.dataaccess.realm.model.Diary
+import com.hcdisat.dairyapp.dataaccess.realm.model.RealmGenericException
+import com.hcdisat.dairyapp.domain.extensions.toDiary
 import com.hcdisat.dairyapp.domain.extensions.toDomainDiary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,6 +21,15 @@ class MongoRepositoryImpl @Inject constructor(
 
     override suspend fun getSingleDiary(entryId: String): Result<DomainDiary> =
         mongoDB.getSingleDiary(entryId).mapCatching { it.toDomainDiary() }
+
+    override suspend fun saveDiary(domainDiary: DomainDiary): Result<DomainDiary> {
+        val maybeDiary = domainDiary.toDiary().getOrNull()
+
+        return maybeDiary?.let { diary ->
+            mongoDB.saveDiary(diary).mapCatching { it.toDomainDiary() }
+        } ?: throw RealmGenericException(Exception())
+
+    }
 
     private fun List<Diary>.toDiaryMap(): Map<LocalDateTime, List<DomainDiary>> =
         groupBy { it.date.toLocalDateTime() }

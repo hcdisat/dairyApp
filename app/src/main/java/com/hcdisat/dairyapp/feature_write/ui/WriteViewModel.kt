@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.navigation.NavigationConstants
 import com.hcdisat.dairyapp.presentation.components.model.Mood
+import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import com.hcdisat.dairyapp.presentation.extensions.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,9 +24,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WriteViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val getSingleDiary: GetSingleDiaryUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val saveDiary: SaveDiaryUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(DiaryEntryState())
     val state = _state.asStateFlow()
@@ -35,8 +38,20 @@ class WriteViewModel @Inject constructor(
 
     fun receiveAction(action: EntryActions) {
         when (action) {
+            is EntryActions.SaveEntry -> saveEntry(action.entry)
             is EntryActions.UpdateMood -> updateMood(action.newValue)
             is EntryActions.UpdateDescription, is EntryActions.UpdateTitle -> updateText(action)
+        }
+    }
+
+    private fun saveEntry(entry: PresentationDiary) {
+        viewModelScope.launch {
+            _state.value = withContext(dispatcher) { saveDiary(entry) }.fold(
+                onFailure = ::handleError,
+                onSuccess = {
+                    state.value.copy(diaryEntry = it, screenState = EntryScreenState.SAVED)
+                },
+            )
         }
     }
 
@@ -57,11 +72,8 @@ class WriteViewModel @Inject constructor(
     private suspend fun loadEntry(entryId: String): DiaryEntryState {
         return withContext(dispatcher) {
             getSingleDiary(entryId).fold(
+                onFailure = ::handleError,
                 onSuccess = { it },
-                onFailure = {
-                    Log.d("WriteViewModel", "loadEntry: ${it.message}", it)
-                    state.value.copy(screenState = EntryScreenState.ERROR)
-                }
             )
         }
     }
@@ -74,4 +86,9 @@ class WriteViewModel @Inject constructor(
             description = action.newValue
         }
     }.let { _state.value = state.value.copy(diaryEntry = it) }
+
+    private fun handleError(throwable: Throwable): DiaryEntryState {
+        Log.d("WriteViewModel", "loadEntry: ${throwable.message}", throwable)
+        return state.value.copy(screenState = EntryScreenState.ERROR)
+    }
 }

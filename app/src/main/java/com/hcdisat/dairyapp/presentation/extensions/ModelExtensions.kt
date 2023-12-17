@@ -16,6 +16,15 @@ fun DomainDiary.toPresentationDiary() = PresentationDiary(
     images = images,
 )
 
+fun PresentationDiary.toDomain() = DomainDiary(
+    id = id,
+    title = title,
+    description = description,
+    date = dateTime,
+    mood = mood.name,
+    images = images
+)
+
 fun LocalDateTime.toPresentationDate(): DairyPresentationDate {
     return DairyPresentationDate(
         dayOfMonth = String.format("%02d", dayOfMonth),

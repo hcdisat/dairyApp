@@ -2,7 +2,7 @@ package com.hcdisat.dairyapp.feature_write.model
 
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
-enum class EntryScreenState { LOADING, READY, ERROR }
+enum class EntryScreenState { LOADING, READY, ERROR, SAVED }
 data class DiaryEntryState(
     val diaryEntry: PresentationDiary = PresentationDiary(),
     val screenState: EntryScreenState = EntryScreenState.LOADING

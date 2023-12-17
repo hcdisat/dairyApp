@@ -2,6 +2,8 @@ package com.hcdisat.dairyapp.feature_write.di
 
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCaseImpl
+import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,4 +16,8 @@ interface WriteModule {
     @Binds
     @ViewModelScoped
     fun bindsGetSingleDiaryUseCase(impl: GetSingleDiaryUseCaseImpl): GetSingleDiaryUseCase
+
+    @Binds
+    @ViewModelScoped
+    fun bindsSaveDiaryUseCase(impl: SaveDiaryUseCaseImpl): SaveDiaryUseCase
 }

@@ -7,4 +7,5 @@ import java.time.LocalDateTime
 interface MongoRepository {
     fun getAllDiaries(): Flow<Result<Map<LocalDateTime, List<DomainDiary>>>>
     suspend fun getSingleDiary(entryId: String): Result<DomainDiary>
+    suspend fun saveDiary(domainDiary: DomainDiary): Result<DomainDiary>
 }
