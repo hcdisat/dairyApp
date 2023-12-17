@@ -96,7 +96,7 @@ fun WriteContent(
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
                     .height(54.dp),
-                onClick = {},
+                onClick = { WriteEntryEvents.OnSave(diary).onEvent() },
                 shape = Shapes().small
             ) {
                 Text(text = stringResource(R.string.save_btn))

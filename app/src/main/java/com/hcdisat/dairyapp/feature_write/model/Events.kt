@@ -5,6 +5,7 @@ import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
 sealed interface WriteEntryEvents {
     data object OnBackPressed : WriteEntryEvents
+    data class OnSave(val entry: PresentationDiary) : WriteEntryEvents
     data class OnDelete(val presentationDiary: PresentationDiary) : WriteEntryEvents
     data class OnTitleChanged(val newValue: String) : WriteEntryEvents
     data class OnMoodChanged(val newValue: Mood) : WriteEntryEvents

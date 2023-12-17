@@ -24,8 +24,8 @@ fun WriteScreen(onBackPressed: () -> Unit) {
         EntryScreenState.READY -> {
             WriteScreen(diary = state.diaryEntry) { event ->
                 when (event) {
-                    is WriteEntryEvents.OnBackPressed -> onBackPressed()
-                    is WriteEntryEvents.OnDelete -> {}
+                    WriteEntryEvents.OnBackPressed -> onBackPressed()
+                    is WriteEntryEvents.OnDelete -> Unit
                     is WriteEntryEvents.OnDescriptionChanged ->
                         viewModel.receiveAction(EntryActions.UpdateDescription(event.newValue))
 
@@ -34,6 +34,9 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 
                     is WriteEntryEvents.OnMoodChanged ->
                         viewModel.receiveAction(EntryActions.UpdateMood(event.newValue))
+
+                    is WriteEntryEvents.OnSave ->
+                        viewModel.receiveAction(EntryActions.SaveEntry(event.entry))
                 }
             }
         }
@@ -41,6 +44,8 @@ fun WriteScreen(onBackPressed: () -> Unit) {
         EntryScreenState.ERROR -> {
             throw Exception("UPPS")
         }
+
+        EntryScreenState.SAVED -> onBackPressed()
     }
 }
 
