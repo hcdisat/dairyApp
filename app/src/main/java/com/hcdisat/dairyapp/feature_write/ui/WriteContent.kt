@@ -97,7 +97,8 @@ fun WriteContent(
                     .padding(horizontal = 12.dp)
                     .height(54.dp),
                 onClick = { WriteEntryEvents.OnSave(diary).onEvent() },
-                shape = Shapes().small
+                shape = Shapes().small,
+                enabled = diary.title.isNotBlank() && diary.description.isNotBlank()
             ) {
                 Text(text = stringResource(R.string.save_btn))
             }
