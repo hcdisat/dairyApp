@@ -6,3 +6,5 @@ data class DairyPresentationDate(
     val month: String = "",
     val year: String = ""
 )
+
+val DairyPresentationDate.entryKey get() = "$dayOfMonth-$month-$dayOfWeek-$year"

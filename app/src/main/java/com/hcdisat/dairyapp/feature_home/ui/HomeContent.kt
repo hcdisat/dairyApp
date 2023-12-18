@@ -30,13 +30,13 @@ import com.hcdisat.dairyapp.presentation.components.DiaryDate
 import com.hcdisat.dairyapp.presentation.components.DiaryHolder
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import com.hcdisat.dairyapp.presentation.components.model.entryKey
 import com.hcdisat.dairyapp.presentation.extensions.toPresentationDate
-import java.time.LocalDateTime
 
 
 @Composable
 fun HomeContent(
-    homeState: DiaryState = DiaryState.Loaded(mapOf()),
+    homeState: DiaryState = DiaryState.Loaded(listOf()),
     paddingValues: PaddingValues = PaddingValues(all = 0.dp),
     onClick: (String) -> Unit = {}
 ) {
@@ -60,7 +60,7 @@ fun HomeContent(
 @ExperimentalFoundationApi
 @Composable
 private fun LoadedContent(
-    diaries: Map<LocalDateTime, List<PresentationDiary>> = mapOf(),
+    diaries: List<PresentationDiary> = listOf(),
     paddingValues: PaddingValues = PaddingValues(all = 0.dp),
     onClick: (String) -> Unit = {}
 ) {
@@ -78,10 +78,10 @@ private fun LoadedContent(
             .navigationBarsPadding()
             .padding(top = paddingValues.calculateTopPadding()),
     ) {
-        diaries.forEach { (date, diaries) ->
-            stickyHeader(key = date.toString()) {
+        diaries.groupBy { it.dateTime.toPresentationDate() }.forEach { (date, diaries) ->
+            stickyHeader(key = date.entryKey) {
                 DiaryDate(
-                    date = date.toPresentationDate(),
+                    date = date,
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = MaterialTheme.colorScheme.surface)
@@ -120,7 +120,7 @@ class HomeContentProvider : PreviewParameterProvider<DiaryState> {
         get() = sequenceOf(
             DiaryState.Loading,
             DiaryState.Error(Exception("Some Error")),
-            DiaryState.Loaded(mapOf()),
+            DiaryState.Loaded(listOf()),
         )
 }
 

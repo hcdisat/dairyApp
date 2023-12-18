@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.presentation.components.model
 
 import com.hcdisat.dairyapp.presentation.extensions.getFormattedTime
-import com.hcdisat.dairyapp.presentation.extensions.getInlineDate
+import com.hcdisat.dairyapp.presentation.extensions.getInlineDateTime
 import java.time.LocalDateTime
 
 data class DiaryHeaderPresentation(val mood: Mood, val time: String)
@@ -24,6 +24,6 @@ data class MutablePresentationDiary(
     val images: MutableList<String> = mutableListOf()
 )
 
-val PresentationDiary.formattedDateTime get() = dateTime.getInlineDate()
+val PresentationDiary.formattedDateTime get() = dateTime.getInlineDateTime()
 
 val PresentationDiary.time: String get() = dateTime.getFormattedTime()
