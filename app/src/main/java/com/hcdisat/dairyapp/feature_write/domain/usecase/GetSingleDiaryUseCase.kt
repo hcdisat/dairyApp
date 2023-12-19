@@ -17,7 +17,7 @@ class GetSingleDiaryUseCaseImpl @Inject constructor(
         mongoRepository.getSingleDiary(entryId).mapCatching { domainDiary ->
             DiaryEntryState(
                 diaryEntry = domainDiary.toPresentationDiary(),
-                screenState = EntryScreenState.READY
+                screenState = EntryScreenState.Ready
             )
         }
 }

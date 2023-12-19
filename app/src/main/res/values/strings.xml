@@ -30,4 +30,8 @@
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">CANCEL</string>
     <string name="btn_accept">ACCEPT</string>
+    <string name="diary_deleted_message">Diary entry deleted.</string>
+    <string name="diary_added_message">Diary entry was added.</string>
+    <string name="user_not_found_error">User not found.</string>
+    <string name="service_issues">We are having services issues. Please try again later</string>
 </resources>

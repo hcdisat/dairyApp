@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.core.di.IODispatcher
+import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.ErrorHandlerUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.UpdateDateTimeUseCase
@@ -30,6 +32,8 @@ class WriteViewModel @Inject constructor(
     private val getSingleDiary: GetSingleDiaryUseCase,
     private val saveDiary: SaveDiaryUseCase,
     private val updateDateTime: UpdateDateTimeUseCase,
+    private val deleteDiary: DeleteDiaryUseCase,
+    private val errorHandler: ErrorHandlerUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(DiaryEntryState())
     val state = _state.asStateFlow()
@@ -40,11 +44,24 @@ class WriteViewModel @Inject constructor(
 
     fun receiveAction(action: EntryActions) {
         when (action) {
+            is EntryActions.DeleteEntry -> deleteEntry(action.entry.id)
             is EntryActions.UpdateTime -> updateTime(action.hour, action.minute, action.diary)
             is EntryActions.UpdateDate -> updateDate(action.dateInUtcMillis, action.diary)
             is EntryActions.SaveEntry -> saveEntry(action.entry)
             is EntryActions.UpdateMood -> updateMood(action.newValue)
             is EntryActions.UpdateDescription, is EntryActions.UpdateTitle -> updateText(action)
+        }
+    }
+
+    private fun deleteEntry(entryId: String) {
+        viewModelScope.launch {
+            _state.value = state.value.copy(screenState = EntryScreenState.Loading)
+            withContext(dispatcher) { deleteDiary(entryId) }.fold(
+                onFailure = ::handleError,
+                onSuccess = {
+                    _state.value = state.value.copy(screenState = EntryScreenState.Deleted)
+                }
+            )
         }
     }
 
@@ -68,7 +85,7 @@ class WriteViewModel @Inject constructor(
             _state.value = withContext(dispatcher) { saveDiary(entry) }.fold(
                 onFailure = ::handleError,
                 onSuccess = {
-                    state.value.copy(diaryEntry = it, screenState = EntryScreenState.SAVED)
+                    state.value.copy(diaryEntry = it, screenState = EntryScreenState.Saved)
                 },
             )
         }
@@ -84,7 +101,7 @@ class WriteViewModel @Inject constructor(
         entryId?.let {
             viewModelScope.launch { _state.value = loadEntry(it) }
         } ?: run {
-            _state.value = DiaryEntryState.newState().copy(screenState = EntryScreenState.READY)
+            _state.value = DiaryEntryState.newState().copy(screenState = EntryScreenState.Ready)
         }
     }
 
@@ -108,7 +125,7 @@ class WriteViewModel @Inject constructor(
 
     private fun handleError(throwable: Throwable): DiaryEntryState {
         Log.d("WriteViewModel", "loadEntry: ${throwable.message}", throwable)
-        return state.value.copy(screenState = EntryScreenState.ERROR)
+        return state.value.copy(screenState = EntryScreenState.Error(errorHandler(throwable)))
     }
 
     private fun PresentationDiary.update(

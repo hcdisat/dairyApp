@@ -1,13 +1,18 @@
 package com.hcdisat.dairyapp.feature_write.ui
 
+import android.content.Context
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
@@ -27,13 +32,15 @@ fun WriteScreen(onBackPressed: () -> Unit) {
     val state by viewModel.state
         .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
 
-    when (state.screenState) {
-        EntryScreenState.LOADING -> LoadingContent()
-        EntryScreenState.READY -> {
+    when (val screenState = state.screenState) {
+        EntryScreenState.Loading -> LoadingContent()
+        EntryScreenState.Ready -> {
             WriteScreen(diary = state.diaryEntry) { event ->
                 when (event) {
                     WriteEntryEvents.OnBackPressed -> onBackPressed()
-                    is WriteEntryEvents.OnDelete -> Unit
+                    is WriteEntryEvents.OnDelete ->
+                        viewModel.receiveAction(EntryActions.DeleteEntry(event.presentationDiary))
+
                     is WriteEntryEvents.OnDescriptionChanged ->
                         viewModel.receiveAction(EntryActions.UpdateDescription(event.newValue))
 
@@ -66,11 +73,19 @@ fun WriteScreen(onBackPressed: () -> Unit) {
             }
         }
 
-        EntryScreenState.ERROR -> {
-            throw Exception("UPPS")
+        is EntryScreenState.Error ->
+            LocalContext.current.showMessage(screenState.message)
+
+
+        EntryScreenState.Deleted -> {
+            onBackPressed()
+            LocalContext.current.showMessage(R.string.diary_deleted_message)
         }
 
-        EntryScreenState.SAVED -> onBackPressed()
+        EntryScreenState.Saved -> {
+            onBackPressed()
+            LocalContext.current.showMessage(R.string.diary_added_message)
+        }
     }
 }
 
@@ -131,4 +146,12 @@ private fun WriteScreen(
             }
         }
     }
+}
+
+private fun Context.showMessage(@StringRes messageId: Int) {
+    Toast.makeText(this, messageId, Toast.LENGTH_LONG).show()
+}
+
+private fun Context.showMessage(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }

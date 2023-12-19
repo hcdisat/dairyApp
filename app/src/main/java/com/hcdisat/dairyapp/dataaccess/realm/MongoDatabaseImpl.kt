@@ -1,9 +1,9 @@
 package com.hcdisat.dairyapp.dataaccess.realm
 
 import android.util.Log
+import com.hcdisat.dairyapp.core.RealmGenericException
+import com.hcdisat.dairyapp.core.UserNotAuthenticatedException
 import com.hcdisat.dairyapp.dataaccess.realm.model.Diary
-import com.hcdisat.dairyapp.dataaccess.realm.model.RealmGenericException
-import com.hcdisat.dairyapp.dataaccess.realm.model.UserNotAuthenticatedException
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.App
@@ -77,6 +77,15 @@ class MongoDatabaseImpl @Inject constructor(
             updatableDiary.mood = diary.mood
             updatableDiary.images = diary.images
             updatableDiary
+        }
+    }
+
+    override suspend fun deleteDiary(entryId: ObjectId): Result<Boolean> = runCatching {
+        checkUser(user)
+        realm.write {
+            val query = queryProvider.getByIdAndOwnerId().query
+            delete(query<Diary>(query, entryId, user.id))
+            true
         }
     }
 
