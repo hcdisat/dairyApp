@@ -11,4 +11,5 @@ sealed interface WriteEntryEvents {
     data class OnMoodChanged(val newValue: Mood) : WriteEntryEvents
     data class OnDescriptionChanged(val newValue: String) : WriteEntryEvents
     data class OnDateChanged(val dateInUtcMillis: Long) : WriteEntryEvents
+    data class OnTimeChanged(val hour: Int, val minute: Int) : WriteEntryEvents
 }

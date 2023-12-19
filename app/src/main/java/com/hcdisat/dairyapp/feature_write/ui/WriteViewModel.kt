@@ -13,8 +13,8 @@ import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.navigation.NavigationConstants
 import com.hcdisat.dairyapp.presentation.components.model.Mood
+import com.hcdisat.dairyapp.presentation.components.model.MutablePresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
-import com.hcdisat.dairyapp.presentation.extensions.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,11 +40,20 @@ class WriteViewModel @Inject constructor(
 
     fun receiveAction(action: EntryActions) {
         when (action) {
+            is EntryActions.UpdateTime -> updateTime(action.hour, action.minute, action.diary)
             is EntryActions.UpdateDate -> updateDate(action.dateInUtcMillis, action.diary)
             is EntryActions.SaveEntry -> saveEntry(action.entry)
             is EntryActions.UpdateMood -> updateMood(action.newValue)
             is EntryActions.UpdateDescription, is EntryActions.UpdateTitle -> updateText(action)
         }
+    }
+
+    private fun updateTime(hour: Int, minute: Int, diary: PresentationDiary) {
+        _state.value = state.value.copy(
+            diaryEntry = diary.update {
+                dateTime = dateTime.withHour(hour).withMinute(minute)
+            }
+        )
     }
 
     private fun updateDate(utcMillis: Long, diary: PresentationDiary) {
@@ -101,4 +110,30 @@ class WriteViewModel @Inject constructor(
         Log.d("WriteViewModel", "loadEntry: ${throwable.message}", throwable)
         return state.value.copy(screenState = EntryScreenState.ERROR)
     }
+
+    private fun PresentationDiary.update(
+        mutableDiaryScope: MutablePresentationDiary.() -> Unit
+    ): PresentationDiary {
+        val diary = MutablePresentationDiary(
+            id = id,
+            title = title,
+            description = description,
+            mood = mood,
+            images = images.toMutableList(),
+            dateTime = dateTime
+        )
+
+        diary.mutableDiaryScope()
+        return diary.toPresentationDiary()
+    }
+
+    private fun MutablePresentationDiary.toPresentationDiary(): PresentationDiary =
+        PresentationDiary(
+            id = id,
+            title = title,
+            description = description,
+            mood = mood,
+            images = images,
+            dateTime = dateTime
+        )
 }

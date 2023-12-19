@@ -14,7 +14,9 @@ import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
 import com.hcdisat.dairyapp.presentation.components.DatePickerEvents
 import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
+import com.hcdisat.dairyapp.presentation.components.DiaryTimePicker
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
+import com.hcdisat.dairyapp.presentation.components.TimePickerEvents
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.formattedDateTime
 import com.hcdisat.dairyapp.presentation.extensions.toMillis
@@ -51,6 +53,15 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                                 diary = state.diaryEntry
                             )
                         )
+
+                    is WriteEntryEvents.OnTimeChanged ->
+                        viewModel.receiveAction(
+                            EntryActions.UpdateTime(
+                                hour = event.hour,
+                                minute = event.minute,
+                                diary = state.diaryEntry
+                            )
+                        )
                 }
             }
         }
@@ -69,6 +80,8 @@ private fun WriteScreen(
     onEvent: (WriteEntryEvents) -> Unit,
 ) {
     var shouldOpenDatePicker by rememberSaveable { mutableStateOf(false) }
+    var shouldOpenTimePicker by rememberSaveable { mutableStateOf(false) }
+
     AppScaffold(
         topBar = {
             WriteTopBar(
@@ -83,18 +96,37 @@ private fun WriteScreen(
         }
     ) {
         WriteContent(diary = diary, paddingValues = this) { onEvent(this) }
+
         DiaryDatePicker(
             showDatePicker = shouldOpenDatePicker,
             selectedTimeInMillis = diary.dateTime.toMillis()
         ) {
             when (this) {
                 is DatePickerEvents.DateSelected -> {
+                    shouldOpenTimePicker = true
                     shouldOpenDatePicker = false
                     onEvent(WriteEntryEvents.OnDateChanged(this.dateInUtcMillis))
                 }
 
                 DatePickerEvents.OnDismissed -> {
                     shouldOpenDatePicker = false
+                }
+            }
+        }
+
+        DiaryTimePicker(
+            showTimePicker = shouldOpenTimePicker,
+            atHour = diary.dateTime.hour,
+            atMinute = diary.dateTime.minute
+        ) {
+            when (this) {
+                TimePickerEvents.OnDismissed -> {
+                    shouldOpenTimePicker = false
+                }
+
+                is TimePickerEvents.TimeSelected -> {
+                    shouldOpenTimePicker = false
+                    onEvent(WriteEntryEvents.OnTimeChanged(hour, minute))
                 }
             }
         }

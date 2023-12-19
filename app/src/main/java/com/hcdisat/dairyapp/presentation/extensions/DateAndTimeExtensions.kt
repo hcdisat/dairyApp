@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 private const val TIME_FORMAT = "hh:mm a"
 
 fun LocalDateTime.getInlineDate(): String =
-    "$dayOfWeek $month $dayOfMonth $year"
+    "${dayOfWeek.toString().take(3)} $month $dayOfMonth $year"
 
 fun LocalDateTime.getInlineDateTime(): String =
     "${getInlineDate()}, ${getFormattedTime()}"
