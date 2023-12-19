@@ -27,8 +27,9 @@ class MongoRepositoryImpl @Inject constructor(
         val maybeDiary = domainDiary.toDiary().getOrNull()
 
         return maybeDiary?.let { diary ->
-            mongoDB.saveDiary(diary).mapCatching { it.toDomainDiary() }
-        } ?: throw RealmGenericException(Exception())
+            (if (domainDiary.id.isBlank()) mongoDB.saveDiary(diary)
+            else mongoDB.updateDiary(diary)).mapCatching { it.toDomainDiary() }
 
+        } ?: throw RealmGenericException(Exception())
     }
 }

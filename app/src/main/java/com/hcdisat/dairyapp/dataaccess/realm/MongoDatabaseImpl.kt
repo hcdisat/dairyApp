@@ -48,11 +48,11 @@ class MongoDatabaseImpl @Inject constructor(
     }
 
     override suspend fun getSingleDiary(entryId: String): Result<Diary> {
-        if (!isUserLoggedIn()) return Result.failure(UserNotAuthenticatedException())
         val query = queryProvider.getById().query
         val id = ObjectId.invoke(entryId)
 
         return runCatching {
+            checkUser(user)
             realm.query<Diary>(query = query, id).find().first()
         }.mapCatching { it }
     }
@@ -62,6 +62,21 @@ class MongoDatabaseImpl @Inject constructor(
         realm.write {
             val addedDiary = copyToRealm(diary.apply { ownerId = user.id })
             addedDiary
+        }
+    }
+
+    override suspend fun updateDiary(diary: Diary): Result<Diary> = runCatching {
+        realm.write {
+            val updatableDiary = query<Diary>(queryProvider.getById().query, diary._id)
+                .find()
+                .first()
+
+            updatableDiary.title = diary.title
+            updatableDiary.description = diary.description
+            updatableDiary.date = diary.date
+            updatableDiary.mood = diary.mood
+            updatableDiary.images = diary.images
+            updatableDiary
         }
     }
 
