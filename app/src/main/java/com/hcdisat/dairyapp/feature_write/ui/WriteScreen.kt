@@ -17,6 +17,7 @@ import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.formattedDateTime
+import com.hcdisat.dairyapp.presentation.extensions.toMillis
 
 @Composable
 fun WriteScreen(onBackPressed: () -> Unit) {
@@ -77,7 +78,10 @@ private fun WriteScreen(
         }
     ) {
         WriteContent(diary = diary, paddingValues = this) { onEvent(this) }
-        DiaryDatePicker(showDatePicker = shouldOpenDatePicker) {
+        DiaryDatePicker(
+            showDatePicker = shouldOpenDatePicker,
+            selectedTimeInMillis = diary.dateTime.toMillis()
+        ) {
             when (this) {
                 is DatePickerEvents.DateSelected -> {
                     shouldOpenDatePicker = false

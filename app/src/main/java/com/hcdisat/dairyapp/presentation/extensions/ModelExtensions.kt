@@ -6,6 +6,7 @@ import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.MutablePresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 fun DomainDiary.toPresentationDiary() = PresentationDiary(
     id = id,
@@ -33,6 +34,8 @@ fun LocalDateTime.toPresentationDate(): DairyPresentationDate {
         year = year.toString()
     )
 }
+
+fun LocalDateTime.toMillis(): Long = atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
 fun PresentationDiary.update(
     mutableDiaryScope: MutablePresentationDiary.() -> Unit
