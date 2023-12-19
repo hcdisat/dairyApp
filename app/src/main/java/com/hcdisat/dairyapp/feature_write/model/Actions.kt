@@ -8,4 +8,5 @@ sealed interface EntryActions {
     data class UpdateDescription(val newValue: String) : EntryActions
     data class UpdateMood(val newValue: Mood) : EntryActions
     data class SaveEntry(val entry: PresentationDiary) : EntryActions
+    data class UpdateDate(val dateInMillis: Long) : EntryActions
 }

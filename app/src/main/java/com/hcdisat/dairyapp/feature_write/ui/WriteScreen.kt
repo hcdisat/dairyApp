@@ -2,6 +2,9 @@ package com.hcdisat.dairyapp.feature_write.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -9,6 +12,8 @@ import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
+import com.hcdisat.dairyapp.presentation.components.DatePickerEvents
+import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.formattedDateTime
@@ -37,6 +42,9 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 
                     is WriteEntryEvents.OnSave ->
                         viewModel.receiveAction(EntryActions.SaveEntry(event.entry))
+
+                    is WriteEntryEvents.OnDateChanged ->
+                        viewModel.receiveAction(EntryActions.UpdateDate(event.dateInMillis))
                 }
             }
         }
@@ -54,6 +62,7 @@ private fun WriteScreen(
     diary: PresentationDiary,
     onEvent: (WriteEntryEvents) -> Unit,
 ) {
+    var shouldOpenDatePicker by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
         topBar = {
             WriteTopBar(
@@ -62,10 +71,23 @@ private fun WriteScreen(
                 diaryTitle = diary.title,
                 onBackPressed = { onEvent(WriteEntryEvents.OnBackPressed) },
                 isEdit = diary.id.isNotBlank(),
-                onDeletePressed = { onEvent(WriteEntryEvents.OnDelete(diary)) }
+                onDeletePressed = { onEvent(WriteEntryEvents.OnDelete(diary)) },
+                onAddDatePressed = { shouldOpenDatePicker = true }
             )
         }
     ) {
         WriteContent(diary = diary, paddingValues = this) { onEvent(this) }
+        DiaryDatePicker(showDatePicker = shouldOpenDatePicker) {
+            when (this) {
+                is DatePickerEvents.DateSelected -> {
+                    shouldOpenDatePicker = false
+                    onEvent(WriteEntryEvents.OnDateChanged(this.dateInMillis))
+                }
+
+                DatePickerEvents.OnDismissed -> {
+                    shouldOpenDatePicker = false
+                }
+            }
+        }
     }
 }

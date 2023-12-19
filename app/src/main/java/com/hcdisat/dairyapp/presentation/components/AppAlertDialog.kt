@@ -13,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.hcdisat.dairyapp.R
 
 enum class DialogEvent { POSITIVE, NEGATIVE }
 
@@ -22,8 +24,8 @@ fun AppAlertDialog(
     isDismissed: Boolean,
     message: String,
     title: String,
-    confirmButtonText: String = "Accept",
-    dismissButtonText: String = "Cancel",
+    confirmButtonText: String = stringResource(R.string.btn_accept),
+    dismissButtonText: String = stringResource(R.string.btn_cancel),
     icon: @Composable () -> Unit = {
         Icon(
             imageVector = Icons.Default.Info,

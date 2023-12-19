@@ -41,6 +41,7 @@ class WriteViewModel @Inject constructor(
             is EntryActions.SaveEntry -> saveEntry(action.entry)
             is EntryActions.UpdateMood -> updateMood(action.newValue)
             is EntryActions.UpdateDescription, is EntryActions.UpdateTitle -> updateText(action)
+            is EntryActions.UpdateDate -> {}
         }
     }
 
