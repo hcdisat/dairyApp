@@ -1,6 +1,8 @@
 package com.hcdisat.dairyapp.presentation.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +15,7 @@ fun AppScaffold(
     modifier: Modifier = Modifier,
     messageBarState: MessageBarState? = null,
     topBar: @Composable () -> Unit = {},
+    bottomBar: (@Composable () -> Unit)? = null,
     floatingAction: @Composable () -> Unit = {},
     content: @Composable PaddingValues.() -> Unit
 ) {
@@ -20,6 +23,8 @@ fun AppScaffold(
         topBar = topBar,
         modifier = modifier,
         floatingActionButton = floatingAction,
+        bottomBar = { bottomBar?.let { BottomAppBar { it() } } },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         content = { paddingValues ->
             messageBarState?.let { messageBarState ->
                 ContentWithMessageBar(messageBarState = messageBarState) {

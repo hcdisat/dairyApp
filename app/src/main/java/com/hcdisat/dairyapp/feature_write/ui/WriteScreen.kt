@@ -3,11 +3,14 @@ package com.hcdisat.dairyapp.feature_write.ui
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -110,7 +113,13 @@ private fun WriteScreen(
             )
         }
     ) {
-        WriteContent(diary = diary, paddingValues = this) { onEvent(this) }
+        WriteContent(
+            diary = diary,
+            paddingValues = this,
+            modifier = Modifier
+                .padding(top = this.calculateTopPadding(), bottom = this.calculateTopPadding())
+                .imePadding()
+        ) { onEvent(this) }
 
         DiaryDatePicker(
             showDatePicker = shouldOpenDatePicker,
