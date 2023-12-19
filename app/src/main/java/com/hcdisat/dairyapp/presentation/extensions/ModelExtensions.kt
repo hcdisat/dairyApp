@@ -46,7 +46,7 @@ fun PresentationDiary.update(
         description = description,
         mood = mood,
         images = images.toMutableList(),
-        date = dateTime
+        dateTime = dateTime
     )
 
     diary.mutableDiaryScope()
@@ -60,5 +60,5 @@ private fun MutablePresentationDiary.toPresentationDiary(): PresentationDiary =
         description = description,
         mood = mood,
         images = images,
-        dateTime = date
+        dateTime = dateTime
     )

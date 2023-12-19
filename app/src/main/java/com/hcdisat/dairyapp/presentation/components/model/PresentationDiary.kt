@@ -19,7 +19,7 @@ data class MutablePresentationDiary(
     val id: String = "",
     var title: String = "",
     var description: String = "",
-    var date: LocalDateTime = LocalDateTime.now(),
+    var dateTime: LocalDateTime = LocalDateTime.now(),
     var mood: Mood = Mood.Neutral,
     val images: MutableList<String> = mutableListOf()
 )

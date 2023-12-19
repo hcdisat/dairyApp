@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.UpdateDateTimeUseCase
 import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
@@ -27,7 +28,8 @@ class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val getSingleDiary: GetSingleDiaryUseCase,
-    private val saveDiary: SaveDiaryUseCase
+    private val saveDiary: SaveDiaryUseCase,
+    private val updateDateTime: UpdateDateTimeUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(DiaryEntryState())
     val state = _state.asStateFlow()
@@ -38,11 +40,18 @@ class WriteViewModel @Inject constructor(
 
     fun receiveAction(action: EntryActions) {
         when (action) {
+            is EntryActions.UpdateDate -> updateDate(action.dateInUtcMillis, action.diary)
             is EntryActions.SaveEntry -> saveEntry(action.entry)
             is EntryActions.UpdateMood -> updateMood(action.newValue)
             is EntryActions.UpdateDescription, is EntryActions.UpdateTitle -> updateText(action)
-            is EntryActions.UpdateDate -> {}
         }
+    }
+
+    private fun updateDate(utcMillis: Long, diary: PresentationDiary) {
+        updateDateTime(utcMillis = utcMillis, diary = diary).fold(
+            onFailure = ::handleError,
+            onSuccess = { _state.value = state.value.copy(diaryEntry = it) }
+        )
     }
 
     private fun saveEntry(entry: PresentationDiary) {

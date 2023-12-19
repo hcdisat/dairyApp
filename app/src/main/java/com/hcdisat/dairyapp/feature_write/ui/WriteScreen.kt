@@ -45,7 +45,12 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                         viewModel.receiveAction(EntryActions.SaveEntry(event.entry))
 
                     is WriteEntryEvents.OnDateChanged ->
-                        viewModel.receiveAction(EntryActions.UpdateDate(event.dateInMillis))
+                        viewModel.receiveAction(
+                            EntryActions.UpdateDate(
+                                dateInUtcMillis = event.dateInUtcMillis,
+                                diary = state.diaryEntry
+                            )
+                        )
                 }
             }
         }
@@ -85,7 +90,7 @@ private fun WriteScreen(
             when (this) {
                 is DatePickerEvents.DateSelected -> {
                     shouldOpenDatePicker = false
-                    onEvent(WriteEntryEvents.OnDateChanged(this.dateInMillis))
+                    onEvent(WriteEntryEvents.OnDateChanged(this.dateInUtcMillis))
                 }
 
                 DatePickerEvents.OnDismissed -> {

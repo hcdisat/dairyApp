@@ -52,7 +52,7 @@ fun DiaryDatePicker(
 }
 
 sealed interface DatePickerEvents {
-    data class DateSelected(val dateInMillis: Long) : DatePickerEvents
+    data class DateSelected(val dateInUtcMillis: Long) : DatePickerEvents
     data object OnDismissed : DatePickerEvents
 }
 
