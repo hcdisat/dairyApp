@@ -1,5 +1,6 @@
 package com.hcdisat.dairyapp.feature_write.model
 
+import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
@@ -16,4 +17,8 @@ sealed interface EntryActions {
         val diary: PresentationDiary
     ) : EntryActions
 
+    data class AddImages(
+        val diaryEntry: PresentationDiary,
+        val images: List<GalleryImage>
+    ) : EntryActions
 }

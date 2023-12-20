@@ -25,8 +25,10 @@ import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
 import com.hcdisat.dairyapp.presentation.components.DiaryTimePicker
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
 import com.hcdisat.dairyapp.presentation.components.TimePickerEvents
+import com.hcdisat.dairyapp.presentation.components.model.GalleryState
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.formattedDateTime
+import com.hcdisat.dairyapp.presentation.components.model.rememberGalleryUploaderState
 import com.hcdisat.dairyapp.presentation.extensions.toMillis
 
 @Composable
@@ -34,11 +36,12 @@ fun WriteScreen(onBackPressed: () -> Unit) {
     val viewModel: WriteViewModel = hiltViewModel()
     val state by viewModel.state
         .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
+    val galleryState = rememberGalleryUploaderState()
 
     when (val screenState = state.screenState) {
         EntryScreenState.Loading -> LoadingContent()
         EntryScreenState.Ready -> {
-            WriteScreen(diary = state.diaryEntry) { event ->
+            WriteScreen(diary = state.diaryEntry, galleryState = galleryState) { event ->
                 when (event) {
                     WriteEntryEvents.OnBackPressed -> onBackPressed()
                     is WriteEntryEvents.OnDelete ->
@@ -72,6 +75,13 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                                 diary = state.diaryEntry
                             )
                         )
+
+                    is WriteEntryEvents.OnImagesAdded -> {
+                        galleryState.addImageUris(event.images)
+                        viewModel.receiveAction(
+                            EntryActions.AddImages(state.diaryEntry, galleryState.images)
+                        )
+                    }
                 }
             }
         }
@@ -95,6 +105,7 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 @Composable
 private fun WriteScreen(
     diary: PresentationDiary,
+    galleryState: GalleryState = GalleryState(),
     onEvent: (WriteEntryEvents) -> Unit,
 ) {
     var shouldOpenDatePicker by rememberSaveable { mutableStateOf(false) }
@@ -116,6 +127,7 @@ private fun WriteScreen(
         WriteContent(
             diary = diary,
             paddingValues = this,
+            galleryState = galleryState,
             modifier = Modifier
                 .padding(top = this.calculateTopPadding(), bottom = this.calculateTopPadding())
                 .imePadding()

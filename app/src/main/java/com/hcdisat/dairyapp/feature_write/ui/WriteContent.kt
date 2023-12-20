@@ -31,7 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
+import com.hcdisat.dairyapp.presentation.components.GalleryUploader
+import com.hcdisat.dairyapp.presentation.components.GalleryUploaderEvents
 import com.hcdisat.dairyapp.presentation.components.MoodPager
+import com.hcdisat.dairyapp.presentation.components.model.GalleryState
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import kotlinx.coroutines.launch
 
@@ -40,6 +43,7 @@ import kotlinx.coroutines.launch
 fun WriteContent(
     modifier: Modifier = Modifier,
     diary: PresentationDiary = PresentationDiary(),
+    galleryState: GalleryState = GalleryState(),
     paddingValues: PaddingValues = PaddingValues(0.dp),
     onEvent: WriteEntryEvents.() -> Unit = {}
 ) {
@@ -111,6 +115,19 @@ fun WriteContent(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            GalleryUploader(
+                modifier = Modifier.padding(start = 12.dp),
+                galleryState = galleryState,
+                onEvents = {
+                    when (this) {
+                        is GalleryUploaderEvents.OnAddImageClicked -> Unit
+                        is GalleryUploaderEvents.OnImageClicked -> Unit
+                        is GalleryUploaderEvents.OnLocalImagesSelected ->
+                            WriteEntryEvents.OnImagesAdded(images).onEvent()
+                    }
+                }
+            )
+
             Button(
                 modifier = Modifier
                     .fillMaxWidth()

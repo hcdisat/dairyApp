@@ -14,6 +14,7 @@ import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.navigation.NavigationConstants
+import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.MutablePresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
@@ -44,12 +45,21 @@ class WriteViewModel @Inject constructor(
 
     fun receiveAction(action: EntryActions) {
         when (action) {
+            is EntryActions.AddImages -> handleImages(action.diaryEntry, action.images)
             is EntryActions.DeleteEntry -> deleteEntry(action.entry.id)
             is EntryActions.UpdateTime -> updateTime(action.hour, action.minute, action.diary)
             is EntryActions.UpdateDate -> updateDate(action.dateInUtcMillis, action.diary)
             is EntryActions.SaveEntry -> saveEntry(action.entry)
             is EntryActions.UpdateMood -> updateMood(action.newValue)
             is EntryActions.UpdateDescription, is EntryActions.UpdateTitle -> updateText(action)
+        }
+    }
+
+    private fun handleImages(diaryEntry: PresentationDiary, newImages: List<GalleryImage>) {
+        diaryEntry.update {
+            images.addAll(newImages.map { it.remoteImagePath })
+        }.also {
+            _state.value = state.value.copy(diaryEntry = it)
         }
     }
 

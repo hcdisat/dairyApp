@@ -79,7 +79,7 @@ fun Gallery(
 }
 
 @Composable
-private fun ImagePagination(size: Dp, shape: CornerBasedShape, remainingItems: Int) {
+internal fun ImagePagination(size: Dp, shape: CornerBasedShape, remainingItems: Int) {
     Box(contentAlignment = Alignment.Center) {
         Surface(
             content = {},
