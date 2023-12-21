@@ -64,6 +64,7 @@ fun WriteContent(
                 .verticalScroll(state = scrollState)
         ) {
             MoodPager(modifier = Modifier.size(120.dp), diary.mood, onEvent = onEvent)
+
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()

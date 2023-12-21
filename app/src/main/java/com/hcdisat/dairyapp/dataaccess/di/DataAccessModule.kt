@@ -1,5 +1,10 @@
 package com.hcdisat.dairyapp.dataaccess.di
 
+import com.google.firebase.auth.FirebaseAuth
+import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInService
+import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInServiceImpl
+import com.hcdisat.dairyapp.dataaccess.firebase.GoogleCredentialsProvider
+import com.hcdisat.dairyapp.dataaccess.firebase.GoogleCredentialsProviderImpl
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabaseImpl
 import com.hcdisat.dairyapp.dataaccess.realm.QueryProvider
@@ -15,10 +20,14 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RealmModule {
+class DataAccessModule {
     @Provides
     @Singleton
     fun providesRealApp(): App = App.create(APP_ID)
+
+    @Provides
+    @Singleton
+    fun providesFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Module
     @InstallIn(SingletonComponent::class)
@@ -30,5 +39,13 @@ class RealmModule {
         @Binds
         @Singleton
         fun bindsMongoDatabase(databaseImpl: MongoDatabaseImpl): MongoDatabase
+
+        @Binds
+        @Singleton
+        fun bindsGoogleCredentialsProvider(impl: GoogleCredentialsProviderImpl): GoogleCredentialsProvider
+
+        @Binds
+        @Singleton
+        fun bindsFirebaseSignInService(impl: FirebaseSignInServiceImpl): FirebaseSignInService
     }
 }
