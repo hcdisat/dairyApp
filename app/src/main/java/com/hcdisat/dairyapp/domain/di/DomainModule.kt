@@ -1,5 +1,6 @@
 package com.hcdisat.dairyapp.domain.di
 
+import com.hcdisat.dairyapp.abstraction.domain.repository.AuthenticationRepository
 import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
 import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
@@ -7,6 +8,7 @@ import com.hcdisat.dairyapp.abstraction.networking.SessionService
 import com.hcdisat.dairyapp.dataaccess.realm.services.CreateAccountServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.services.LogoutAccountServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.services.SessionServiceImpl
+import com.hcdisat.dairyapp.domain.repository.AuthenticationRepositoryImpl
 import com.hcdisat.dairyapp.domain.repository.MongoRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -32,4 +34,8 @@ interface DomainModule {
     @Binds
     @ViewModelScoped
     fun bindsSessionService(impl: SessionServiceImpl): SessionService
+
+    @Binds
+    @ViewModelScoped
+    fun bindsAuthenticationRepository(impl: AuthenticationRepositoryImpl): AuthenticationRepository
 }
