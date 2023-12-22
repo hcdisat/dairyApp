@@ -1,5 +1,6 @@
 package com.hcdisat.dairyapp.feature_write.model
 
+import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
 sealed interface EntryScreenState {
@@ -12,12 +13,14 @@ sealed interface EntryScreenState {
 
 data class DiaryEntryState(
     val diaryEntry: PresentationDiary = PresentationDiary(),
-    val screenState: EntryScreenState = EntryScreenState.Loading
+    val screenState: EntryScreenState = EntryScreenState.Loading,
+    val images: List<GalleryImage> = listOf()
 ) {
     companion object {
         fun newState() = DiaryEntryState(
             screenState = EntryScreenState.Ready,
-            diaryEntry = PresentationDiary()
+            diaryEntry = PresentationDiary(),
+            images = listOf()
         )
     }
 }

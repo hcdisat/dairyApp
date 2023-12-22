@@ -1,5 +1,7 @@
 package com.hcdisat.dairyapp.domain.repository
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.hcdisat.dairyapp.abstraction.domain.repository.AuthenticationRepository
 import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
 import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
@@ -9,8 +11,10 @@ import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val createAccountService: CreateAccountService,
-    private val firebaseSignInService: FirebaseSignInService
+    private val firebaseSignInService: FirebaseSignInService,
 ) : AuthenticationRepository {
+    override val user: FirebaseUser? get() = FirebaseAuth.getInstance().currentUser
+
     override suspend fun createWithGoogle(googleToken: String): AccountSessionState =
         createAccountService.createWithGoogle(googleToken)
 

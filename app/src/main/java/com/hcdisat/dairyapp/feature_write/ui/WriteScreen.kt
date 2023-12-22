@@ -1,6 +1,7 @@
 package com.hcdisat.dairyapp.feature_write.ui
 
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.imePadding
@@ -16,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hcdisat.dairyapp.R
+import com.hcdisat.dairyapp.core.InvalidImageUriException
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
@@ -25,10 +27,9 @@ import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
 import com.hcdisat.dairyapp.presentation.components.DiaryTimePicker
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
 import com.hcdisat.dairyapp.presentation.components.TimePickerEvents
-import com.hcdisat.dairyapp.presentation.components.model.GalleryState
+import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.formattedDateTime
-import com.hcdisat.dairyapp.presentation.components.model.rememberGalleryUploaderState
 import com.hcdisat.dairyapp.presentation.extensions.toMillis
 
 @Composable
@@ -36,12 +37,12 @@ fun WriteScreen(onBackPressed: () -> Unit) {
     val viewModel: WriteViewModel = hiltViewModel()
     val state by viewModel.state
         .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
-    val galleryState = rememberGalleryUploaderState()
+    val context = LocalContext.current
 
     when (val screenState = state.screenState) {
         EntryScreenState.Loading -> LoadingContent()
         EntryScreenState.Ready -> {
-            WriteScreen(diary = state.diaryEntry, galleryState = galleryState) { event ->
+            WriteScreen(diary = state.diaryEntry, images = state.images) { event ->
                 when (event) {
                     WriteEntryEvents.OnBackPressed -> onBackPressed()
                     is WriteEntryEvents.OnDelete ->
@@ -77,10 +78,8 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                         )
 
                     is WriteEntryEvents.OnImagesAdded -> {
-                        galleryState.addImageUris(event.images)
-                        viewModel.receiveAction(
-                            EntryActions.AddImages(state.diaryEntry, galleryState.images)
-                        )
+                        val images = event.images.map { uri -> uri to context.getImageType(uri) }
+                        viewModel.receiveAction(EntryActions.AddImages(state.diaryEntry, images))
                     }
                 }
             }
@@ -105,7 +104,7 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 @Composable
 private fun WriteScreen(
     diary: PresentationDiary,
-    galleryState: GalleryState = GalleryState(),
+    images: List<GalleryImage> = listOf(),
     onEvent: (WriteEntryEvents) -> Unit,
 ) {
     var shouldOpenDatePicker by rememberSaveable { mutableStateOf(false) }
@@ -127,7 +126,7 @@ private fun WriteScreen(
         WriteContent(
             diary = diary,
             paddingValues = this,
-            galleryState = galleryState,
+            images = images,
             modifier = Modifier
                 .padding(top = this.calculateTopPadding(), bottom = this.calculateTopPadding())
                 .imePadding()
@@ -175,4 +174,9 @@ private fun Context.showMessage(@StringRes messageId: Int) {
 
 private fun Context.showMessage(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+private fun Context.getImageType(uri: Uri): String {
+    val type = contentResolver.getType(uri) ?: throw InvalidImageUriException(uri)
+    return type.split("/").last()
 }

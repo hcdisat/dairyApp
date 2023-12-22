@@ -34,14 +34,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
-import com.hcdisat.dairyapp.presentation.components.model.GalleryState
 import com.hcdisat.dairyapp.ui.theme.Elevation
 
 @Preview
 @Composable
 fun GalleryUploader(
     modifier: Modifier = Modifier,
-    galleryState: GalleryState = GalleryState(),
+    images: List<GalleryImage> = listOf(),
     imageSize: Dp = 60.dp,
     imageShape: CornerBasedShape = MaterialTheme.shapes.medium,
     spaceBetween: Dp = 12.dp,
@@ -71,7 +70,7 @@ fun GalleryUploader(
                 )
             }
 
-            galleryState.images.take(imageCount).forEach { galleryImage ->
+            images.take(imageCount).forEach { galleryImage ->
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(galleryImage.image)
@@ -91,7 +90,7 @@ fun GalleryUploader(
                 )
             }
 
-            val remainingImages = galleryState.images.size - imageCount
+            val remainingImages = images.size - imageCount
             if (remainingImages > 0) {
                 ImagePagination(
                     size = imageSize,

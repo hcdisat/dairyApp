@@ -1,5 +1,6 @@
 package com.hcdisat.dairyapp.feature_write.ui
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,13 +9,13 @@ import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ErrorHandlerUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.ImageUploaderUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.UpdateDateTimeUseCase
 import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.navigation.NavigationConstants
-import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.MutablePresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
@@ -34,6 +35,7 @@ class WriteViewModel @Inject constructor(
     private val saveDiary: SaveDiaryUseCase,
     private val updateDateTime: UpdateDateTimeUseCase,
     private val deleteDiary: DeleteDiaryUseCase,
+    private val imageUploader: ImageUploaderUseCase,
     private val errorHandler: ErrorHandlerUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(DiaryEntryState())
@@ -55,12 +57,17 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun handleImages(diaryEntry: PresentationDiary, newImages: List<GalleryImage>) {
-        diaryEntry.update {
-            images.addAll(newImages.map { it.remoteImagePath })
-        }.also {
-            _state.value = state.value.copy(diaryEntry = it)
-        }
+    private fun handleImages(diaryEntry: PresentationDiary, newImages: List<Pair<Uri, String>>) {
+        imageUploader(newImages).fold(
+            onFailure = ::handleError,
+            onSuccess = { galleryImages ->
+                val updatedDiary = diaryEntry.update {
+                    galleryImages.map { it.remoteImagePath }.also { images.addAll(it) }
+                }
+                _state.value = state.value.copy(images = galleryImages, diaryEntry = updatedDiary)
+                Log.d("hector", "handleImages: ${state.value}")
+            }
+        )
     }
 
     private fun deleteEntry(entryId: String) {
@@ -92,7 +99,12 @@ class WriteViewModel @Inject constructor(
 
     private fun saveEntry(entry: PresentationDiary) {
         viewModelScope.launch {
-            _state.value = withContext(dispatcher) { saveDiary(entry) }.fold(
+            _state.value = withContext(dispatcher) {
+                val newEntry = entry.copy(
+                    images = state.value.images.map { it.remoteImagePath }
+                )
+                saveDiary(newEntry)
+            }.fold(
                 onFailure = ::handleError,
                 onSuccess = {
                     state.value.copy(diaryEntry = it, screenState = EntryScreenState.Saved)
