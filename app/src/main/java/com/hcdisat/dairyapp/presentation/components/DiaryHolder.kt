@@ -54,7 +54,7 @@ fun DiaryHolder(
     onClick: (String?) -> Unit = {}
 ) {
     var componentHeight by remember { mutableStateOf(0.dp) }
-    var isGalleryOpen by remember { mutableStateOf(true) }
+    var isGalleryOpen by remember { mutableStateOf(false) }
     val localDensity = LocalDensity.current
 
     Row(
