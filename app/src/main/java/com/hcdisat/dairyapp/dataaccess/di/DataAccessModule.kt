@@ -1,10 +1,13 @@
 package com.hcdisat.dairyapp.dataaccess.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInService
 import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInServiceImpl
 import com.hcdisat.dairyapp.dataaccess.firebase.GoogleCredentialsProvider
 import com.hcdisat.dairyapp.dataaccess.firebase.GoogleCredentialsProviderImpl
+import com.hcdisat.dairyapp.dataaccess.firebase.ImageUploaderService
+import com.hcdisat.dairyapp.dataaccess.firebase.ImageUploaderServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabaseImpl
 import com.hcdisat.dairyapp.dataaccess.realm.QueryProvider
@@ -29,6 +32,10 @@ class DataAccessModule {
     @Singleton
     fun providesFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
+    @Provides
+    @Singleton
+    fun providesStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
     @Module
     @InstallIn(SingletonComponent::class)
     interface SubModule {
@@ -47,5 +54,9 @@ class DataAccessModule {
         @Binds
         @Singleton
         fun bindsFirebaseSignInService(impl: FirebaseSignInServiceImpl): FirebaseSignInService
+
+        @Binds
+        @Singleton
+        fun bindsImageRepository(impl: ImageUploaderServiceImpl): ImageUploaderService
     }
 }

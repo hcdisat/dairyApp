@@ -15,12 +15,4 @@ data class DiaryEntryState(
     val diaryEntry: PresentationDiary = PresentationDiary(),
     val screenState: EntryScreenState = EntryScreenState.Loading,
     val images: List<GalleryImage> = listOf()
-) {
-    companion object {
-        fun newState() = DiaryEntryState(
-            screenState = EntryScreenState.Ready,
-            diaryEntry = PresentationDiary(),
-            images = listOf()
-        )
-    }
-}
+)

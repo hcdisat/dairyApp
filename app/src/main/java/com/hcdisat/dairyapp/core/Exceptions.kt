@@ -8,3 +8,6 @@ class UnexpectedException(innerException: Throwable) : RuntimeException(innerExc
 data class RealmGenericException(val throwable: Throwable) : RuntimeException(throwable)
 
 class InvalidImageUriException(uri: Uri) : RuntimeException("${uri.path}")
+class OperationCanceledException(
+    override val message: String = "Operation was Cancelled"
+) : RuntimeException(message)

@@ -9,6 +9,8 @@ import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCaseImpl
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ImageUploaderUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ImageUploaderUseCaseImpl
+import com.hcdisat.dairyapp.feature_write.domain.usecase.RemoteImagePathGeneratorUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.RemoteImagePathGeneratorUseCaseImpl
 import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.SaveDiaryUseCaseImpl
 import com.hcdisat.dairyapp.feature_write.domain.usecase.UpdateDateTimeUseCase
@@ -47,6 +49,12 @@ interface WriteModule {
     @Binds
     @ViewModelScoped
     fun bindsImageUploaderUseCase(impl: ImageUploaderUseCaseImpl): ImageUploaderUseCase
+
+    @Binds
+    @ViewModelScoped
+    fun bindsRemoteImagePathGeneratorUseCase(
+        impl: RemoteImagePathGeneratorUseCaseImpl
+    ): RemoteImagePathGeneratorUseCase
 }
 
 @Module

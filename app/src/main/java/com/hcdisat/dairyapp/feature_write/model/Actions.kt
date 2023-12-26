@@ -17,8 +17,5 @@ sealed interface EntryActions {
         val diary: PresentationDiary
     ) : EntryActions
 
-    data class AddImages(
-        val diaryEntry: PresentationDiary,
-        val images: List<Pair<Uri, String>>
-    ) : EntryActions
+    data class AddImages(val images: List<Pair<Uri, String>>) : EntryActions
 }

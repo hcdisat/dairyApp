@@ -79,7 +79,7 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 
                     is WriteEntryEvents.OnImagesAdded -> {
                         val images = event.images.map { uri -> uri to context.getImageType(uri) }
-                        viewModel.receiveAction(EntryActions.AddImages(state.diaryEntry, images))
+                        viewModel.receiveAction(EntryActions.AddImages(images))
                     }
                 }
             }

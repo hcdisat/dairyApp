@@ -2,9 +2,9 @@ package com.hcdisat.dairyapp.dataaccess.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 sealed interface FirebaseAuthResult {
     data object Success : FirebaseAuthResult
@@ -24,7 +24,7 @@ class FirebaseSignInServiceImpl @Inject constructor(
     override val user: FirebaseUser? get() = FirebaseAuth.getInstance().currentUser
 
     override suspend fun signInWithCredentials(tokenId: String): FirebaseAuthResult =
-        suspendCoroutine { continuation ->
+        suspendCancellableCoroutine { continuation ->
             val credentials = googleCredentialService.getCredentials(tokenId)
             firebaseAuth.signInWithCredential(credentials).addOnCompleteListener { task ->
                 when {
@@ -38,6 +38,10 @@ class FirebaseSignInServiceImpl @Inject constructor(
                         val error = task.exception ?: RuntimeException("Unknown Error")
                         continuation.resume(FirebaseAuthResult.Error(error))
                     }
+                }
+
+                continuation.invokeOnCancellation {
+                    continuation.resume(FirebaseAuthResult.Canceled)
                 }
             }
         }

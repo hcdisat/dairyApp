@@ -9,6 +9,8 @@ import com.hcdisat.dairyapp.dataaccess.realm.services.CreateAccountServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.services.LogoutAccountServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.services.SessionServiceImpl
 import com.hcdisat.dairyapp.domain.repository.AuthenticationRepositoryImpl
+import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
+import com.hcdisat.dairyapp.domain.repository.DomainImageRepositoryImpl
 import com.hcdisat.dairyapp.domain.repository.MongoRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -38,4 +40,8 @@ interface DomainModule {
     @Binds
     @ViewModelScoped
     fun bindsAuthenticationRepository(impl: AuthenticationRepositoryImpl): AuthenticationRepository
+
+    @Binds
+    @ViewModelScoped
+    fun bindsDomainImageRepository(impl: DomainImageRepositoryImpl): DomainImageRepository
 }
