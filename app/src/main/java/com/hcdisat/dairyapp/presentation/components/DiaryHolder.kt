@@ -158,14 +158,21 @@ private fun GalleryToggle(
     isLoading: Boolean = false,
     openedText: String = stringResource(R.string.show_gallery_label),
     closedText: String = stringResource(R.string.hide_gallery_label),
+    loadingText: String = stringResource(R.string.loading_gallery_label),
     onToggle: () -> Unit
 ) {
+    val labelState = when {
+        isLoading -> loadingText
+        isOpen -> closedText
+        else -> openedText
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
-            text = if (isOpen) closedText else openedText,
+            text = labelState,
             modifier = Modifier
                 .padding(start = 16.dp)
                 .clickable { onToggle() },
