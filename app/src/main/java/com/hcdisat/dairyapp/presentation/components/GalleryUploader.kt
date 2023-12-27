@@ -40,7 +40,7 @@ import com.hcdisat.dairyapp.ui.theme.Elevation
 @Composable
 fun GalleryUploader(
     modifier: Modifier = Modifier,
-    images: List<GalleryImage> = listOf(),
+    images: Set<GalleryImage> = setOf(),
     imageSize: Dp = 60.dp,
     imageShape: CornerBasedShape = MaterialTheme.shapes.medium,
     spaceBetween: Dp = 12.dp,

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadResult
 import com.hcdisat.dairyapp.core.OperationCanceledException
 import com.hcdisat.dairyapp.core.di.IODispatcher
+import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ErrorHandlerUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
@@ -21,6 +22,7 @@ import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.navigation.NavigationConstants
+import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.MutablePresentationDiary
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
@@ -42,6 +44,7 @@ class WriteViewModel @Inject constructor(
     private val updateDateTime: UpdateDateTimeUseCase,
     private val deleteDiary: DeleteDiaryUseCase,
     private val imageUploader: ImageUploaderUseCase,
+    private val loadGallery: LoadDiaryGalleryUseCase,
     private val errorHandler: ErrorHandlerUseCase,
     private val imagePathGenerator: RemoteImagePathGeneratorUseCase
 ) : ViewModel() {
@@ -67,13 +70,10 @@ class WriteViewModel @Inject constructor(
     private fun handleImages(newImages: List<Pair<Uri, String>>) = state.updateState {
         val remoteImageMetadata = newImages.map { (uri, ext) ->
             ImageData(uri) to ImageExtension(ext)
-        }
+        }.let(imagePathGenerator::invoke)
 
-        val allImages = images.toMutableList().apply {
-            addAll(imagePathGenerator(remoteImageMetadata))
-        }
-
-        copy(images = allImages.toList())
+        val allImages = images.toMutableSet().apply { addAll(remoteImageMetadata) }
+        copy(images = allImages.toSet(), newImages = remoteImageMetadata)
     }
 
     private fun deleteEntry(entryId: String) {
@@ -106,14 +106,26 @@ class WriteViewModel @Inject constructor(
         viewModelScope.launch {
             uploadImages().mapCatching {
                 val newEntry = entry.update {
-                    images.addAll(state.value.images.map { it.remoteImagePath })
+                    val updatedGallery = state.value.images.map {
+                        it.remoteImagePath
+                    }.toMutableSet()
+
+                    updatedGallery.addAll(images)
+                    images.apply {
+                        clear()
+                        addAll(updatedGallery)
+                    }
                 }
                 saveDiary(newEntry).getOrThrow()
             }.fold(
                 onFailure = ::handleError,
                 onSuccess = {
                     state.updateState {
-                        copy(diaryEntry = it, screenState = EntryScreenState.Saved)
+                        copy(
+                            diaryEntry = it,
+                            screenState = EntryScreenState.Saved,
+                            newImages = listOf()
+                        )
                     }
                 }
             )
@@ -121,7 +133,7 @@ class WriteViewModel @Inject constructor(
     }
 
     private suspend fun uploadImages(): Result<Unit> = withContext(dispatcher) {
-        imageUploader(state.value.images).mapCatching { uploadResult ->
+        imageUploader(state.value.newImages).mapCatching { uploadResult ->
             when (uploadResult) {
                 ImageUploadResult.Canceled ->
                     throw OperationCanceledException("Images upload cancelled")
@@ -149,7 +161,15 @@ class WriteViewModel @Inject constructor(
 
     private suspend fun loadEntry(entryId: String): DiaryEntryState {
         return withContext(dispatcher) {
-            getSingleDiary(entryId).fold(
+            getSingleDiary(entryId).mapCatching {
+                val uriList = loadGallery(it.diaryEntry.images).getOrThrow()
+
+                val galleryImages = it.diaryEntry.images.mapIndexed { index, remotePath ->
+                    GalleryImage(image = uriList[index], remoteImagePath = remotePath)
+                }.toSet()
+
+                it.copy(images = galleryImages)
+            }.fold(
                 onFailure = ::handleError,
                 onSuccess = { it },
             )

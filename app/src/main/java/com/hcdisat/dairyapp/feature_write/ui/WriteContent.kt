@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 fun WriteContent(
     modifier: Modifier = Modifier,
     diary: PresentationDiary = PresentationDiary(),
-    images: List<GalleryImage> = listOf(),
+    images: Set<GalleryImage> = setOf(),
     paddingValues: PaddingValues = PaddingValues(0.dp),
     onEvent: WriteEntryEvents.() -> Unit = {}
 ) {

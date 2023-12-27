@@ -104,7 +104,7 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 @Composable
 private fun WriteScreen(
     diary: PresentationDiary,
-    images: List<GalleryImage> = listOf(),
+    images: Set<GalleryImage> = setOf(),
     onEvent: (WriteEntryEvents) -> Unit,
 ) {
     var shouldOpenDatePicker by rememberSaveable { mutableStateOf(false) }

@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_home.domain.usecase
+package com.hcdisat.dairyapp.domain.usecases
 
 import android.net.Uri
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepository

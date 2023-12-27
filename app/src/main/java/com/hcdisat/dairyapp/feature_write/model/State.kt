@@ -14,5 +14,6 @@ sealed interface EntryScreenState {
 data class DiaryEntryState(
     val diaryEntry: PresentationDiary = PresentationDiary(),
     val screenState: EntryScreenState = EntryScreenState.Loading,
-    val images: List<GalleryImage> = listOf()
+    val images: Set<GalleryImage> = setOf(),
+    val newImages: List<GalleryImage> = listOf()
 )

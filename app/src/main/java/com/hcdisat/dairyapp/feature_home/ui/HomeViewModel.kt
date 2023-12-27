@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
 import com.hcdisat.dairyapp.core.di.IODispatcher
+import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCase
-import com.hcdisat.dairyapp.feature_home.domain.usecase.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
 import com.hcdisat.dairyapp.feature_home.model.DiaryState
 import com.hcdisat.dairyapp.feature_home.model.GalleryState
