@@ -6,6 +6,8 @@ import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInService
 import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInServiceImpl
 import com.hcdisat.dairyapp.dataaccess.firebase.GoogleCredentialsProvider
 import com.hcdisat.dairyapp.dataaccess.firebase.GoogleCredentialsProviderImpl
+import com.hcdisat.dairyapp.dataaccess.firebase.ImageReaderService
+import com.hcdisat.dairyapp.dataaccess.firebase.ImageReaderServiceImpl
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageUploaderService
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageUploaderServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
@@ -58,5 +60,9 @@ class DataAccessModule {
         @Binds
         @Singleton
         fun bindsImageRepository(impl: ImageUploaderServiceImpl): ImageUploaderService
+
+        @Binds
+        @Singleton
+        fun bindsImageReaderService(impl: ImageReaderServiceImpl): ImageReaderService
     }
 }
