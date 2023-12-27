@@ -68,7 +68,12 @@ class WriteViewModel @Inject constructor(
         val remoteImageMetadata = newImages.map { (uri, ext) ->
             ImageData(uri) to ImageExtension(ext)
         }
-        copy(images = imagePathGenerator(remoteImageMetadata))
+
+        val allImages = images.toMutableList().apply {
+            addAll(imagePathGenerator(remoteImageMetadata))
+        }
+
+        copy(images = allImages.toList())
     }
 
     private fun deleteEntry(entryId: String) {
@@ -100,16 +105,15 @@ class WriteViewModel @Inject constructor(
         state.updateState { copy(screenState = EntryScreenState.Loading) }
         viewModelScope.launch {
             uploadImages().mapCatching {
-                val newEntry = entry.copy(images = state.value.images.map { it.remoteImagePath })
+                val newEntry = entry.update {
+                    images.addAll(state.value.images.map { it.remoteImagePath })
+                }
                 saveDiary(newEntry).getOrThrow()
             }.fold(
                 onFailure = ::handleError,
                 onSuccess = {
-                    _state.updateState {
-                        copy(
-                            diaryEntry = it,
-                            screenState = EntryScreenState.Saved
-                        )
+                    state.updateState {
+                        copy(diaryEntry = it, screenState = EntryScreenState.Saved)
                     }
                 }
             )
