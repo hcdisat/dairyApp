@@ -1,5 +1,7 @@
 package com.hcdisat.dairyapp.presentation.components
 
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -32,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +44,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hcdisat.dairyapp.R
+import com.hcdisat.dairyapp.feature_home.model.GalleryState
+import com.hcdisat.dairyapp.feature_home.model.HomeEvent
+import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 import com.hcdisat.dairyapp.presentation.components.model.DiaryHeaderPresentation
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
@@ -51,15 +58,18 @@ import java.time.LocalDateTime
 fun DiaryHolder(
     modifier: Modifier = Modifier,
     diary: PresentationDiary,
-    onClick: (String?) -> Unit = {}
+    images: List<Uri> = listOf(),
+    galleryState: GalleryState = GalleryState.Collapsed,
+    onEvent: HomeEventAction = {}
 ) {
+    val context = LocalContext.current
     var componentHeight by remember { mutableStateOf(0.dp) }
-    var isGalleryOpen by remember { mutableStateOf(false) }
+    val isGalleryOpen = GalleryState.Visible == galleryState
     val localDensity = LocalDensity.current
 
     Row(
         modifier = modifier.clickable(
-            onClick = { onClick(diary.id) },
+            onClick = { HomeEvent.EditEntry(diary.id).onEvent() },
             indication = null,
             interactionSource = remember { MutableInteractionSource() }
         )
@@ -103,9 +113,14 @@ fun DiaryHolder(
                         maxLines = 4
                     )
 
-                    if (diary.images.isNotEmpty()) {
-                        GalleryToggle(isOpen = isGalleryOpen) {
-                            isGalleryOpen = !isGalleryOpen
+                    GalleryToggle(
+                        isOpen = isGalleryOpen,
+                        isLoading = galleryState is GalleryState.Loading
+                    ) {
+                        when (galleryState) {
+                            GalleryState.Collapsed -> HomeEvent.ShowGallery(diary).onEvent()
+                            GalleryState.Visible -> HomeEvent.HideGallery(diary).onEvent()
+                            else -> Unit
                         }
                     }
 
@@ -119,7 +134,7 @@ fun DiaryHolder(
                         )
                     ) {
                         Gallery(
-                            images = diary.images,
+                            images = images,
                             modifier = Modifier.padding(start = 12.dp)
                         )
                     }
@@ -127,22 +142,45 @@ fun DiaryHolder(
             }
         }
     }
+
+    if (galleryState is GalleryState.Error) {
+        Toast.makeText(
+            context,
+            galleryState.throwable.message ?: "Error loading the gallery",
+            Toast.LENGTH_LONG
+        ).show()
+    }
 }
 
 @Composable
 private fun GalleryToggle(
     isOpen: Boolean,
+    isLoading: Boolean = false,
     openedText: String = stringResource(R.string.show_gallery_label),
     closedText: String = stringResource(R.string.hide_gallery_label),
     onToggle: () -> Unit
 ) {
-    Text(
-        text = if (isOpen) closedText else openedText,
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clickable { onToggle() },
-        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface)
-    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = if (isOpen) closedText else openedText,
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .clickable { onToggle() },
+            style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface)
+        )
+
+        if (isLoading) {
+            CircularProgressIndicator(
+                strokeWidth = 1.dp,
+                modifier = Modifier
+                    .size(15.dp)
+                    .align(alignment = Alignment.CenterVertically)
+            )
+        }
+    }
 }
 
 @Composable

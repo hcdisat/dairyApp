@@ -61,9 +61,9 @@ fun NavGraphBuilder.home(
             when (this) {
                 is HomeEvent.AddNewEntry -> onAddNewEntry()
                 is HomeEvent.EditEntry -> onEditEntry(entryId)
-                is HomeEvent.MenuClicked -> Unit
                 is HomeEvent.OpenDrawer -> scope.launch { drawerState.open() }
                 is HomeEvent.Logout -> onLoggedOut()
+                else -> Unit
             }
         }
     }

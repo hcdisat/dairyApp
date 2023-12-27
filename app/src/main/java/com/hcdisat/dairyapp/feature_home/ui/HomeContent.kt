@@ -25,7 +25,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.hcdisat.dairyapp.R
+import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
 import com.hcdisat.dairyapp.feature_home.model.DiaryState
+import com.hcdisat.dairyapp.feature_home.model.GalleryStateData
+import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 import com.hcdisat.dairyapp.presentation.components.DiaryDate
 import com.hcdisat.dairyapp.presentation.components.DiaryHolder
 import com.hcdisat.dairyapp.presentation.components.LoadingContent
@@ -34,35 +37,36 @@ import com.hcdisat.dairyapp.presentation.components.model.entryKey
 import com.hcdisat.dairyapp.presentation.extensions.toPresentationDate
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
-    homeState: DiaryState = DiaryState.Loaded(listOf()),
+    homeState: DiaryState = DiaryState(),
     paddingValues: PaddingValues = PaddingValues(all = 0.dp),
-    onClick: (String) -> Unit = {}
+    onEvent: HomeEventAction,
 ) {
-    when (homeState) {
-        is DiaryState.Loading -> LoadingContent()
-        is DiaryState.Error -> EmptyPage(
+    when (homeState.screenState) {
+        is DiaryScreenState.Loading -> LoadingContent()
+        is DiaryScreenState.Error -> EmptyPage(
             title = "An error has occurred",
             subtitle = "We can't find any diaries, please login again."
         )
 
-        is DiaryState.Loaded -> LoadedContent(
+        is DiaryScreenState.Loaded -> LoadedContent(
             diaries = homeState.diaries,
-            onClick = onClick,
+            galleryState = homeState.galleryState,
+            onEvent = onEvent,
             paddingValues = paddingValues
         )
     }
-
-
 }
 
 @ExperimentalFoundationApi
 @Composable
 private fun LoadedContent(
     diaries: List<PresentationDiary> = listOf(),
+    galleryState: Map<String, GalleryStateData> = mapOf(),
     paddingValues: PaddingValues = PaddingValues(all = 0.dp),
-    onClick: (String) -> Unit = {}
+    onEvent: HomeEventAction
 ) {
     if (diaries.isEmpty()) {
         EmptyPage(
@@ -78,7 +82,7 @@ private fun LoadedContent(
             .navigationBarsPadding()
             .padding(top = paddingValues.calculateTopPadding()),
     ) {
-        diaries.groupBy { it.dateTime.toPresentationDate() }.forEach { (date, diaries) ->
+        diaries.groupBy { it.dateTime.toPresentationDate() }.forEach { (date, entries) ->
             stickyHeader(key = date.entryKey) {
                 DiaryDate(
                     date = date,
@@ -89,8 +93,14 @@ private fun LoadedContent(
                 )
             }
 
-            items(items = diaries, key = { it.id }) { diary ->
-                DiaryHolder(diary = diary, onClick = { it?.let(onClick) })
+            items(items = entries, key = { it.id }) { diary ->
+                val stateData = galleryState[diary.id] ?: GalleryStateData()
+                DiaryHolder(
+                    diary = diary,
+                    onEvent = onEvent,
+                    images = stateData.images,
+                    galleryState = stateData.galleryState
+                )
             }
         }
     }
@@ -115,12 +125,12 @@ private fun EmptyPage(title: String, subtitle: String) {
     }
 }
 
-class HomeContentProvider : PreviewParameterProvider<DiaryState> {
-    override val values: Sequence<DiaryState>
+class HomeContentProvider : PreviewParameterProvider<DiaryScreenState> {
+    override val values: Sequence<DiaryScreenState>
         get() = sequenceOf(
-            DiaryState.Loading,
-            DiaryState.Error(Exception("Some Error")),
-            DiaryState.Loaded(listOf()),
+            DiaryScreenState.Loading,
+            DiaryScreenState.Error(Exception("Some Error")),
+            DiaryScreenState.Loaded,
         )
 }
 

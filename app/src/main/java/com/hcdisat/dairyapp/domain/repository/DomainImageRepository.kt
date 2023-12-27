@@ -20,4 +20,7 @@ class DomainImageRepositoryImpl @Inject constructor(
     ): Result<ImageUploadResult> = runCatching {
         imageUploaderService.uploadImages(newImages)
     }
+
+    override suspend fun downloadImages(paths: List<String>): Result<List<Uri>> =
+        imageReaderService.getImagesFromPaths(paths)
 }

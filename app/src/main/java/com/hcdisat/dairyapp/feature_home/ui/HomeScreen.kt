@@ -82,8 +82,14 @@ fun HomeScreen(
             HomeContent(
                 homeState = homeState,
                 paddingValues = this,
-                onClick = { HomeEvent.EditEntry(it).onEvent() }
-            )
+            ) {
+                when (this) {
+                    is HomeEvent.HideGallery -> viewModel.hideGalleryImages(diary)
+                    is HomeEvent.ShowGallery -> viewModel.showGalleryImages(diary)
+                    is HomeEvent.LoadGallery -> viewModel.loadImageGallery(diary)
+                    else -> onEvent(this)
+                }
+            }
         }
     }
 

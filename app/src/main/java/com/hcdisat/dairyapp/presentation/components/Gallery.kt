@@ -1,6 +1,6 @@
 package com.hcdisat.dairyapp.presentation.components
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -34,7 +33,7 @@ import com.hcdisat.dairyapp.ui.theme.Elevation
 @Composable
 fun Gallery(
     modifier: Modifier = Modifier,
-    images: List<String> = listOf(),
+    images: List<Uri> = listOf(),
     imageSize: Dp = 40.dp,
     spaceBetween: Dp = 10.dp,
     shape: CornerBasedShape = Shapes().small
@@ -94,20 +93,4 @@ internal fun ImagePagination(size: Dp, shape: CornerBasedShape, remainingItems: 
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
         )
     }
-}
-
-@Preview
-@Composable
-private fun ImagePaginationPreview() {
-    ImagePagination(
-        size = 40.dp,
-        shape = MaterialTheme.shapes.small,
-        remainingItems = 4
-    )
-}
-
-@Preview(uiMode = UI_MODE_NIGHT_YES)
-@Composable
-private fun GalleryPreview() {
-    Gallery(images = listOf("", "", "", "", "", "", "", ""))
 }

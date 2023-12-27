@@ -5,7 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCase
+import com.hcdisat.dairyapp.feature_home.domain.usecase.LoadDiaryGalleryUseCase
+import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
 import com.hcdisat.dairyapp.feature_home.model.DiaryState
+import com.hcdisat.dairyapp.feature_home.model.GalleryState
+import com.hcdisat.dairyapp.feature_home.model.GalleryStateData
+import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +23,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val logoutAccountService: LogoutAccountService,
-    private val getDiaries: GetDiariesUseCase
+    private val getDiaries: GetDiariesUseCase,
+    private val loadGallery: LoadDiaryGalleryUseCase
 ) : ViewModel() {
-    private val _homeState: MutableStateFlow<DiaryState> = MutableStateFlow(DiaryState.Loading)
+    private val _homeState: MutableStateFlow<DiaryState> = MutableStateFlow(DiaryState())
     val homeState = _homeState.asStateFlow()
 
     init {
@@ -33,14 +39,79 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun hideGalleryImages(presentationDiary: PresentationDiary) = updateGallery(presentationDiary) {
+        copy(galleryState = GalleryState.Collapsed)
+    }
+
+    fun showGalleryImages(presentationDiary: PresentationDiary) {
+        if (homeState.value.galleryState.contains(presentationDiary.id)) {
+            updateGallery(presentationDiary) {
+                copy(galleryState = GalleryState.Visible)
+            }
+            return
+        }
+
+        loadImageGallery(presentationDiary)
+    }
+
+    fun loadImageGallery(presentationDiary: PresentationDiary) {
+        updateGallery(presentationDiary) {
+            copy(galleryState = GalleryState.Loading)
+        }
+
+        viewModelScope.launch {
+            withContext(dispatcher) { loadGallery(presentationDiary.images) }.fold(
+                onFailure = {
+                    updateGallery(presentationDiary) {
+                        copy(galleryState = GalleryState.Error(it))
+                    }
+                },
+                onSuccess = { imageUris ->
+                    updateGallery(presentationDiary) {
+                        copy(images = imageUris, galleryState = GalleryState.Visible)
+                    }
+                }
+            )
+        }
+    }
+
     private fun observeDiaries() {
-        viewModelScope.launch(dispatcher) {
-            getDiaries().collect { result ->
-                _homeState.value = result.fold(
-                    onSuccess = { DiaryState.Loaded(it) },
-                    onFailure = { DiaryState.Error(it) }
+        viewModelScope.launch {
+            withContext(dispatcher) { getDiaries() }.collect { result ->
+                result.fold(
+                    onSuccess = { diaries ->
+                        updateState {
+                            diaries.filter { diary ->
+                                diary.id in galleryState.filter {
+                                    it.value.galleryState == GalleryState.Visible
+                                }.keys
+                            }.forEach(::loadImageGallery)
+
+                            copy(diaries = diaries, screenState = DiaryScreenState.Loaded)
+                        }
+                    },
+                    onFailure = {
+                        updateState { copy(screenState = DiaryScreenState.Error(it)) }
+                    }
                 )
             }
         }
+    }
+
+    private inline fun updateState(update: DiaryState.() -> DiaryState) {
+        _homeState.value = homeState.value.update()
+    }
+
+    private inline fun updateGallery(
+        presentationDiary: PresentationDiary,
+        update: GalleryStateData.() -> GalleryStateData
+    ) = updateState {
+        val galleryToUpdate = galleryState[presentationDiary.id] ?: GalleryStateData()
+
+        val updatedGallery = galleryToUpdate.update()
+        val newGalleryMap = galleryState.toMutableMap()
+        newGalleryMap[presentationDiary.id] = updatedGallery
+
+        copy(galleryState = newGalleryMap.toMap())
     }
 }
