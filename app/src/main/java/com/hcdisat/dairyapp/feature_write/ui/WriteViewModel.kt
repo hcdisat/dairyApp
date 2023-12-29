@@ -5,8 +5,6 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadResult
-import com.hcdisat.dairyapp.core.OperationCanceledException
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCase
@@ -104,20 +102,20 @@ class WriteViewModel @Inject constructor(
     private fun saveEntry(entry: PresentationDiary) {
         state.updateState { copy(screenState = EntryScreenState.Loading) }
         viewModelScope.launch {
-            uploadImages().mapCatching {
-                val newEntry = entry.update {
-                    val updatedGallery = state.value.images.map {
-                        it.remoteImagePath
-                    }.toMutableSet()
+            withContext(dispatcher) { imageUploader(state.value.newImages) }
+            val newEntry = entry.update {
+                val updatedGallery = state.value.images.map {
+                    it.remoteImagePath
+                }.toMutableSet()
 
-                    updatedGallery.addAll(images)
-                    images.apply {
-                        clear()
-                        addAll(updatedGallery)
-                    }
+                updatedGallery.addAll(images)
+                images.apply {
+                    clear()
+                    addAll(updatedGallery)
                 }
-                saveDiary(newEntry).getOrThrow()
-            }.fold(
+            }
+
+            withContext(dispatcher) { saveDiary(newEntry) }.fold(
                 onFailure = ::handleError,
                 onSuccess = {
                     state.updateState {
@@ -131,19 +129,6 @@ class WriteViewModel @Inject constructor(
             )
         }
     }
-
-    private suspend fun uploadImages(): Result<Unit> = withContext(dispatcher) {
-        imageUploader(state.value.newImages).mapCatching { uploadResult ->
-            when (uploadResult) {
-                ImageUploadResult.Canceled ->
-                    throw OperationCanceledException("Images upload cancelled")
-
-                is ImageUploadResult.Error -> throw uploadResult.throwable
-                ImageUploadResult.Success -> Unit
-            }
-        }
-    }
-
 
     private fun updateMood(newMood: Mood) = state.updateState {
         val update = diaryEntry.update { mood = newMood }

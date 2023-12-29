@@ -1,6 +1,7 @@
 package com.hcdisat.dairyapp.domain.di
 
 import com.hcdisat.dairyapp.abstraction.domain.repository.AuthenticationRepository
+import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
 import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
 import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
@@ -11,7 +12,10 @@ import com.hcdisat.dairyapp.dataaccess.realm.services.SessionServiceImpl
 import com.hcdisat.dairyapp.domain.repository.AuthenticationRepositoryImpl
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepositoryImpl
+import com.hcdisat.dairyapp.domain.repository.ImageUploadRetryRepositoryImpl
 import com.hcdisat.dairyapp.domain.repository.MongoRepositoryImpl
+import com.hcdisat.dairyapp.domain.usecases.RetryImageUploadUseCase
+import com.hcdisat.dairyapp.domain.usecases.RetryImageUploadUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -44,4 +48,12 @@ interface DomainModule {
     @Binds
     @ViewModelScoped
     fun bindsDomainImageRepository(impl: DomainImageRepositoryImpl): DomainImageRepository
+
+    @Binds
+    @ViewModelScoped
+    fun bindsImageUploadRetryRepository(impl: ImageUploadRetryRepositoryImpl): ImageUploadRetryRepository
+
+    @Binds
+    @ViewModelScoped
+    fun bindsRetryImageUploadUseCase(impl: RetryImageUploadUseCaseImpl): RetryImageUploadUseCase
 }

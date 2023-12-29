@@ -1,5 +1,6 @@
 package com.hcdisat.dairyapp.presentation.components
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -46,7 +47,11 @@ fun GalleryUploader(
     spaceBetween: Dp = 12.dp,
     onEvents: GalleryUploaderEvents.() -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+
     val multiplePhotoPicker = rememberMultiplePhotoPicker {
+        forEach { context.contentResolver.takePersistableUriPermission(it, flag) }
         GalleryUploaderEvents.OnLocalImagesSelected(this).onEvents()
     }
 
