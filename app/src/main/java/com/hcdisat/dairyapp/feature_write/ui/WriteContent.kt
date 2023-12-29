@@ -13,13 +13,20 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusEvent
@@ -33,11 +40,14 @@ import com.hcdisat.dairyapp.R
 import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
 import com.hcdisat.dairyapp.presentation.components.GalleryUploader
 import com.hcdisat.dairyapp.presentation.components.GalleryUploaderEvents
+import com.hcdisat.dairyapp.presentation.components.ImageModal
+import com.hcdisat.dairyapp.presentation.components.ImageModalEvent
 import com.hcdisat.dairyapp.presentation.components.MoodPager
 import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
 fun WriteContent(
@@ -55,6 +65,14 @@ fun WriteContent(
         val placeHolderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
         val focusManager = LocalFocusManager.current
         val scope = rememberCoroutineScope()
+
+        val imageModalState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        var selectedImage by remember { mutableStateOf(GalleryImage()) }
+        var shouldShowImageModal by remember { mutableStateOf(false) }
+
+        LaunchedEffect(key1 = shouldShowImageModal) {
+            if (shouldShowImageModal) imageModalState.expand()
+        }
 
         Column(
             modifier = Modifier
@@ -122,9 +140,13 @@ fun WriteContent(
                 onEvents = {
                     when (this) {
                         is GalleryUploaderEvents.OnAddImageClicked -> Unit
-                        is GalleryUploaderEvents.OnImageClicked -> Unit
                         is GalleryUploaderEvents.OnLocalImagesSelected ->
                             WriteEntryEvents.OnImagesAdded(this.images).onEvent()
+
+                        is GalleryUploaderEvents.OnImageClicked -> {
+                            selectedImage = image
+                            shouldShowImageModal = true
+                        }
                     }
                 }
             )
@@ -139,6 +161,22 @@ fun WriteContent(
                 enabled = diary.title.isNotBlank() && diary.description.isNotBlank()
             ) {
                 Text(text = stringResource(R.string.save_btn))
+            }
+        }
+
+        ImageModal(
+            image = selectedImage,
+            sheetState = imageModalState,
+            showModal = shouldShowImageModal
+        ) {
+            when (it) {
+                is ImageModalEvent.Dismiss -> {
+                    shouldShowImageModal = false
+                }
+
+                is ImageModalEvent.OnDelete -> {
+                    WriteEntryEvents.OnDeleteImage(it.image)
+                }
             }
         }
     }

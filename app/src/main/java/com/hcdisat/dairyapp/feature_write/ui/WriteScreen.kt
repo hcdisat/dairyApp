@@ -81,6 +81,8 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                         val images = event.images.map { uri -> uri to context.getImageType(uri) }
                         viewModel.receiveAction(EntryActions.AddImages(images))
                     }
+
+                    is WriteEntryEvents.OnDeleteImage -> Unit // TODO: implement delete image
                 }
             }
         }
