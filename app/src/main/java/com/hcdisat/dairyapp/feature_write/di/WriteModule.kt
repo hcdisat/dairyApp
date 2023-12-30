@@ -3,6 +3,8 @@ package com.hcdisat.dairyapp.feature_write.di
 import android.content.Context
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCaseImpl
+import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteImageUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteImageUseCaseImpl
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ErrorHandlerUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ErrorHandlerUseCaseImpl
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
@@ -55,6 +57,10 @@ interface WriteModule {
     fun bindsRemoteImagePathGeneratorUseCase(
         impl: RemoteImagePathGeneratorUseCaseImpl
     ): RemoteImagePathGeneratorUseCase
+
+    @Binds
+    @ViewModelScoped
+    fun bindsDeleteImageUseCase(impl: DeleteImageUseCaseImpl): DeleteImageUseCase
 }
 
 @Module

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCase
+import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteImageUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ErrorHandlerUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.GetSingleDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ImageData
@@ -26,7 +27,6 @@ import com.hcdisat.dairyapp.presentation.components.model.MutablePresentationDia
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,6 +43,7 @@ class WriteViewModel @Inject constructor(
     private val updateDateTime: UpdateDateTimeUseCase,
     private val deleteDiary: DeleteDiaryUseCase,
     private val imageUploader: ImageUploaderUseCase,
+    private val deleteImage: DeleteImageUseCase,
     private val loadGallery: LoadDiaryGalleryUseCase,
     private val errorHandler: ErrorHandlerUseCase,
     private val imagePathGenerator: RemoteImagePathGeneratorUseCase
@@ -106,8 +107,9 @@ class WriteViewModel @Inject constructor(
     private fun saveEntry(entry: PresentationDiary) {
         state.updateState { screenState = EntryScreenState.Loading }
         viewModelScope.launch {
-            async(dispatcher) { imageUploader(state.value.newImages) }
-            async(dispatcher) { }
+            launch(dispatcher) { imageUploader(state.value.newImages) }
+            launch(dispatcher) { deleteImage(state.value.imagesToRemove) }
+
             val newEntry = entry.update {
                 val imagesRemotePaths = state.value.images.map { it.remoteImagePath }.toMutableSet()
                 imagesRemotePaths.addAll(images)
