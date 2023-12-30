@@ -3,7 +3,7 @@ package com.hcdisat.dairyapp.domain.repository
 import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadRetry
 import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
 import com.hcdisat.dairyapp.dataaccess.room.ImageDao
-import com.hcdisat.dairyapp.dataaccess.room.ImageToUpload
+import com.hcdisat.dairyapp.dataaccess.room.entities.ImageToUpload
 import javax.inject.Inject
 
 class ImageUploadRetryRepositoryImpl @Inject constructor(

@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.dataaccess.room
+package com.hcdisat.dairyapp.dataaccess.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
