@@ -82,7 +82,8 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                         viewModel.receiveAction(EntryActions.AddImages(images))
                     }
 
-                    is WriteEntryEvents.OnDeleteImage -> Unit // TODO: implement delete image
+                    is WriteEntryEvents.OnDeleteImage ->
+                        viewModel.receiveAction(EntryActions.DeleteImage(event.galleryImage))
                 }
             }
         }

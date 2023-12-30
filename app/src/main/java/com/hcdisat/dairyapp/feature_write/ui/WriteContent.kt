@@ -175,7 +175,8 @@ fun WriteContent(
                 }
 
                 is ImageModalEvent.OnDelete -> {
-                    WriteEntryEvents.OnDeleteImage(it.image)
+                    shouldShowImageModal = false
+                    WriteEntryEvents.OnDeleteImage(it.image).onEvent()
                 }
             }
         }

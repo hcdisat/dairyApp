@@ -1,5 +1,6 @@
 package com.hcdisat.dairyapp.feature_write.model
 
+import androidx.compose.runtime.Immutable
 import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
@@ -11,9 +12,11 @@ sealed interface EntryScreenState {
     data object Deleted : EntryScreenState
 }
 
+@Immutable
 data class DiaryEntryState(
     val diaryEntry: PresentationDiary = PresentationDiary(),
     val screenState: EntryScreenState = EntryScreenState.Loading,
     val images: Set<GalleryImage> = setOf(),
-    val newImages: List<GalleryImage> = listOf()
+    val newImages: List<GalleryImage> = listOf(),
+    val imagesToRemove: Set<GalleryImage> = setOf()
 )

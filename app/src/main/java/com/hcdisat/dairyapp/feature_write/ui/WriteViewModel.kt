@@ -26,6 +26,7 @@ import com.hcdisat.dairyapp.presentation.components.model.MutablePresentationDia
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,7 +56,8 @@ class WriteViewModel @Inject constructor(
 
     fun receiveAction(action: EntryActions) {
         when (action) {
-            is EntryActions.AddImages -> handleImages(action.images)
+            is EntryActions.DeleteImage -> removeImage(action.target)
+            is EntryActions.AddImages -> addImages(action.images)
             is EntryActions.DeleteEntry -> deleteEntry(action.entry.id)
             is EntryActions.UpdateTime -> updateTime(action.hour, action.minute, action.diary)
             is EntryActions.UpdateDate -> updateDate(action.dateInUtcMillis, action.diary)
@@ -65,53 +67,53 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    private fun handleImages(newImages: List<Pair<Uri, String>>) = state.updateState {
-        val remoteImageMetadata = newImages.map { (uri, ext) ->
+    private fun removeImage(image: GalleryImage) = state.updateState {
+        images.remove(image)
+        newImages.remove(image)
+        imagesToRemove.add(image)
+    }
+
+    private fun addImages(imagesToAdd: List<Pair<Uri, String>>) = state.updateState {
+        val remoteImageMetadata = imagesToAdd.map { (uri, ext) ->
             ImageData(uri) to ImageExtension(ext)
         }.let(imagePathGenerator::invoke)
 
-        val allImages = images.toMutableSet().apply { addAll(remoteImageMetadata) }
-        copy(images = allImages.toSet(), newImages = remoteImageMetadata)
+        images.addAll(remoteImageMetadata)
+        newImages.addAll(remoteImageMetadata)
     }
 
     private fun deleteEntry(entryId: String) {
         viewModelScope.launch {
-            state.updateState { copy(screenState = EntryScreenState.Loading) }
+            state.updateState { screenState = EntryScreenState.Loading }
             withContext(dispatcher) { deleteDiary(entryId) }.fold(
                 onFailure = ::handleError,
-                onSuccess = { state.updateState { copy(screenState = EntryScreenState.Deleted) } }
+                onSuccess = { state.updateState { screenState = EntryScreenState.Deleted } }
             )
         }
     }
 
     private fun updateTime(hour: Int, minute: Int, diary: PresentationDiary) = state.updateState {
-        val diaryEntry = diary.update {
-            dateTime = dateTime.withHour(hour).withMinute(minute)
-        }
-
-        copy(diaryEntry = diaryEntry)
+        diaryEntry.dateTime = diary.dateTime.withHour(hour).withMinute(minute)
     }
 
     private fun updateDate(utcMillis: Long, diary: PresentationDiary) = state.updateState {
         updateDateTime(utcMillis = utcMillis, diary = diary).fold(
             onFailure = ::handleError,
-            onSuccess = { copy(diaryEntry = it) }
+            onSuccess = { diaryEntry = diary.toMutablePresentationDiary() }
         )
     }
 
     private fun saveEntry(entry: PresentationDiary) {
-        state.updateState { copy(screenState = EntryScreenState.Loading) }
+        state.updateState { screenState = EntryScreenState.Loading }
         viewModelScope.launch {
-            withContext(dispatcher) { imageUploader(state.value.newImages) }
+            async(dispatcher) { imageUploader(state.value.newImages) }
+            async(dispatcher) { }
             val newEntry = entry.update {
-                val updatedGallery = state.value.images.map {
-                    it.remoteImagePath
-                }.toMutableSet()
-
-                updatedGallery.addAll(images)
+                val imagesRemotePaths = state.value.images.map { it.remoteImagePath }.toMutableSet()
+                imagesRemotePaths.addAll(images)
                 images.apply {
                     clear()
-                    addAll(updatedGallery)
+                    addAll(imagesRemotePaths)
                 }
             }
 
@@ -119,11 +121,9 @@ class WriteViewModel @Inject constructor(
                 onFailure = ::handleError,
                 onSuccess = {
                     state.updateState {
-                        copy(
-                            diaryEntry = it,
-                            screenState = EntryScreenState.Saved,
-                            newImages = listOf()
-                        )
+                        diaryEntry = it.toMutablePresentationDiary()
+                        screenState = EntryScreenState.Saved
+                        newImages.clear()
                     }
                 }
             )
@@ -131,15 +131,14 @@ class WriteViewModel @Inject constructor(
     }
 
     private fun updateMood(newMood: Mood) = state.updateState {
-        val update = diaryEntry.update { mood = newMood }
-        copy(diaryEntry = update)
+        diaryEntry.mood = newMood
     }
 
     private fun handleLoadEntryEvent() {
         val entryId = savedStateHandle.get<String>(NavigationConstants.WRITE_ARGUMENT)
         viewModelScope.launch {
-            state.updateState {
-                entryId?.let { loadEntry(it) } ?: copy(screenState = EntryScreenState.Ready)
+            entryId?.let { _state.value = loadEntry(it) } ?: run {
+                state.updateState { screenState = EntryScreenState.Ready }
             }
         }
     }
@@ -162,16 +161,11 @@ class WriteViewModel @Inject constructor(
     }
 
     private fun updateText(action: EntryActions) = state.updateState {
-        val update = diaryEntry.update {
-            if (action is EntryActions.UpdateTitle) {
-                title = action.newValue
-            }
-
-            if (action is EntryActions.UpdateDescription) {
-                description = action.newValue
-            }
+        when (action) {
+            is EntryActions.UpdateDescription -> diaryEntry.description = action.newValue
+            is EntryActions.UpdateTitle -> diaryEntry.title = action.newValue
+            else -> Unit
         }
-        copy(diaryEntry = update)
     }
 
     private fun handleError(throwable: Throwable): DiaryEntryState {
@@ -179,22 +173,16 @@ class WriteViewModel @Inject constructor(
         return state.value.copy(screenState = EntryScreenState.Error(errorHandler(throwable)))
     }
 
-    private inline fun StateFlow<DiaryEntryState>.updateState(updater: DiaryEntryState.() -> DiaryEntryState) {
-        _state.value = value.updater()
+    private inline fun StateFlow<DiaryEntryState>.updateState(updater: MutableState.() -> Unit) {
+        val mutableState = value.toMutableState()
+        mutableState.updater()
+        _state.value = mutableState.toState()
     }
 
     private fun PresentationDiary.update(
         mutableDiaryScope: MutablePresentationDiary.() -> Unit
     ): PresentationDiary {
-        val diary = MutablePresentationDiary(
-            id = id,
-            title = title,
-            description = description,
-            mood = mood,
-            images = images.toMutableList(),
-            dateTime = dateTime
-        )
-
+        val diary = toMutablePresentationDiary()
         diary.mutableDiaryScope()
         return diary.toPresentationDiary()
     }
@@ -208,4 +196,38 @@ class WriteViewModel @Inject constructor(
             images = images,
             dateTime = dateTime
         )
+
+    private fun PresentationDiary.toMutablePresentationDiary(): MutablePresentationDiary =
+        MutablePresentationDiary(
+            id = id,
+            title = title,
+            description = description,
+            mood = mood,
+            images = images.toMutableList(),
+            dateTime = dateTime
+        )
+
+    private fun MutableState.toState() = DiaryEntryState(
+        diaryEntry = diaryEntry.toPresentationDiary(),
+        screenState = screenState,
+        images = images.toSet(),
+        newImages = newImages.toList(),
+        imagesToRemove = imagesToRemove.toSet()
+    )
+
+    private fun DiaryEntryState.toMutableState() = MutableState(
+        diaryEntry = diaryEntry.toMutablePresentationDiary(),
+        screenState = screenState,
+        images = images.toMutableSet(),
+        newImages = newImages.toMutableList(),
+        imagesToRemove = imagesToRemove.toMutableSet()
+    )
 }
+
+private data class MutableState(
+    var diaryEntry: MutablePresentationDiary = MutablePresentationDiary(),
+    var screenState: EntryScreenState = EntryScreenState.Loading,
+    val images: MutableSet<GalleryImage> = mutableSetOf(),
+    val newImages: MutableList<GalleryImage> = mutableListOf(),
+    val imagesToRemove: MutableSet<GalleryImage> = mutableSetOf()
+)
