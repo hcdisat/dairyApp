@@ -4,6 +4,7 @@ import android.net.Uri
 import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadResult
 import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadRetry
 import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
+import com.hcdisat.dairyapp.dataaccess.firebase.DeleteImageService
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageReaderService
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageUploaderService
 import com.hcdisat.dairyapp.dataaccess.firebase.UploadSession
@@ -17,12 +18,14 @@ interface DomainImageRepository {
     suspend fun retryUpLoadImage(session: UploadSession): Result<ImageUploadResult>
     suspend fun uploadImages(newImages: List<Pair<String, Uri>>)
     suspend fun downloadImages(paths: List<String>): Result<List<Uri>>
+    suspend fun removeImages(paths: List<String>)
 }
 
 class DomainImageRepositoryImpl @Inject constructor(
     private val imageUploaderService: ImageUploaderService,
     private val imageReaderService: ImageReaderService,
-    private val retryRepository: ImageUploadRetryRepository
+    private val retryRepository: ImageUploadRetryRepository,
+    private val deleteImageService: DeleteImageService
 ) : DomainImageRepository {
     override suspend fun uploadImagesWithResult(
         newImages: List<Pair<String, Uri>>
@@ -49,6 +52,10 @@ class DomainImageRepositoryImpl @Inject constructor(
 
     override suspend fun downloadImages(paths: List<String>): Result<List<Uri>> =
         imageReaderService.getImagesFromPaths(paths)
+
+    override suspend fun removeImages(paths: List<String>) {
+        deleteImageService.deleteImages(remotePaths = paths)
+    }
 
     private fun UploadSession.toRetryUpload(): ImageUploadRetry = ImageUploadRetry(
         sessionUri = sessionUri.toString(),

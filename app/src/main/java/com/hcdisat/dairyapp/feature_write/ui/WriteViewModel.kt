@@ -43,7 +43,7 @@ class WriteViewModel @Inject constructor(
     private val updateDateTime: UpdateDateTimeUseCase,
     private val deleteDiary: DeleteDiaryUseCase,
     private val imageUploader: ImageUploaderUseCase,
-    private val deleteImage: DeleteImageUseCase,
+    private val deleteImages: DeleteImageUseCase,
     private val loadGallery: LoadDiaryGalleryUseCase,
     private val errorHandler: ErrorHandlerUseCase,
     private val imagePathGenerator: RemoteImagePathGeneratorUseCase
@@ -59,7 +59,7 @@ class WriteViewModel @Inject constructor(
         when (action) {
             is EntryActions.DeleteImage -> removeImage(action.target)
             is EntryActions.AddImages -> addImages(action.images)
-            is EntryActions.DeleteEntry -> deleteEntry(action.entry.id)
+            is EntryActions.DeleteEntry -> deleteEntry(action.entry)
             is EntryActions.UpdateTime -> updateTime(action.hour, action.minute, action.diary)
             is EntryActions.UpdateDate -> updateDate(action.dateInUtcMillis, action.diary)
             is EntryActions.SaveEntry -> saveEntry(action.entry)
@@ -83,13 +83,16 @@ class WriteViewModel @Inject constructor(
         newImages.addAll(remoteImageMetadata)
     }
 
-    private fun deleteEntry(entryId: String) {
+    private fun deleteEntry(entry: PresentationDiary) {
         viewModelScope.launch {
             state.updateState { screenState = EntryScreenState.Loading }
-            withContext(dispatcher) { deleteDiary(entryId) }.fold(
-                onFailure = ::handleError,
-                onSuccess = { state.updateState { screenState = EntryScreenState.Deleted } }
-            )
+            withContext(dispatcher) { deleteDiary(entry.id) }
+                .mapCatching { wasDiaryDeleted ->
+                    if (wasDiaryDeleted) deleteImages(entry.images.toSet())
+                }.fold(
+                    onFailure = ::handleError,
+                    onSuccess = { state.updateState { screenState = EntryScreenState.Deleted } }
+                )
         }
     }
 
@@ -108,7 +111,12 @@ class WriteViewModel @Inject constructor(
         state.updateState { screenState = EntryScreenState.Loading }
         viewModelScope.launch {
             launch(dispatcher) { imageUploader(state.value.newImages) }
-            launch(dispatcher) { deleteImage(state.value.imagesToRemove) }
+            launch(dispatcher) {
+                state.value.imagesToRemove
+                    .map { it.remoteImagePath }
+                    .toSet()
+                    .also { deleteImages(it) }
+            }
 
             val newEntry = entry.update {
                 val imagesRemotePaths = state.value.images.map { it.remoteImagePath }.toMutableSet()
