@@ -1,6 +1,7 @@
 package com.hcdisat.dairyapp.feature_write.model
 
 import android.net.Uri
+import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
 import com.hcdisat.dairyapp.presentation.components.model.Mood
 import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 
@@ -18,4 +19,5 @@ sealed interface EntryActions {
     ) : EntryActions
 
     data class AddImages(val images: List<Pair<Uri, String>>) : EntryActions
+    data class DeleteImage(val target: GalleryImage) : EntryActions
 }
