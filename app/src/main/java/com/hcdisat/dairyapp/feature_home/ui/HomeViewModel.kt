@@ -1,10 +1,17 @@
 package com.hcdisat.dairyapp.feature_home.ui
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
+import com.hcdisat.dairyapp.core.conectivity.ConnectivityObserverService
+import com.hcdisat.dairyapp.core.conectivity.ConnectivityStatus
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
+import com.hcdisat.dairyapp.feature_home.domain.usecase.DeleteAllDiariesUseCase
 import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCase
 import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
 import com.hcdisat.dairyapp.feature_home.model.DiaryState
@@ -21,16 +28,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    networkObserver: ConnectivityObserverService,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val logoutAccountService: LogoutAccountService,
     private val getDiaries: GetDiariesUseCase,
-    private val loadGallery: LoadDiaryGalleryUseCase
+    private val loadGallery: LoadDiaryGalleryUseCase,
+    private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase
 ) : ViewModel() {
     private val _homeState: MutableStateFlow<DiaryState> = MutableStateFlow(DiaryState())
     val homeState = _homeState.asStateFlow()
 
+    private var networkState by mutableStateOf(ConnectivityStatus.UNAVAILABLE)
+
+
     init {
         observeDiaries()
+        viewModelScope.launch {
+            networkObserver.observe().collect { networkState = it }
+        }
     }
 
     fun logout() {
@@ -76,7 +91,20 @@ class HomeViewModel @Inject constructor(
     }
 
     fun removeAllDiaries() {
+        updateState { copy(screenState = DiaryScreenState.Loading) }
+        if (networkState != ConnectivityStatus.AVAILABLE) return
 
+        viewModelScope.launch(dispatcher) {
+            deleteAllDiariesUseCase()
+                .onFailure {
+                    val tag = "HomeViewModel"
+                    val message = "removeAllDiaries: some or all diaries were not deleted"
+                    Log.d(tag, message)
+                    Log.e(tag, "removeAllDiaries: ${it.message}", it)
+                }.onSuccess {
+                    updateState { copy(screenState = DiaryScreenState.Loaded) }
+                }
+        }
     }
 
     private fun observeDiaries() {

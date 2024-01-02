@@ -118,7 +118,6 @@ fun HomeScreen(
             isRemoveAllDialogDismissed = true
             if (it == DialogEvent.POSITIVE) {
                 viewModel.removeAllDiaries()
-                HomeEvent.Logout.onEvent()
             }
         }
     )
