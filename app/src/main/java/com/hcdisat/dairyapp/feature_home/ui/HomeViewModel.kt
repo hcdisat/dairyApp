@@ -75,6 +75,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun removeAllDiaries() {
+
+    }
+
     private fun observeDiaries() {
         viewModelScope.launch {
             withContext(dispatcher) { getDiaries() }.collect { result ->

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -21,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,6 +34,7 @@ import com.hcdisat.dairyapp.R
 
 sealed interface NavigationDrawerEvent {
     data object Logout : NavigationDrawerEvent
+    data object DeleteAllEntries : NavigationDrawerEvent
 }
 
 @Composable
@@ -61,6 +65,18 @@ fun AppNavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         DrawerItem(
+                            text = stringResource(id = R.string.drawer_delete_all_label),
+                            imageVector = Icons.Default.Delete,
+                            iconColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
+                    selected = false,
+                    onClick = { NavigationDrawerEvent.DeleteAllEntries.onEvent() }
+                )
+
+                NavigationDrawerItem(
+                    label = {
+                        DrawerItem(
                             text = stringResource(id = R.string.drawer_logout_label),
                             iconId = R.drawable.google_logo
                         )
@@ -75,18 +91,39 @@ fun AppNavigationDrawer(
 }
 
 @Composable
-private fun DrawerItem(text: String, @DrawableRes iconId: Int) {
+private fun DrawerItem(
+    text: String,
+    @DrawableRes iconId: Int? = null,
+    imageVector: ImageVector? = null,
+    iconColor: Color = Color.Unspecified
+) {
+    if (iconId == null && imageVector == null)
+        throw IllegalArgumentException("iconId and painter cannot be null at the same time")
+
     Row(
-        modifier = Modifier
-            .padding(dimensionResource(id = R.dimen.nav_drawer_padding)),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.padding(dimensionResource(id = R.dimen.nav_drawer_padding)),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painter = painterResource(id = iconId),
-            contentDescription = stringResource(id = R.string.google_logo_content_description),
-            tint = Color.Unspecified
-        )
-        Text(text = text, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurface)
+
+        when {
+            iconId != null -> Icon(
+                painter = painterResource(id = iconId),
+                contentDescription = stringResource(id = R.string.google_logo_content_description),
+                tint = iconColor
+            )
+
+            imageVector != null -> Icon(
+                imageVector = imageVector,
+                contentDescription = stringResource(id = R.string.google_logo_content_description),
+                tint = iconColor
+            )
+
+            else ->
+                throw IllegalArgumentException("iconId and painter cannot be null at the same time")
+        }
+
+        Text(text = text, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 

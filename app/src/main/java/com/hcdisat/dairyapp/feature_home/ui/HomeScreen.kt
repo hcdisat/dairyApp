@@ -46,15 +46,15 @@ fun HomeScreen(
         minActiveState = Lifecycle.State.STARTED
     )
 
-    var isDialogDismissed by remember { mutableStateOf(true) }
+    var isLogoutDialogDismissed by remember { mutableStateOf(true) }
+    var isRemoveAllDialogDismissed by remember { mutableStateOf(true) }
 
     AppNavigationDrawer(
         drawerState = drawerState,
         onEvent = {
             when (this) {
-                NavigationDrawerEvent.Logout -> {
-                    isDialogDismissed = false
-                }
+                NavigationDrawerEvent.Logout -> isLogoutDialogDismissed = false
+                NavigationDrawerEvent.DeleteAllEntries -> isRemoveAllDialogDismissed = false
             }
         }
     ) {
@@ -94,15 +94,30 @@ fun HomeScreen(
     }
 
     AppAlertDialog(
-        isDismissed = isDialogDismissed,
+        isDismissed = isLogoutDialogDismissed,
         message = stringResource(R.string.logout_dialog_message),
         title = stringResource(R.string.login_out_dialog_title),
         confirmButtonText = stringResource(R.string.yes_btn),
         dismissButtonText = stringResource(R.string.no_btn),
         onEvent = {
-            isDialogDismissed = true
+            isLogoutDialogDismissed = true
             if (it == DialogEvent.POSITIVE) {
                 viewModel.logout()
+                HomeEvent.Logout.onEvent()
+            }
+        }
+    )
+
+    AppAlertDialog(
+        isDismissed = isRemoveAllDialogDismissed,
+        message = stringResource(R.string.remove_all_dialog_message),
+        title = stringResource(R.string.remove_all_dialog_title),
+        confirmButtonText = stringResource(R.string.yes_btn),
+        dismissButtonText = stringResource(R.string.btn_cancel),
+        onEvent = {
+            isRemoveAllDialogDismissed = true
+            if (it == DialogEvent.POSITIVE) {
+                viewModel.removeAllDiaries()
                 HomeEvent.Logout.onEvent()
             }
         }
