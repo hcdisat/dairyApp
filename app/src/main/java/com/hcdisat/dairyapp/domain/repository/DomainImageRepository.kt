@@ -60,8 +60,7 @@ class DomainImageRepositoryImpl @Inject constructor(
         deleteRemoteImageService.deleteRemoteImages(
             remotePaths = paths,
             onEach = { launch(NonCancellable) { deleteRepository.insert(it) } },
-//            onEachDone = { launch(NonCancellable) { deleteRepository.deleteImage(it) } }
-            onEachDone = { }
+            onEachDone = { launch(NonCancellable) { deleteRepository.deleteImage(it) } }
         )
     }
 

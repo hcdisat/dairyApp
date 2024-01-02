@@ -110,16 +110,13 @@ class WriteViewModel @Inject constructor(
     private fun saveEntry(entry: PresentationDiary) {
         state.updateState { screenState = EntryScreenState.Loading }
         viewModelScope.launch {
+            val imagesToRemove = state.value.imagesToRemove.map { it.remoteImagePath }
             launch(dispatcher) { imageUploader(state.value.newImages) }
-            launch(dispatcher) {
-                state.value.imagesToRemove
-                    .map { it.remoteImagePath }
-                    .toSet()
-                    .also { deleteImages(it) }
-            }
+            launch(dispatcher) { imagesToRemove.toSet().also { deleteImages(it) } }
 
             val newEntry = entry.update {
                 val imagesRemotePaths = state.value.images.map { it.remoteImagePath }.toMutableSet()
+                images.removeAll(imagesToRemove)
                 imagesRemotePaths.addAll(images)
                 images.apply {
                     clear()
