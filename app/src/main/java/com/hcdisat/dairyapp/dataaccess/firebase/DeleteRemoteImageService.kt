@@ -3,6 +3,8 @@ package com.hcdisat.dairyapp.dataaccess.firebase
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -15,6 +17,8 @@ interface DeleteRemoteImageService {
     ): Result<Unit>
 
     suspend fun deleteRemoteImage(remotePath: String): Result<ImageDeletionResult>
+
+    suspend fun deleteAllImages(onFailure: Throwable.(String) -> Unit): Result<Unit>
 }
 
 sealed class ImageDeletionResult(val remotePath: String) {
@@ -23,8 +27,11 @@ sealed class ImageDeletionResult(val remotePath: String) {
 }
 
 class DeleteImageServiceImpl @Inject constructor(
-    private val storage: FirebaseStorage
+    private val storage: FirebaseStorage,
+    private val signInService: FirebaseSignInService,
 ) : DeleteRemoteImageService {
+    private val imagesDir get() = signInService.user?.let { "images/${it.uid}" }
+
     override suspend fun deleteRemoteImages(
         remotePaths: List<String>,
         onEach: (String) -> Unit,
@@ -44,6 +51,30 @@ class DeleteImageServiceImpl @Inject constructor(
                 }
             }
         }
+
+    override suspend fun deleteAllImages(
+        onFailure: Throwable.(String) -> Unit
+    ): Result<Unit> = coroutineScope {
+        val directory = imagesDir ?: return@coroutineScope Result.success(Unit)
+        val bucket = storage.reference
+        val listAllTask = bucket.child(directory).listAll()
+
+        runCatching {
+            suspendCancellableCoroutine { continuation ->
+                listAllTask.addOnSuccessListener { resultList ->
+                    resultList.items
+                        .asSequence()
+                        .mapNotNull { ref -> ref?.let { "$directory/${it.name}" } }
+                        .map { imagePath -> imagePath to bucket.child(imagePath).delete() }
+                        .forEach { (path, task) ->
+                            task.addOnFailureListener { launch { it.onFailure(path) } }
+                        }
+
+                    continuation.resume(Unit)
+                }
+            }
+        }
+    }
 
     private fun handleTask(task: Task<Void?>, targetPath: String): Result<ImageDeletionResult> {
         val error = task.exception

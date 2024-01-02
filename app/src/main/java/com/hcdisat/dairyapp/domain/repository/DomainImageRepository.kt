@@ -21,6 +21,7 @@ interface DomainImageRepository {
     suspend fun downloadImages(paths: List<String>): Result<List<Uri>>
     suspend fun removeImages(paths: List<String>): Result<Unit>
     suspend fun removeImage(remotePath: String): Result<Boolean>
+    suspend fun removeAllImages(): Result<Unit>
 }
 
 class DomainImageRepositoryImpl @Inject constructor(
@@ -69,6 +70,12 @@ class DomainImageRepositoryImpl @Inject constructor(
             deleteRepository.deleteImage(it.remotePath)
             true
         }
+
+    override suspend fun removeAllImages(): Result<Unit> = coroutineScope {
+        deleteRemoteImageService.deleteAllImages {
+            launch(NonCancellable) { deleteRepository.insert(it) }
+        }
+    }
 
     private fun UploadSession.toRetryUpload(): ImageUploadRetry = ImageUploadRetry(
         sessionUri = sessionUri.toString(),

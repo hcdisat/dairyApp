@@ -36,4 +36,6 @@ class MongoRepositoryImpl @Inject constructor(
 
     override suspend fun deleteDiary(entryId: String): Result<Boolean> =
         mongoDB.deleteDiary(ObjectId(entryId))
+
+    override suspend fun deleteAllDiaries(): Result<Unit> = mongoDB.deleteAllDiaries()
 }

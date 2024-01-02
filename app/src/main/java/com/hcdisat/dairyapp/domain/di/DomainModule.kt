@@ -16,6 +16,8 @@ import com.hcdisat.dairyapp.domain.repository.DomainImageRepositoryImpl
 import com.hcdisat.dairyapp.domain.repository.ImageToDeleteRepositoryImpl
 import com.hcdisat.dairyapp.domain.repository.ImageUploadRetryRepositoryImpl
 import com.hcdisat.dairyapp.domain.repository.MongoRepositoryImpl
+import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
+import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCaseImpl
 import com.hcdisat.dairyapp.domain.usecases.ResumeImagesRemovalUseCase
 import com.hcdisat.dairyapp.domain.usecases.ResumeImagesRemovalUseCaseImpl
 import com.hcdisat.dairyapp.domain.usecases.RetryImageUploadUseCase
@@ -68,4 +70,8 @@ interface DomainModule {
     @Binds
     @ViewModelScoped
     fun bindsResumeImagesRemovalUseCase(impl: ResumeImagesRemovalUseCaseImpl): ResumeImagesRemovalUseCase
+
+    @Binds
+    @ViewModelScoped
+    fun bindsLoadDiaryGalleryUseCase(impl: LoadDiaryGalleryUseCaseImpl): LoadDiaryGalleryUseCase
 }

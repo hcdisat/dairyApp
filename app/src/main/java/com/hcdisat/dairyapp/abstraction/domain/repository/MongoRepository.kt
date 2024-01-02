@@ -8,4 +8,5 @@ interface MongoRepository {
     suspend fun getSingleDiary(entryId: String): Result<DomainDiary>
     suspend fun saveDiary(domainDiary: DomainDiary): Result<DomainDiary>
     suspend fun deleteDiary(entryId: String): Result<Boolean>
+    suspend fun deleteAllDiaries(): Result<Unit>
 }
