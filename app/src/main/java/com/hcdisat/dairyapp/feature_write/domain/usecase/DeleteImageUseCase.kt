@@ -8,9 +8,8 @@ interface DeleteImageUseCase {
 }
 
 class DeleteImageUseCaseImpl @Inject constructor(
-    private val repository: DomainImageRepository
+    private val retryRepository: DomainImageRepository
 ) : DeleteImageUseCase {
-    override suspend fun invoke(imageSet: Set<String>) = runCatching {
-        repository.removeImages(imageSet.toList())
-    }
+    override suspend fun invoke(imageSet: Set<String>) =
+        retryRepository.removeImages(imageSet.toList())
 }

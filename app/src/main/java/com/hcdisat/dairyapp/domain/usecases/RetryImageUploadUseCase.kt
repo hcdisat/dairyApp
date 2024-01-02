@@ -6,9 +6,9 @@ import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadRetry
 import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
 import com.hcdisat.dairyapp.dataaccess.firebase.UploadSession
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 interface RetryImageUploadUseCase {
     suspend operator fun invoke()
@@ -20,11 +20,11 @@ class RetryImageUploadUseCaseImpl @Inject constructor(
     private val imageRepository: DomainImageRepository,
     private val retryRepository: ImageUploadRetryRepository
 ) : RetryImageUploadUseCase {
-    override suspend fun invoke(): Unit = coroutineScope {
+    override suspend fun invoke() {
         val sessionsToResume = retryRepository.getAllImages().map { it.uploadSession() }
-        if (sessionsToResume.isEmpty()) return@coroutineScope
+        if (sessionsToResume.isEmpty()) return
 
-        sessionsToResume.take(1).forEach { session ->
+        sessionsToResume.forEach { session ->
             withContext(coroutineContext) { imageRepository.retryUpLoadImage(session) }
                 .onSuccess { retryRepository.removeImage(session.sessionUri.toString()) }
                 .onFailure {

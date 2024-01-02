@@ -3,8 +3,9 @@ package com.hcdisat.dairyapp.domain.repository
 import android.net.Uri
 import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadResult
 import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadRetry
+import com.hcdisat.dairyapp.abstraction.domain.repository.ImageToDeleteRepository
 import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
-import com.hcdisat.dairyapp.dataaccess.firebase.DeleteImageService
+import com.hcdisat.dairyapp.dataaccess.firebase.DeleteRemoteImageService
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageReaderService
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageUploaderService
 import com.hcdisat.dairyapp.dataaccess.firebase.UploadSession
@@ -18,14 +19,16 @@ interface DomainImageRepository {
     suspend fun retryUpLoadImage(session: UploadSession): Result<ImageUploadResult>
     suspend fun uploadImages(newImages: List<Pair<String, Uri>>)
     suspend fun downloadImages(paths: List<String>): Result<List<Uri>>
-    suspend fun removeImages(paths: List<String>)
+    suspend fun removeImages(paths: List<String>): Result<Unit>
+    suspend fun removeImage(remotePath: String): Result<Boolean>
 }
 
 class DomainImageRepositoryImpl @Inject constructor(
     private val imageUploaderService: ImageUploaderService,
     private val imageReaderService: ImageReaderService,
     private val retryRepository: ImageUploadRetryRepository,
-    private val deleteImageService: DeleteImageService
+    private val deleteRemoteImageService: DeleteRemoteImageService,
+    private val deleteRepository: ImageToDeleteRepository
 ) : DomainImageRepository {
     override suspend fun uploadImagesWithResult(
         newImages: List<Pair<String, Uri>>
@@ -53,9 +56,20 @@ class DomainImageRepositoryImpl @Inject constructor(
     override suspend fun downloadImages(paths: List<String>): Result<List<Uri>> =
         imageReaderService.getImagesFromPaths(paths)
 
-    override suspend fun removeImages(paths: List<String>) {
-        deleteImageService.deleteImages(remotePaths = paths)
+    override suspend fun removeImages(paths: List<String>) = coroutineScope {
+        deleteRemoteImageService.deleteRemoteImages(
+            remotePaths = paths,
+            onEach = { launch(NonCancellable) { deleteRepository.insert(it) } },
+//            onEachDone = { launch(NonCancellable) { deleteRepository.deleteImage(it) } }
+            onEachDone = { }
+        )
     }
+
+    override suspend fun removeImage(remotePath: String): Result<Boolean> =
+        deleteRemoteImageService.deleteRemoteImage(remotePath).mapCatching {
+            deleteRepository.deleteImage(it.remotePath)
+            true
+        }
 
     private fun UploadSession.toRetryUpload(): ImageUploadRetry = ImageUploadRetry(
         sessionUri = sessionUri.toString(),

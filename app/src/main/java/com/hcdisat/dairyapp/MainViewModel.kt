@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.abstraction.networking.Session
 import com.hcdisat.dairyapp.abstraction.networking.SessionService
 import com.hcdisat.dairyapp.core.di.IODispatcher
+import com.hcdisat.dairyapp.domain.usecases.ResumeImagesRemovalUseCase
 import com.hcdisat.dairyapp.domain.usecases.RetryImageUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,11 +16,15 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val sessionService: SessionService,
     private val retryUploads: RetryImageUploadUseCase,
+    private val deletePendingImage: ResumeImagesRemovalUseCase,
     @IODispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     fun getSession(): Session = sessionService.getSession()
 
-    fun retryImageUpload() {
-        viewModelScope.launch(dispatcher) { retryUploads() }
+    fun syncRemoteImages() {
+        viewModelScope.launch(dispatcher) {
+            launch { retryUploads() }
+            launch { deletePendingImage() }
+        }
     }
 }

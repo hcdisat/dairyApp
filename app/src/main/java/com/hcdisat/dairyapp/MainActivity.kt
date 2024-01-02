@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        mainViewModel.retryImageUpload()
+        mainViewModel.syncRemoteImages()
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
