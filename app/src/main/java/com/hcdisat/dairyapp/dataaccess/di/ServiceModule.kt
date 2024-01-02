@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.dataaccess.di
 
-import com.hcdisat.dairyapp.dataaccess.firebase.DeleteImageService
 import com.hcdisat.dairyapp.dataaccess.firebase.DeleteImageServiceImpl
+import com.hcdisat.dairyapp.dataaccess.firebase.DeleteRemoteImageService
 import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInService
 import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInServiceImpl
 import com.hcdisat.dairyapp.dataaccess.firebase.GoogleCredentialsProvider
@@ -37,5 +37,5 @@ interface ServiceModule {
 
     @Binds
     @Singleton
-    fun bindsDeleterImageService(impl: DeleteImageServiceImpl): DeleteImageService
+    fun bindsDeleterImageService(impl: DeleteImageServiceImpl): DeleteRemoteImageService
 }

@@ -4,13 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Instant
 
-private const val IMAGES_TO_UPLOAD_TABLE = "images_to_upload"
+private const val IMAGE_TO_DELETE_TABLE = "images_to_delete"
 
-@Entity(tableName = IMAGES_TO_UPLOAD_TABLE)
-data class ImageToUpload(
+@Entity(tableName = IMAGE_TO_DELETE_TABLE)
+data class ImageToDelete(
     @PrimaryKey(autoGenerate = false)
-    val sessionUri: String,
-    val remotePath: String,
-    val imageUri: String,
+    val remotePath: String = "",
     val createdAt: Long = Instant.now().toEpochMilli()
 )

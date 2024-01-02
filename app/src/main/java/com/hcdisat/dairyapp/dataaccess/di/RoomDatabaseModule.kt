@@ -1,7 +1,8 @@
 package com.hcdisat.dairyapp.dataaccess.di
 
 import android.content.Context
-import com.hcdisat.dairyapp.dataaccess.room.ImageDao
+import com.hcdisat.dairyapp.dataaccess.room.ImageToDeleteDao
+import com.hcdisat.dairyapp.dataaccess.room.ImageToUploadDao
 import com.hcdisat.dairyapp.dataaccess.room.ImagesDatabase
 import dagger.Module
 import dagger.Provides
@@ -20,5 +21,10 @@ object RoomDatabaseModule {
 
     @Provides
     @Singleton
-    fun providesImageDao(database: ImagesDatabase): ImageDao = database.imageDao()
+    fun providesImageDao(database: ImagesDatabase): ImageToUploadDao = database.imageToUploadDao()
+
+    @Provides
+    @Singleton
+    fun providesImageToDeleteDao(database: ImagesDatabase): ImageToDeleteDao =
+        database.imageToDeleteDao()
 }

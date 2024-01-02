@@ -4,21 +4,25 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.hcdisat.dairyapp.dataaccess.room.entities.ImageToDelete
 import com.hcdisat.dairyapp.dataaccess.room.entities.ImageToUpload
 
 @Database(
-    entities = [ImageToUpload::class],
-    version = 1,
+    entities = [ImageToUpload::class, ImageToDelete::class],
+    version = 2,
     exportSchema = false
 )
 abstract class ImagesDatabase : RoomDatabase() {
-    abstract fun imageDao(): ImageDao
+    abstract fun imageToUploadDao(): ImageToUploadDao
+    abstract fun imageToDeleteDao(): ImageToDeleteDao
 
     companion object {
         private const val NAME = "images_db"
 
         fun create(context: Context): ImagesDatabase {
-            return Room.databaseBuilder(context, ImagesDatabase::class.java, NAME).build()
+            return Room.databaseBuilder(context, ImagesDatabase::class.java, NAME)
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }
