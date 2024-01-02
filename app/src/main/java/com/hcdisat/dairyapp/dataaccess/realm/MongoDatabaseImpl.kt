@@ -89,6 +89,14 @@ class MongoDatabaseImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteAllDiaries(): Result<Unit> = runCatching {
+        checkUser(user)
+        realm.write {
+            val query = queryProvider.filterQuery().query
+            delete(query<Diary>(query, user.id))
+        }
+    }
+
     private fun config(user: User) {
         val filterQuery = queryProvider.filterQuery()
         val config = SyncConfiguration.Builder(

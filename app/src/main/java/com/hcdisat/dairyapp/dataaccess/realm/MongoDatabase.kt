@@ -11,4 +11,5 @@ interface MongoDatabase {
     suspend fun saveDiary(diary: Diary): Result<Diary>
     suspend fun updateDiary(diary: Diary): Result<Diary>
     suspend fun deleteDiary(entryId: ObjectId): Result<Boolean>
+    suspend fun deleteAllDiaries(): Result<Unit>
 }
