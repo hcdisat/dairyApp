@@ -8,17 +8,17 @@ plugins {
 }
 
 android {
-    namespace = "com.hcdisat.dairyapp"
-    compileSdk = 34
+    namespace = ProjectConfig.applicationId
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
-        applicationId = "com.hcdisat.dairyapp"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = ProjectConfig.applicationId
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
+        versionCode = ProjectConfig.versionCode
+        versionName = ProjectConfig.versionName
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = ProjectConfig.instrumentationRunner
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -39,13 +39,13 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = ProjectConfig.jvmTarget
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = ProjectConfig.compose
     }
     packaging {
         resources {
@@ -73,8 +73,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // compose
-    implementation("androidx.navigation:navigation-compose:2.7.5")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation(libs.navigation.compose)
+    implementation(libs.runtime.compose)
 
     // firebase
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
@@ -100,9 +100,6 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil-compose:2.2.2")
-
-    // pager - accompanist
-//    implementation("com.google.accompanist:accompanist-pager:0.27.0")
 
     // MessageBar - compose
     implementation("com.github.stevdza-san:MessageBarCompose:1.0.8")
