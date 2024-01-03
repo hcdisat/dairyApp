@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -81,7 +80,11 @@ fun WriteContent(
                 .imePadding()
                 .verticalScroll(state = scrollState)
         ) {
-            MoodPager(modifier = Modifier.size(120.dp), diary.mood, onEvent = onEvent)
+            MoodPager(
+                modifier = Modifier.fillMaxWidth(),
+                diary.mood,
+                onEvent = onEvent
+            )
 
             TextField(
                 modifier = Modifier

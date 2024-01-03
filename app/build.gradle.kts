@@ -98,17 +98,11 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
-    // google auth
-//    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
     // coil
     implementation("io.coil-kt:coil-compose:2.2.2")
 
     // pager - accompanist
-    implementation("com.google.accompanist:accompanist-pager:0.27.0")
-
-    // Datetime picker
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
+//    implementation("com.google.accompanist:accompanist-pager:0.27.0")
 
     // MessageBar - compose
     implementation("com.github.stevdza-san:MessageBarCompose:1.0.8")
