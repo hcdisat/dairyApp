@@ -15,12 +15,15 @@ sealed interface HomeEvent {
     data class ShowGallery(val diary: PresentationDiary) : HomeEvent
     data class LoadGallery(val diary: PresentationDiary) : HomeEvent
     data class HideGallery(val diary: PresentationDiary) : HomeEvent
+    data class DiaryFilterEvent(val action: DiaryFilterAction) : HomeEvent
 }
+
+enum class DiaryFilterAction { AttachFilter, RemoveFilter }
 
 sealed interface DiaryScreenState {
     data object Loading : DiaryScreenState
     data class Error(val throwable: Throwable) : DiaryScreenState
-    data object Loaded : DiaryScreenState
+    data class Loaded(val isFiltered: Boolean = false) : DiaryScreenState
 }
 
 sealed interface GalleryState {
@@ -42,3 +45,5 @@ data class GalleryStateData(
     val images: List<Uri> = listOf(),
     val galleryState: GalleryState = GalleryState.Collapsed
 )
+
+val DiaryState.isFiltered get() = (screenState as? DiaryScreenState.Loaded)?.isFiltered == true

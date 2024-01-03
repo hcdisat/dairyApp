@@ -12,6 +12,7 @@ import com.hcdisat.dairyapp.core.conectivity.ConnectivityStatus
 import com.hcdisat.dairyapp.core.di.IODispatcher
 import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_home.domain.usecase.DeleteAllDiariesUseCase
+import com.hcdisat.dairyapp.feature_home.domain.usecase.FilterDiariesUseCase
 import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCase
 import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
 import com.hcdisat.dairyapp.feature_home.model.DiaryState
@@ -33,7 +34,8 @@ class HomeViewModel @Inject constructor(
     private val logoutAccountService: LogoutAccountService,
     private val getDiaries: GetDiariesUseCase,
     private val loadGallery: LoadDiaryGalleryUseCase,
-    private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase
+    private val deleteAllDiariesUseCase: DeleteAllDiariesUseCase,
+    private val diariesFilter: FilterDiariesUseCase
 ) : ViewModel() {
     private val _homeState: MutableStateFlow<DiaryState> = MutableStateFlow(DiaryState())
     val homeState = _homeState.asStateFlow()
@@ -102,9 +104,21 @@ class HomeViewModel @Inject constructor(
                     Log.d(tag, message)
                     Log.e(tag, "removeAllDiaries: ${it.message}", it)
                 }.onSuccess {
-                    updateState { copy(screenState = DiaryScreenState.Loaded) }
+                    updateState { copy(screenState = DiaryScreenState.Loaded()) }
                 }
         }
+    }
+
+    fun filterDiaries(dateInUtcMillis: Long) = updateState {
+        copy(
+            diaries = diaries.filter { diariesFilter(it.dateTime, dateInUtcMillis) },
+            screenState = DiaryScreenState.Loaded(isFiltered = true)
+        )
+    }
+
+    fun removeFilter() {
+        updateState { copy(screenState = DiaryScreenState.Loading) }
+        observeDiaries()
     }
 
     private fun observeDiaries() {
@@ -119,7 +133,7 @@ class HomeViewModel @Inject constructor(
                                 }.keys
                             }.forEach(::loadImageGallery)
 
-                            copy(diaries = diaries, screenState = DiaryScreenState.Loaded)
+                            copy(diaries = diaries, screenState = DiaryScreenState.Loaded())
                         }
                     },
                     onFailure = {

@@ -130,7 +130,7 @@ class HomeContentProvider : PreviewParameterProvider<DiaryScreenState> {
         get() = sequenceOf(
             DiaryScreenState.Loading,
             DiaryScreenState.Error(Exception("Some Error")),
-            DiaryScreenState.Loaded,
+            DiaryScreenState.Loaded(),
         )
 }
 

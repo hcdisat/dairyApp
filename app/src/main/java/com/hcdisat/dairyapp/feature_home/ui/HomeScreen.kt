@@ -24,13 +24,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hcdisat.dairyapp.R
+import com.hcdisat.dairyapp.feature_home.model.DiaryFilterAction
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
+import com.hcdisat.dairyapp.feature_home.model.isFiltered
 import com.hcdisat.dairyapp.presentation.components.AppAlertDialog
 import com.hcdisat.dairyapp.presentation.components.AppNavigationDrawer
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
+import com.hcdisat.dairyapp.presentation.components.DatePickerEvents
 import com.hcdisat.dairyapp.presentation.components.DialogEvent
+import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
 import com.hcdisat.dairyapp.presentation.components.NavigationDrawerEvent
+import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,6 +53,7 @@ fun HomeScreen(
 
     var isLogoutDialogDismissed by remember { mutableStateOf(true) }
     var isRemoveAllDialogDismissed by remember { mutableStateOf(true) }
+    var shouldOpenDatePicker by remember { mutableStateOf(false) }
 
     AppNavigationDrawer(
         drawerState = drawerState,
@@ -66,8 +72,23 @@ fun HomeScreen(
                 .navigationBarsPadding(),
             topBar = {
                 HomeTopBar(
-                    onEvent = { HomeEvent.OpenDrawer.onEvent() },
-                    scrollBehavior = topBarScrollBehavior
+                    onEvent = {
+                        when (this) {
+                            is HomeEvent.MenuClicked -> HomeEvent.OpenDrawer.onEvent()
+                            is HomeEvent.DiaryFilterEvent -> {
+                                if (action == DiaryFilterAction.AttachFilter)
+                                    shouldOpenDatePicker = true
+                                else {
+                                    shouldOpenDatePicker = false
+                                    viewModel.removeFilter()
+                                }
+                            }
+
+                            else -> Unit
+                        }
+                    },
+                    scrollBehavior = topBarScrollBehavior,
+                    isFiltered = homeState.isFiltered
                 )
             },
             floatingAction = {
@@ -121,6 +142,22 @@ fun HomeScreen(
             }
         }
     )
+
+    DiaryDatePicker(
+        showDatePicker = shouldOpenDatePicker,
+        selectedTimeInMillis = Instant.now().toEpochMilli()
+    ) {
+        shouldOpenDatePicker = when (this) {
+            is DatePickerEvents.DateSelected -> {
+                viewModel.filterDiaries(dateInUtcMillis)
+                false
+            }
+
+            DatePickerEvents.OnDismissed -> {
+                false
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

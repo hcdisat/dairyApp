@@ -7,9 +7,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
+import com.hcdisat.dairyapp.core.settings.Constants.CLIENT_ID
 import com.hcdisat.dairyapp.feature_auth.ui.components.AuthenticationContent
 import com.hcdisat.dairyapp.presentation.components.AppScaffold
-import com.hcdisat.dairyapp.settings.Constants.CLIENT_ID
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 import com.stevdzasan.onetap.rememberOneTapSignInState

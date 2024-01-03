@@ -1,6 +1,7 @@
 package com.hcdisat.dairyapp.feature_home.ui
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.hcdisat.dairyapp.R
+import com.hcdisat.dairyapp.feature_home.model.DiaryFilterAction
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 
@@ -24,6 +26,7 @@ import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 fun HomeTopBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    isFiltered: Boolean = false,
     onEvent: HomeEventAction = {}
 ) {
     TopAppBar(
@@ -40,9 +43,14 @@ fun HomeTopBar(
             }
         },
         actions = {
-            IconButton(onClick = { HomeEvent.Logout.onEvent() }) {
+            val (action, icon) = if (isFiltered)
+                DiaryFilterAction.RemoveFilter to Icons.Default.Clear
+            else
+                DiaryFilterAction.AttachFilter to Icons.Default.DateRange
+
+            IconButton(onClick = { HomeEvent.DiaryFilterEvent(action).onEvent() }) {
                 Icon(
-                    imageVector = Icons.Default.DateRange,
+                    imageVector = icon,
                     contentDescription = stringResource(R.string.sort_by_date_icon_cd),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
