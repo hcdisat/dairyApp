@@ -1,25 +1,22 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
 
 interface UpdateDateTimeUseCase {
-    operator fun invoke(diary: PresentationDiary, utcMillis: Long): Result<PresentationDiary>
+    operator fun invoke(diaryTime: LocalDateTime, utcMillis: Long): Result<LocalDateTime>
 }
 
 class UpdateDateTimeUseCaseImpl @Inject constructor() : UpdateDateTimeUseCase {
-    override fun invoke(diary: PresentationDiary, utcMillis: Long): Result<PresentationDiary> =
+    override fun invoke(diaryTime: LocalDateTime, utcMillis: Long): Result<LocalDateTime> =
         runCatching {
-            val newDate = Instant
-                .ofEpochMilli(utcMillis)
+            Instant.ofEpochMilli(utcMillis)
                 .atZone(ZoneId.of(ZONE_ID))
                 .toLocalDateTime()
-                .withHour(diary.dateTime.hour)
-                .withMinute(diary.dateTime.minute)
-
-            diary.copy(dateTime = newDate)
+                .withHour(diaryTime.hour)
+                .withMinute(diaryTime.minute)
         }
 
     companion object {

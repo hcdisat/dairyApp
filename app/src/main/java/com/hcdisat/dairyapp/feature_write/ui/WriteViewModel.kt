@@ -101,9 +101,11 @@ class WriteViewModel @Inject constructor(
     }
 
     private fun updateDate(utcMillis: Long, diary: PresentationDiary) = state.updateState {
-        updateDateTime(utcMillis = utcMillis, diary = diary).fold(
+        updateDateTime(utcMillis = utcMillis, diaryTime = diary.dateTime).fold(
             onFailure = ::handleError,
-            onSuccess = { diaryEntry = diary.toMutablePresentationDiary() }
+            onSuccess = {
+                diaryEntry.dateTime = it
+            }
         )
     }
 
