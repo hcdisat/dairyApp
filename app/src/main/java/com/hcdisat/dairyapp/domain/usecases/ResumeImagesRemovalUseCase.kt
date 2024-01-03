@@ -24,7 +24,6 @@ class ResumeImagesRemovalUseCaseImpl @Inject constructor(
             }
         }
     }.onFailure {
-        throw it
         Log.e(
             "ResumeImagesRemovalUseCaseImpl",
             "images were not deleted: ${it.message}",
