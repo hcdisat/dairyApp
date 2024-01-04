@@ -17,8 +17,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "DairyApp"
 include(":app")
-include(":ui")
 include(":core:ui")
-include(":core:mylibrary")
 include(":core:abstraction")
 include(":core:common")
