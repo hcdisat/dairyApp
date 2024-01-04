@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.hcdisat.dairyapp.R
+import com.hcdisat.core.ui.R
 import com.hcdisat.dairyapp.feature_home.model.DiaryFilterAction
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction

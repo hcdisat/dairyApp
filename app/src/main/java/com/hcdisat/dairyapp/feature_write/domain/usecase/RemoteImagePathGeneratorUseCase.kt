@@ -1,9 +1,9 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
 import android.net.Uri
-import com.hcdisat.dairyapp.abstraction.domain.repository.AuthenticationRepository
-import com.hcdisat.dairyapp.core.UserNotAuthenticatedException
-import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
+import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
+import com.hcdisat.common.UserNotAuthenticatedException
+import com.hcdisat.ui.model.GalleryImage
 import javax.inject.Inject
 
 @JvmInline

@@ -1,6 +1,6 @@
 package com.hcdisat.dairyapp.feature_home.domain.usecase
 
-import com.hcdisat.dairyapp.core.settings.Constants
+import com.hcdisat.common.settings.Constants
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId

@@ -1,8 +1,8 @@
 package com.hcdisat.dairyapp.dataaccess.realm.services
 
-import com.hcdisat.dairyapp.abstraction.networking.Session
-import com.hcdisat.dairyapp.abstraction.networking.SessionService
-import com.hcdisat.dairyapp.abstraction.networking.SessionState
+import com.hcdisat.abstraction.networking.Session
+import com.hcdisat.abstraction.networking.SessionService
+import com.hcdisat.abstraction.networking.SessionState
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.User
 import javax.inject.Inject

@@ -2,10 +2,10 @@ package com.hcdisat.dairyapp.domain.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.hcdisat.dairyapp.abstraction.domain.repository.AuthenticationRepository
-import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
-import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
-import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseAuthResult
+import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
+import com.hcdisat.abstraction.domain.repository.FirebaseAuthResult
+import com.hcdisat.abstraction.networking.AccountSessionState
+import com.hcdisat.abstraction.networking.CreateAccountService
 import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseSignInService
 import javax.inject.Inject
 

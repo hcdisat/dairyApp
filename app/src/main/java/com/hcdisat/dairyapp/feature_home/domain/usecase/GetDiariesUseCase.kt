@@ -1,8 +1,8 @@
 package com.hcdisat.dairyapp.feature_home.domain.usecase
 
-import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
-import com.hcdisat.dairyapp.presentation.extensions.toPresentationDiary
+import com.hcdisat.abstraction.domain.repository.MongoRepository
+import com.hcdisat.ui.extensions.toPresentationDiary
+import com.hcdisat.ui.model.PresentationDiary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

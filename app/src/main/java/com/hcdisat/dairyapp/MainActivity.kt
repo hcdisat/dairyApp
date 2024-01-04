@@ -7,10 +7,10 @@ import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
-import com.hcdisat.dairyapp.abstraction.networking.SessionState
+import com.hcdisat.abstraction.networking.SessionState
 import com.hcdisat.dairyapp.navigation.Screen
 import com.hcdisat.dairyapp.navigation.SetupNavGraph
-import com.hcdisat.dairyapp.ui.theme.DairyAppTheme
+import com.hcdisat.ui.theme.DairyAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

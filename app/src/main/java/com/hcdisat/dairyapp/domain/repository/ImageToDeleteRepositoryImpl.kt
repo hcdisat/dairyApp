@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.domain.repository
 
-import com.hcdisat.dairyapp.abstraction.domain.model.DomainImageToDelete
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageToDeleteRepository
+import com.hcdisat.abstraction.domain.model.DomainImageToDelete
+import com.hcdisat.abstraction.domain.repository.ImageToDeleteRepository
 import com.hcdisat.dairyapp.dataaccess.room.ImageToDeleteDao
 import com.hcdisat.dairyapp.dataaccess.room.entities.ImageToDelete
 import javax.inject.Inject

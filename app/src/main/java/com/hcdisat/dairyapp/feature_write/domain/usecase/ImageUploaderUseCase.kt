@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
-import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
+import com.hcdisat.ui.model.GalleryImage
 import javax.inject.Inject
 
 interface ImageUploaderUseCase {

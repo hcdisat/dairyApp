@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.dataaccess.realm.services
 
-import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
-import com.hcdisat.dairyapp.abstraction.networking.LogoutResult
+import com.hcdisat.abstraction.networking.LogoutAccountService
+import com.hcdisat.abstraction.networking.LogoutResult
 import io.realm.kotlin.mongodb.App
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException

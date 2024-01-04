@@ -1,8 +1,8 @@
 package com.hcdisat.dairyapp.feature_write.model
 
 import androidx.compose.runtime.Immutable
-import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import com.hcdisat.ui.model.GalleryImage
+import com.hcdisat.ui.model.PresentationDiary
 
 sealed interface EntryScreenState {
     data object Loading : EntryScreenState

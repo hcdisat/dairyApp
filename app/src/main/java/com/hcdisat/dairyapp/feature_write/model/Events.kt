@@ -1,9 +1,9 @@
 package com.hcdisat.dairyapp.feature_write.model
 
 import android.net.Uri
-import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
-import com.hcdisat.dairyapp.presentation.components.model.Mood
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import com.hcdisat.ui.model.GalleryImage
+import com.hcdisat.ui.model.Mood
+import com.hcdisat.ui.model.PresentationDiary
 
 sealed interface WriteEntryEvents {
     data object OnBackPressed : WriteEntryEvents

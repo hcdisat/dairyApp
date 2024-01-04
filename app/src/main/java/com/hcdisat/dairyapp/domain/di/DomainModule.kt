@@ -1,12 +1,12 @@
 package com.hcdisat.dairyapp.domain.di
 
-import com.hcdisat.dairyapp.abstraction.domain.repository.AuthenticationRepository
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageToDeleteRepository
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
-import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
-import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
-import com.hcdisat.dairyapp.abstraction.networking.LogoutAccountService
-import com.hcdisat.dairyapp.abstraction.networking.SessionService
+import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
+import com.hcdisat.abstraction.domain.repository.ImageToDeleteRepository
+import com.hcdisat.abstraction.domain.repository.ImageUploadRetryRepository
+import com.hcdisat.abstraction.domain.repository.MongoRepository
+import com.hcdisat.abstraction.networking.CreateAccountService
+import com.hcdisat.abstraction.networking.LogoutAccountService
+import com.hcdisat.abstraction.networking.SessionService
 import com.hcdisat.dairyapp.dataaccess.realm.services.CreateAccountServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.services.LogoutAccountServiceImpl
 import com.hcdisat.dairyapp.dataaccess.realm.services.SessionServiceImpl

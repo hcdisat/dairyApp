@@ -1,10 +1,10 @@
 package com.hcdisat.dairyapp.domain.repository
 
 import android.net.Uri
-import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadResult
-import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadRetry
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageToDeleteRepository
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
+import com.hcdisat.abstraction.domain.model.ImageUploadResult
+import com.hcdisat.abstraction.domain.model.ImageUploadRetry
+import com.hcdisat.abstraction.domain.repository.ImageToDeleteRepository
+import com.hcdisat.abstraction.domain.repository.ImageUploadRetryRepository
 import com.hcdisat.dairyapp.dataaccess.firebase.DeleteRemoteImageService
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageReaderService
 import com.hcdisat.dairyapp.dataaccess.firebase.ImageUploaderService

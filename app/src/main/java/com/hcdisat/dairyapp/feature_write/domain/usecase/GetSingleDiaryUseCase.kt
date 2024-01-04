@@ -1,9 +1,9 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
-import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
+import com.hcdisat.abstraction.domain.repository.MongoRepository
 import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
-import com.hcdisat.dairyapp.presentation.extensions.toPresentationDiary
+import com.hcdisat.ui.extensions.toPresentationDiary
 import javax.inject.Inject
 
 interface GetSingleDiaryUseCase {

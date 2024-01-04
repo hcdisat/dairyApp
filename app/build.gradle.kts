@@ -36,7 +36,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = ProjectConfig.jvmTarget
@@ -64,6 +63,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation(project(":core:common"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -107,6 +107,7 @@ dependencies {
     // OneTapCompose
     implementation("com.github.stevdza-san:OneTapCompose:1.0.9")
 
-    // Desugar JDK
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    implementation(project(":core:ui"))
+    implementation(project(":core:abstraction"))
+    implementation(project(":core:common"))
 }

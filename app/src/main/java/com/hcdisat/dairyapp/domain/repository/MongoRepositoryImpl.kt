@@ -1,8 +1,8 @@
 package com.hcdisat.dairyapp.domain.repository
 
-import com.hcdisat.dairyapp.abstraction.domain.model.DomainDiary
-import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
-import com.hcdisat.dairyapp.core.RealmGenericException
+import com.hcdisat.abstraction.domain.model.DomainDiary
+import com.hcdisat.abstraction.domain.repository.MongoRepository
+import com.hcdisat.common.RealmGenericException
 import com.hcdisat.dairyapp.dataaccess.realm.MongoDatabase
 import com.hcdisat.dairyapp.domain.extensions.toDiary
 import com.hcdisat.dairyapp.domain.extensions.toDomainDiary

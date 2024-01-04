@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.domain.usecases
 
 import android.util.Log
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageToDeleteRepository
+import com.hcdisat.abstraction.domain.repository.ImageToDeleteRepository
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

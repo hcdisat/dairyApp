@@ -1,8 +1,8 @@
 package com.hcdisat.dairyapp.dataaccess.realm
 
 import android.util.Log
-import com.hcdisat.dairyapp.core.RealmGenericException
-import com.hcdisat.dairyapp.core.UserNotAuthenticatedException
+import com.hcdisat.common.RealmGenericException
+import com.hcdisat.common.UserNotAuthenticatedException
 import com.hcdisat.dairyapp.dataaccess.realm.model.Diary
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query

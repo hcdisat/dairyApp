@@ -2,15 +2,10 @@ package com.hcdisat.dairyapp.dataaccess.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.hcdisat.abstraction.domain.repository.FirebaseAuthResult
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
-
-sealed interface FirebaseAuthResult {
-    data object Success : FirebaseAuthResult
-    data object Canceled : FirebaseAuthResult
-    data class Error(val throwable: Throwable) : FirebaseAuthResult
-}
 
 interface FirebaseSignInService {
     val user: FirebaseUser?

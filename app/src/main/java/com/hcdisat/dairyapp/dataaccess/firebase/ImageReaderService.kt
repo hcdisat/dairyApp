@@ -2,7 +2,7 @@ package com.hcdisat.dairyapp.dataaccess.firebase
 
 import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
-import com.hcdisat.dairyapp.core.ImageNotFoundException
+import com.hcdisat.common.ImageNotFoundException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume

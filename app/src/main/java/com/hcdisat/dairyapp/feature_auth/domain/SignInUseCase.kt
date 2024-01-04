@@ -1,10 +1,10 @@
 package com.hcdisat.dairyapp.feature_auth.domain
 
-import com.hcdisat.dairyapp.abstraction.domain.repository.AuthenticationRepository
-import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
-import com.hcdisat.dairyapp.core.SignInCancelledException
-import com.hcdisat.dairyapp.core.UnexpectedException
-import com.hcdisat.dairyapp.dataaccess.firebase.FirebaseAuthResult
+import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
+import com.hcdisat.abstraction.domain.repository.FirebaseAuthResult
+import com.hcdisat.abstraction.networking.AccountSessionState
+import com.hcdisat.common.SignInCancelledException
+import com.hcdisat.common.UnexpectedException
 import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 

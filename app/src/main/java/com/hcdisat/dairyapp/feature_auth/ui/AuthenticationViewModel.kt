@@ -2,8 +2,8 @@ package com.hcdisat.dairyapp.feature_auth.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
-import com.hcdisat.dairyapp.core.di.IODispatcher
+import com.hcdisat.abstraction.networking.AccountSessionState
+import com.hcdisat.dairyapp.di.IODispatcher
 import com.hcdisat.dairyapp.feature_auth.domain.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException

@@ -1,6 +1,6 @@
 package com.hcdisat.dairyapp.feature_home.domain.usecase
 
-import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
+import com.hcdisat.abstraction.domain.repository.MongoRepository
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
 import javax.inject.Inject
 

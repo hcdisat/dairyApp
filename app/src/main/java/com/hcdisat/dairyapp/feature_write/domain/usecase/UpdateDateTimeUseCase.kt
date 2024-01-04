@@ -1,6 +1,6 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
-import com.hcdisat.dairyapp.core.settings.Constants.CONVERSION_ZONE_ID
+import com.hcdisat.common.settings.Constants.CONVERSION_ZONE_ID
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId

@@ -17,8 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.presentation.components.GoogleButton
+import com.hcdisat.core.ui.R
+import com.hcdisat.ui.components.GoogleButton
 
 @Composable
 fun AuthenticationContent(

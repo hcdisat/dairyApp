@@ -35,15 +35,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hcdisat.dairyapp.R
+import com.hcdisat.core.ui.R
 import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
-import com.hcdisat.dairyapp.presentation.components.GalleryUploader
-import com.hcdisat.dairyapp.presentation.components.GalleryUploaderEvents
-import com.hcdisat.dairyapp.presentation.components.ImageModal
-import com.hcdisat.dairyapp.presentation.components.ImageModalEvent
-import com.hcdisat.dairyapp.presentation.components.MoodPager
-import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import com.hcdisat.ui.components.GalleryUploader
+import com.hcdisat.ui.components.GalleryUploaderEvents
+import com.hcdisat.ui.components.ImageModal
+import com.hcdisat.ui.components.ImageModalEvent
+import com.hcdisat.ui.components.MoodPager
+import com.hcdisat.ui.model.GalleryImage
+import com.hcdisat.ui.model.PresentationDiary
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,7 +83,7 @@ fun WriteContent(
             MoodPager(
                 modifier = Modifier.fillMaxWidth(),
                 diary.mood,
-                onEvent = onEvent
+                onChange = { WriteEntryEvents.OnMoodChanged(it).onEvent() }
             )
 
             TextField(

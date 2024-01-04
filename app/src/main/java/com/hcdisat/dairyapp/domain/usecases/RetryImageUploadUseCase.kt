@@ -2,8 +2,8 @@ package com.hcdisat.dairyapp.domain.usecases
 
 import android.util.Log
 import androidx.core.net.toUri
-import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadRetry
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
+import com.hcdisat.abstraction.domain.model.ImageUploadRetry
+import com.hcdisat.abstraction.domain.repository.ImageUploadRetryRepository
 import com.hcdisat.dairyapp.dataaccess.firebase.UploadSession
 import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
 import kotlinx.coroutines.withContext

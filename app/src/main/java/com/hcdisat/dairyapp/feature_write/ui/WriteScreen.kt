@@ -16,21 +16,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.core.InvalidImageUriException
+import com.hcdisat.common.InvalidImageUriException
+import com.hcdisat.core.ui.R
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.feature_write.model.WriteEntryEvents
-import com.hcdisat.dairyapp.presentation.components.AppScaffold
-import com.hcdisat.dairyapp.presentation.components.DatePickerEvents
-import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
-import com.hcdisat.dairyapp.presentation.components.DiaryTimePicker
-import com.hcdisat.dairyapp.presentation.components.LoadingContent
-import com.hcdisat.dairyapp.presentation.components.TimePickerEvents
-import com.hcdisat.dairyapp.presentation.components.model.GalleryImage
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
-import com.hcdisat.dairyapp.presentation.components.model.formattedDateTime
-import com.hcdisat.dairyapp.presentation.extensions.toMillis
+import com.hcdisat.ui.components.AppScaffold
+import com.hcdisat.ui.components.DatePickerEvents
+import com.hcdisat.ui.components.DiaryDatePicker
+import com.hcdisat.ui.components.DiaryTimePicker
+import com.hcdisat.ui.components.LoadingContent
+import com.hcdisat.ui.components.TimePickerEvents
+import com.hcdisat.ui.extensions.toMillis
+import com.hcdisat.ui.model.GalleryImage
+import com.hcdisat.ui.model.PresentationDiary
+import com.hcdisat.ui.model.formattedDateTime
 
 @Composable
 fun WriteScreen(onBackPressed: () -> Unit) {

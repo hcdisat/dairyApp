@@ -24,17 +24,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.hcdisat.dairyapp.R
+import com.hcdisat.core.ui.R
 import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
 import com.hcdisat.dairyapp.feature_home.model.DiaryState
 import com.hcdisat.dairyapp.feature_home.model.GalleryStateData
+import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
-import com.hcdisat.dairyapp.presentation.components.DiaryDate
-import com.hcdisat.dairyapp.presentation.components.DiaryHolder
-import com.hcdisat.dairyapp.presentation.components.LoadingContent
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
-import com.hcdisat.dairyapp.presentation.components.model.entryKey
-import com.hcdisat.dairyapp.presentation.extensions.toPresentationDate
+import com.hcdisat.ui.components.DiaryDate
+import com.hcdisat.ui.components.DiaryHolder
+import com.hcdisat.ui.components.LoadingContent
+import com.hcdisat.ui.components.events.DiaryHolderEvent
+import com.hcdisat.ui.extensions.toPresentationDate
+import com.hcdisat.ui.model.PresentationDiary
+import com.hcdisat.ui.model.entryKey
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -97,7 +99,18 @@ private fun LoadedContent(
                 val stateData = galleryState[diary.id] ?: GalleryStateData()
                 DiaryHolder(
                     diary = diary,
-                    onEvent = onEvent,
+                    onEvent = {
+                        when (this) {
+                            is DiaryHolderEvent.HideGallery ->
+                                HomeEvent.HideGallery(diary).onEvent()
+
+                            is DiaryHolderEvent.OnClicked ->
+                                HomeEvent.EditEntry(diary.id).onEvent()
+
+                            is DiaryHolderEvent.ShowGallery ->
+                                HomeEvent.ShowGallery(diary).onEvent()
+                        }
+                    },
                     images = stateData.images,
                     galleryState = stateData.galleryState
                 )

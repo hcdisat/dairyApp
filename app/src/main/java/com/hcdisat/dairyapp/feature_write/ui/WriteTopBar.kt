@@ -29,9 +29,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.presentation.components.AppAlertDialog
-import com.hcdisat.dairyapp.presentation.components.DialogEvent
+import com.hcdisat.core.ui.R
+import com.hcdisat.ui.components.AppAlertDialog
+import com.hcdisat.ui.components.DialogEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

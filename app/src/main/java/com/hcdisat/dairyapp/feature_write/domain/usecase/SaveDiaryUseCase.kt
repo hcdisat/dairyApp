@@ -1,9 +1,9 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
-import com.hcdisat.dairyapp.abstraction.domain.repository.MongoRepository
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
-import com.hcdisat.dairyapp.presentation.extensions.toDomain
-import com.hcdisat.dairyapp.presentation.extensions.toPresentationDiary
+import com.hcdisat.abstraction.domain.repository.MongoRepository
+import com.hcdisat.ui.extensions.toDomain
+import com.hcdisat.ui.extensions.toPresentationDiary
+import com.hcdisat.ui.model.PresentationDiary
 import javax.inject.Inject
 
 interface SaveDiaryUseCase {

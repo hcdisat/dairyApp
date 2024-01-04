@@ -1,9 +1,9 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
 import android.content.res.Resources
-import com.hcdisat.dairyapp.R
-import com.hcdisat.dairyapp.core.RealmGenericException
-import com.hcdisat.dairyapp.core.UserNotAuthenticatedException
+import com.hcdisat.common.RealmGenericException
+import com.hcdisat.common.UserNotAuthenticatedException
+import com.hcdisat.core.ui.R
 import javax.inject.Inject
 
 interface ErrorHandlerUseCase {

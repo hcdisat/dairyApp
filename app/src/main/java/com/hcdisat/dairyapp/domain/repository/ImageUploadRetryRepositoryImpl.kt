@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.domain.repository
 
-import com.hcdisat.dairyapp.abstraction.domain.model.ImageUploadRetry
-import com.hcdisat.dairyapp.abstraction.domain.repository.ImageUploadRetryRepository
+import com.hcdisat.abstraction.domain.model.ImageUploadRetry
+import com.hcdisat.abstraction.domain.repository.ImageUploadRetryRepository
 import com.hcdisat.dairyapp.dataaccess.room.ImageToUploadDao
 import com.hcdisat.dairyapp.dataaccess.room.entities.ImageToUpload
 import javax.inject.Inject

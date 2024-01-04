@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.domain.extensions
 
-import com.hcdisat.dairyapp.abstraction.domain.model.DomainDiary
-import com.hcdisat.dairyapp.core.extensions.toLocalDateTime
+import com.hcdisat.abstraction.domain.model.DomainDiary
+import com.hcdisat.common.extensions.toLocalDateTime
 import com.hcdisat.dairyapp.dataaccess.realm.model.Diary
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant

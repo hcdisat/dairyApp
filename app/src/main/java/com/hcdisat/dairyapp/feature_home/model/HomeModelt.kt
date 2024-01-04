@@ -2,7 +2,8 @@ package com.hcdisat.dairyapp.feature_home.model
 
 import android.net.Uri
 import androidx.compose.runtime.Stable
-import com.hcdisat.dairyapp.presentation.components.model.PresentationDiary
+import com.hcdisat.ui.model.GalleryState
+import com.hcdisat.ui.model.PresentationDiary
 
 typealias HomeEventAction = HomeEvent.() -> Unit
 
@@ -24,13 +25,6 @@ sealed interface DiaryScreenState {
     data object Loading : DiaryScreenState
     data class Error(val throwable: Throwable) : DiaryScreenState
     data class Loaded(val isFiltered: Boolean = false) : DiaryScreenState
-}
-
-sealed interface GalleryState {
-    data object Loading : GalleryState
-    data object Visible : GalleryState
-    data object Collapsed : GalleryState
-    data class Error(val throwable: Throwable) : GalleryState
 }
 
 @Stable

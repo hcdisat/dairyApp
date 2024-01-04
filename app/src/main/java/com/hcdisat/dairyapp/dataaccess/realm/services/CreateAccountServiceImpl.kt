@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.dataaccess.realm.services
 
-import com.hcdisat.dairyapp.abstraction.networking.AccountSessionState
-import com.hcdisat.dairyapp.abstraction.networking.CreateAccountService
+import com.hcdisat.abstraction.networking.AccountSessionState
+import com.hcdisat.abstraction.networking.CreateAccountService
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import javax.inject.Inject

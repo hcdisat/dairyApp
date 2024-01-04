@@ -20,7 +20,12 @@ hilt-navigation-compose = "1.1.0"
 coil = "2.3.0"
 message-bar-compose = "1.0.5"
 one-tap-compose = "1.0.7"
-desugar = "2.0.3"
+agp = "8.2.0"
+android-library = "7.3.1"
+appcompat = "1.6.1"
+material = "1.11.0"
+compose-bom = "2023.08.00"
+inject = "1"
 
 [libraries]
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
@@ -36,7 +41,6 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
 firebase-auth = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebase-auth" }
 firebase-storage = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebase-storage" }
@@ -50,7 +54,16 @@ realm-sync = { module = "io.realm.kotlin:library-sync", version.ref = "realm" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+javaxInject = { module = "javax.inject:javax.inject", version.ref = "inject" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-message-bar-compose = { module = "com.github.stevdza-san:MessageBarCompose", version.ref = "message-bar-compose" }
-one-tap-compose = { module = "com.github.stevdza-san:OneTapCompose", version.ref = "one-tap-compose" }
-desugar-jdk = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar" }
+messageBarCompose = { module = "com.github.stevdza-san:MessageBarCompose", version.ref = "message-bar-compose" }
+oneTapCompose = { module = "com.github.stevdza-san:OneTapCompose", version.ref = "one-tap-compose" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+
+[plugins]
+androidLibrary = { id = "com.android.library", version.ref = "android-library" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt = { id = "dagger.hilt.android.plugin", version.ref = "dagger-hilt" }
+kotlinKapt = { id = "kotlin-kapt", version.ref = "dagger-hilt" }

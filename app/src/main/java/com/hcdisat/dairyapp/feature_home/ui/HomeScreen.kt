@@ -23,18 +23,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hcdisat.dairyapp.R
+import com.hcdisat.core.ui.R
 import com.hcdisat.dairyapp.feature_home.model.DiaryFilterAction
 import com.hcdisat.dairyapp.feature_home.model.HomeEvent
 import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
 import com.hcdisat.dairyapp.feature_home.model.isFiltered
-import com.hcdisat.dairyapp.presentation.components.AppAlertDialog
-import com.hcdisat.dairyapp.presentation.components.AppNavigationDrawer
-import com.hcdisat.dairyapp.presentation.components.AppScaffold
-import com.hcdisat.dairyapp.presentation.components.DatePickerEvents
-import com.hcdisat.dairyapp.presentation.components.DialogEvent
-import com.hcdisat.dairyapp.presentation.components.DiaryDatePicker
-import com.hcdisat.dairyapp.presentation.components.NavigationDrawerEvent
+import com.hcdisat.ui.components.AppAlertDialog
+import com.hcdisat.ui.components.AppNavigationDrawer
+import com.hcdisat.ui.components.AppScaffold
+import com.hcdisat.ui.components.DatePickerEvents
+import com.hcdisat.ui.components.DialogEvent
+import com.hcdisat.ui.components.DiaryDatePicker
+import com.hcdisat.ui.components.NavigationDrawerEvent
 import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
