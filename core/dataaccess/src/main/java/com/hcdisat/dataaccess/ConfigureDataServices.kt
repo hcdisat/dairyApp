@@ -8,6 +8,8 @@ import javax.inject.Inject
 
 interface ConfigureDataServices {
     fun configure()
+    fun configureRealm()
+    fun initFirebase()
 }
 
 class ConfigureDataServicesImpl @Inject constructor(
@@ -15,7 +17,15 @@ class ConfigureDataServicesImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ConfigureDataServices {
     override fun configure() {
-        FirebaseApp.initializeApp(context)
+        initFirebase()
+        configureRealm()
+    }
+
+    override fun configureRealm() {
         mongoDatabase.configureRealm()
+    }
+
+    override fun initFirebase() {
+        FirebaseApp.initializeApp(context)
     }
 }

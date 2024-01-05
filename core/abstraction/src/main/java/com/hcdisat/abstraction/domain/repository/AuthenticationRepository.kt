@@ -1,6 +1,5 @@
 package com.hcdisat.abstraction.domain.repository
 
-import com.google.firebase.auth.FirebaseUser
 import com.hcdisat.abstraction.networking.AccountSessionState
 
 sealed interface FirebaseAuthResult {
@@ -10,7 +9,7 @@ sealed interface FirebaseAuthResult {
 }
 
 interface AuthenticationRepository {
-    val user: FirebaseUser?
     suspend fun createWithGoogle(googleToken: String): AccountSessionState
-    suspend fun firebaseGoogleSignIn(googleToken: String): FirebaseAuthResult
+    suspend fun firebaseGoogleSignIn(googleToken: String): AccountSessionState
+    fun getUId(): String?
 }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+//    alias(libs.plugins.googleServices)
 }
 
 android {
@@ -42,19 +43,33 @@ android {
 }
 
 dependencies {
+    // core
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime)
+    implementation(libs.coroutines.core)
+
+    // compose
     implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
-    implementation(libs.compose.tooling.preview)
-    implementation(platform(libs.compose.bom))
     implementation(libs.material3.compose)
+    implementation(libs.compose.tooling.preview)
+    implementation(libs.runtime.compose)
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.test.manifest)
 
-    implementation(libs.messageBarCompose)
-    implementation(libs.oneTapCompose)
+    // coil
     implementation(libs.coil)
 
-    implementation(project(":core:abstraction"))
+    // compose libs
+    implementation(libs.messageBarCompose)
+    implementation(libs.oneTapCompose)
 
+    // test libs
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.espresso.core)
+
+    // modules
+    implementation(project(":core:abstraction"))
 }

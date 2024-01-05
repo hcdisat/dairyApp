@@ -1,31 +1,29 @@
 package com.hcdisat.domain.repository
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
 import com.hcdisat.abstraction.domain.repository.FirebaseAuthResult
 import com.hcdisat.abstraction.networking.AccountSessionState
 import com.hcdisat.abstraction.networking.CreateAccountService
+import com.hcdisat.common.OperationCanceledException
 import com.hcdisat.dataaccess.firebase.FirebaseSignInService
-import com.hcdisat.dataaccess.realm.MongoDatabase
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val createAccountService: CreateAccountService,
-    private val firebaseSignInService: FirebaseSignInService,
-    private val mongoDatabase: MongoDatabase
+    private val firebaseSignInService: FirebaseSignInService
 ) : AuthenticationRepository {
-    override val user: FirebaseUser? get() = FirebaseAuth.getInstance().currentUser
-
     override suspend fun createWithGoogle(googleToken: String): AccountSessionState =
         createAccountService.createWithGoogle(googleToken)
 
-    override suspend fun firebaseGoogleSignIn(googleToken: String): FirebaseAuthResult =
+    override suspend fun firebaseGoogleSignIn(googleToken: String): AccountSessionState =
         when (val result = firebaseSignInService.signInWithCredentials(googleToken)) {
-            is FirebaseAuthResult.Error, FirebaseAuthResult.Canceled -> result
-            FirebaseAuthResult.Success -> {
-                mongoDatabase.configureRealm()
-                result
-            }
+            is FirebaseAuthResult.Canceled ->
+                AccountSessionState.LoggedOut(OperationCanceledException())
+
+            is FirebaseAuthResult.Error -> AccountSessionState.Error(result.throwable)
+            FirebaseAuthResult.Success -> createWithGoogle(googleToken)
         }
+
+    override fun getUId(): String? = FirebaseAuth.getInstance().currentUser?.uid
 }

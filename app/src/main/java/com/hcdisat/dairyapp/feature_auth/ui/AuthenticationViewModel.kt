@@ -30,19 +30,13 @@ class AuthenticationViewModel @Inject constructor(
     fun signInWithAtlas(tokenId: String) {
         viewModelScope.launch {
             withContext(dispatcher) { signIn(tokenId) }.mapCatching {
-                when (it) {
-                    AccountSessionState.LOGGED_IN ->
-                        AuthenticationState(sessionState = AccountSessionState.LOGGED_IN)
-
-                    else ->
-                        AuthenticationState(sessionState = AccountSessionState.LOGGED_OUT)
-                }
+                AuthenticationState(sessionState = it)
             }.fold(
                 onSuccess = { _userSessionState.value = it },
                 onFailure = {
                     if (it is CancellationException) throw it
                     _userSessionState.value = userSessionState.value.copy(
-                        sessionState = AccountSessionState.ERROR
+                        sessionState = AccountSessionState.Error(it)
                     )
                 }
             )

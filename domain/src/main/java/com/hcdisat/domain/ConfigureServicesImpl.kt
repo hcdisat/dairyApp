@@ -10,4 +10,12 @@ class ConfigureServicesImpl @Inject constructor(
     override fun initializeServices() {
         serviceConfigurator.configure()
     }
+
+    override fun configureRealm() {
+        serviceConfigurator.configureRealm()
+    }
+
+    override fun initFirebase() {
+        serviceConfigurator.initFirebase()
+    }
 }

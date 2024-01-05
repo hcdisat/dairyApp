@@ -2,6 +2,7 @@ package com.hcdisat.dataaccess.realm.services
 
 import com.hcdisat.abstraction.networking.AccountSessionState
 import com.hcdisat.abstraction.networking.CreateAccountService
+import com.hcdisat.common.UserNotAuthenticatedException
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import javax.inject.Inject
@@ -13,12 +14,12 @@ class CreateAccountServiceImpl @Inject constructor(
     override suspend fun createWithGoogle(googleToken: String): AccountSessionState =
         runCatching {
             if (realmApp.login(Credentials.jwt(googleToken)).loggedIn)
-                AccountSessionState.LOGGED_IN
+                AccountSessionState.LoggedIn
             else
-                AccountSessionState.LOGGED_OUT
+                AccountSessionState.LoggedOut(UserNotAuthenticatedException())
         }.getOrElse {
             if (it is CancellationException) throw it
             it.printStackTrace()
-            AccountSessionState.ERROR
+            AccountSessionState.LoggedOut(it)
         }
 }

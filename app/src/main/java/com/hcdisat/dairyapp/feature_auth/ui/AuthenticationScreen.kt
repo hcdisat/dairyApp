@@ -54,15 +54,15 @@ fun AuthenticationScreen(
 
     LaunchedEffect(key1 = sessionState) {
         when (sessionState) {
-            AccountSessionState.LOGGED_OUT -> Unit
+            is AccountSessionState.LoggedOut -> Unit
 
-            AccountSessionState.LOGGED_IN -> {
+            AccountSessionState.LoggedIn -> {
                 messageBarState.addSuccess("Successfully Authenticated!")
                 delay(600)
                 onLoginSuccess()
             }
 
-            AccountSessionState.ERROR -> {
+            is AccountSessionState.Error -> {
                 messageBarState.addError(Exception("Something went wrong please try again"))
             }
         }

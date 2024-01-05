@@ -20,7 +20,7 @@ class RemoteImagePathGeneratorUseCaseImpl @Inject constructor(
     private val authenticationRepository: AuthenticationRepository,
 ) : RemoteImagePathGeneratorUseCase {
     override fun invoke(images: List<Pair<ImageData, ImageExtension>>): List<GalleryImage> {
-        val uid = authenticationRepository.user?.uid ?: throw UserNotAuthenticatedException()
+        val uid = authenticationRepository.getUId() ?: throw UserNotAuthenticatedException()
         return images.map { (data, ext) ->
             GalleryImage(
                 image = data.uri,

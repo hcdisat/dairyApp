@@ -1,6 +1,10 @@
 package com.hcdisat.abstraction.networking
 
-enum class AccountSessionState { LOGGED_IN, LOGGED_OUT, ERROR }
+sealed interface AccountSessionState {
+    data object LoggedIn : AccountSessionState
+    data class LoggedOut(val reason: Throwable?) : AccountSessionState
+    data class Error(val reason: Throwable?) : AccountSessionState
+}
 
 interface CreateAccountService {
     suspend fun createWithGoogle(googleToken: String): AccountSessionState

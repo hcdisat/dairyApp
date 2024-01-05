@@ -1,10 +1,8 @@
 package com.hcdisat.dairyapp.feature_auth.domain
 
 import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
-import com.hcdisat.abstraction.domain.repository.FirebaseAuthResult
 import com.hcdisat.abstraction.networking.AccountSessionState
-import com.hcdisat.common.SignInCancelledException
-import com.hcdisat.common.UnexpectedException
+import com.hcdisat.abstraction.networking.ConfigureServices
 import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
@@ -13,17 +11,23 @@ interface SignInUseCase {
 }
 
 class SignInUseCaseImpl @Inject constructor(
-    private val authRepository: AuthenticationRepository
+    private val authRepository: AuthenticationRepository,
+    private val configureServices: ConfigureServices
 ) : SignInUseCase {
     override suspend fun invoke(googleToken: String): Result<AccountSessionState> = runCatching {
         when (val result = authRepository.firebaseGoogleSignIn(googleToken)) {
-            is FirebaseAuthResult.Canceled -> throw SignInCancelledException()
-            is FirebaseAuthResult.Error -> {
-                throw if (result.throwable is CancellationException) result.throwable
-                else UnexpectedException(result.throwable)
+            is AccountSessionState.LoggedOut -> result
+
+            is AccountSessionState.LoggedIn -> {
+                configureServices.configureRealm()
+                result
             }
 
-            is FirebaseAuthResult.Success -> authRepository.createWithGoogle(googleToken)
+            is AccountSessionState.Error -> {
+                val error = result.reason
+                if (error is CancellationException) throw error
+                result
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ class MongoDatabaseImpl @Inject constructor(
     private val queryProvider: QueryProvider
 ) : MongoDatabase {
     private lateinit var realm: Realm
-    private val user = realmApp.currentUser
+    private val user: User? get() = realmApp.currentUser
 
     override fun configureRealm() {
         realmApp.currentUser?.let(::config)
@@ -58,9 +58,8 @@ class MongoDatabaseImpl @Inject constructor(
     }
 
     override suspend fun saveDiary(diary: Diary): Result<Diary> = runCatching {
-        checkUser(user)
         realm.write {
-            val addedDiary = copyToRealm(diary.apply { ownerId = user.id })
+            val addedDiary = copyToRealm(diary.apply { ownerId = checkUser(user).id })
             addedDiary
         }
     }
@@ -81,19 +80,17 @@ class MongoDatabaseImpl @Inject constructor(
     }
 
     override suspend fun deleteDiary(entryId: ObjectId): Result<Boolean> = runCatching {
-        checkUser(user)
         realm.write {
             val query = queryProvider.getByIdAndOwnerId().query
-            delete(query<Diary>(query, entryId, user.id))
+            delete(query<Diary>(query, entryId, checkUser(user).id))
             true
         }
     }
 
     override suspend fun deleteAllDiaries(): Result<Unit> = runCatching {
-        checkUser(user)
         realm.write {
             val query = queryProvider.filterQuery().query
-            delete(query<Diary>(query, user.id))
+            delete(query<Diary>(query, checkUser(user).id))
         }
     }
 
@@ -115,11 +112,12 @@ class MongoDatabaseImpl @Inject constructor(
     private fun isUserLoggedIn() = user != null
 
     @OptIn(ExperimentalContracts::class)
-    private fun checkUser(user: User?) {
+    private fun checkUser(user: User?): User {
         contract {
             returns() implies (user != null)
         }
 
         if (user == null) throw UserNotAuthenticatedException()
+        return user
     }
 }
