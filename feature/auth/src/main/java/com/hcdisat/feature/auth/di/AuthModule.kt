@@ -1,7 +1,7 @@
-package com.hcdisat.dairyapp.feature_auth.di
+package com.hcdisat.feature.auth.di
 
-import com.hcdisat.dairyapp.feature_auth.domain.SignInUseCase
-import com.hcdisat.dairyapp.feature_auth.domain.SignInUseCaseImpl
+import com.hcdisat.feature.auth.domain.SignInUseCase
+import com.hcdisat.feature.auth.domain.SignInUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

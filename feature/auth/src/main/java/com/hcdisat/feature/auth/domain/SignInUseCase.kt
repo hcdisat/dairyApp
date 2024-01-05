@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_auth.domain
+package com.hcdisat.feature.auth.domain
 
 import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
 import com.hcdisat.abstraction.networking.AccountSessionState

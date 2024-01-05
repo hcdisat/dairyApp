@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_auth.ui.components
+package com.hcdisat.feature.auth.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,7 @@ import com.hcdisat.core.ui.R
 import com.hcdisat.ui.components.GoogleButton
 
 @Composable
-fun AuthenticationContent(
+internal fun AuthenticationContent(
     loadingState: Boolean,
     onButtonClick: () -> Unit
 ) {
@@ -70,6 +70,6 @@ fun AuthenticationContent(
 
 @Preview(showBackground = true)
 @Composable
-fun AuthenticationScreenPreview() {
+private fun AuthenticationScreenPreview() {
     AuthenticationContent(loadingState = false) {}
 }

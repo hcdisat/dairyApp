@@ -1,10 +1,10 @@
-package com.hcdisat.dairyapp.feature_auth.ui
+package com.hcdisat.feature.auth.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.abstraction.networking.AccountSessionState
-import com.hcdisat.dairyapp.di.IODispatcher
-import com.hcdisat.dairyapp.feature_auth.domain.SignInUseCase
+import com.hcdisat.common.di.IODispatcher
+import com.hcdisat.feature.auth.domain.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor(
+internal class AuthenticationViewModel @Inject constructor(
     @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val signIn: SignInUseCase
 ) : ViewModel() {

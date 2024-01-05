@@ -1,6 +1,5 @@
-package com.hcdisat.dairyapp.feature_auth.ui
+package com.hcdisat.feature.auth.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -8,14 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hcdisat.abstraction.networking.AccountSessionState
 import com.hcdisat.common.settings.Constants.CLIENT_ID
-import com.hcdisat.dairyapp.feature_auth.ui.components.AuthenticationContent
+import com.hcdisat.feature.auth.ui.components.AuthenticationContent
 import com.hcdisat.ui.components.AppScaffold
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import kotlinx.coroutines.delay
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AuthenticationScreen(
     onLoginSuccess: () -> Unit
