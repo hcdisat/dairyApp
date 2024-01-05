@@ -6,7 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.dairyapp.di.IODispatcher
-import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteDiaryUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.DeleteImageUseCase
 import com.hcdisat.dairyapp.feature_write.domain.usecase.ErrorHandlerUseCase
@@ -21,6 +20,7 @@ import com.hcdisat.dairyapp.feature_write.model.DiaryEntryState
 import com.hcdisat.dairyapp.feature_write.model.EntryActions
 import com.hcdisat.dairyapp.feature_write.model.EntryScreenState
 import com.hcdisat.dairyapp.navigation.NavigationConstants
+import com.hcdisat.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.ui.model.GalleryImage
 import com.hcdisat.ui.model.Mood
 import com.hcdisat.ui.model.MutablePresentationDiary

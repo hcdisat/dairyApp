@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.hcdisat.abstraction.networking.Session
 import com.hcdisat.abstraction.networking.SessionService
 import com.hcdisat.dairyapp.di.IODispatcher
-import com.hcdisat.dairyapp.domain.usecases.ResumeImagesRemovalUseCase
-import com.hcdisat.dairyapp.domain.usecases.RetryImageUploadUseCase
+import com.hcdisat.domain.usecases.ResumeImagesRemovalUseCase
+import com.hcdisat.domain.usecases.RetryImageUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch

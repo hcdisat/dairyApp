@@ -1,6 +1,6 @@
 package com.hcdisat.dairyapp.feature_write.domain.usecase
 
-import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
+import com.hcdisat.domain.repository.DomainImageRepository
 import javax.inject.Inject
 
 interface DeleteImageUseCase {

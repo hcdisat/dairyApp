@@ -79,20 +79,20 @@ dependencies {
     implementation(libs.runtime.compose)
 
     // firebase
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.storage)
+//    implementation(libs.firebase.auth)
+//    implementation(libs.firebase.storage)
 
     // room
-    implementation(libs.room.runtime)
-    kapt(libs.room.compiler)
-    implementation(libs.room.ktx)
+//    implementation(libs.room.runtime)
+//    kapt(libs.room.compiler)
+//    implementation(libs.room.ktx)
 
     // splash API
     implementation(libs.splash.api)
 
     // MongoDb realm
-    implementation(libs.realm.base)
-    implementation(libs.realm.sync)
+//    implementation(libs.realm.base)
+//    implementation(libs.realm.sync)
 
     // Dagger Hilt
     implementation(libs.hilt.android)
@@ -111,4 +111,5 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:abstraction"))
     implementation(project(":core:common"))
+    implementation(project(":domain"))
 }

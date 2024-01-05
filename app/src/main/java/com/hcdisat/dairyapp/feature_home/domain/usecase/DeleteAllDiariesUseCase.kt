@@ -1,7 +1,7 @@
 package com.hcdisat.dairyapp.feature_home.domain.usecase
 
 import com.hcdisat.abstraction.domain.repository.MongoRepository
-import com.hcdisat.dairyapp.domain.repository.DomainImageRepository
+import com.hcdisat.domain.repository.DomainImageRepository
 import javax.inject.Inject
 
 interface DeleteAllDiariesUseCase {

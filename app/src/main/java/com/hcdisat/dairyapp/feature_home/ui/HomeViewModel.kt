@@ -10,13 +10,13 @@ import com.hcdisat.abstraction.networking.LogoutAccountService
 import com.hcdisat.common.conectivity.ConnectivityObserverService
 import com.hcdisat.common.conectivity.ConnectivityStatus
 import com.hcdisat.dairyapp.di.IODispatcher
-import com.hcdisat.dairyapp.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.dairyapp.feature_home.domain.usecase.DeleteAllDiariesUseCase
 import com.hcdisat.dairyapp.feature_home.domain.usecase.FilterDiariesUseCase
 import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCase
 import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
 import com.hcdisat.dairyapp.feature_home.model.DiaryState
 import com.hcdisat.dairyapp.feature_home.model.GalleryStateData
+import com.hcdisat.domain.usecases.LoadDiaryGalleryUseCase
 import com.hcdisat.ui.model.GalleryState
 import com.hcdisat.ui.model.PresentationDiary
 import dagger.hilt.android.lifecycle.HiltViewModel
