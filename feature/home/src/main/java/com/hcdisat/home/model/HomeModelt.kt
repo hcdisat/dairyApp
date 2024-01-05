@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_home.model
+package com.hcdisat.home.model
 
 import android.net.Uri
 import androidx.compose.runtime.Stable

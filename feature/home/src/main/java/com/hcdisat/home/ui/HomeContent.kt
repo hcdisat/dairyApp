@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.hcdisat.dairyapp.feature_home.ui
+package com.hcdisat.home.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -25,11 +25,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.hcdisat.core.ui.R
-import com.hcdisat.dairyapp.feature_home.model.DiaryScreenState
-import com.hcdisat.dairyapp.feature_home.model.DiaryState
-import com.hcdisat.dairyapp.feature_home.model.GalleryStateData
-import com.hcdisat.dairyapp.feature_home.model.HomeEvent
-import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
+import com.hcdisat.home.model.DiaryScreenState
+import com.hcdisat.home.model.DiaryState
+import com.hcdisat.home.model.GalleryStateData
+import com.hcdisat.home.model.HomeEvent
+import com.hcdisat.home.model.HomeEventAction
 import com.hcdisat.ui.components.DiaryDate
 import com.hcdisat.ui.components.DiaryHolder
 import com.hcdisat.ui.components.LoadingContent

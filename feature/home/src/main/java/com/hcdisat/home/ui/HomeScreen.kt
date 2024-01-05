@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_home.ui
+package com.hcdisat.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -24,10 +24,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hcdisat.core.ui.R
-import com.hcdisat.dairyapp.feature_home.model.DiaryFilterAction
-import com.hcdisat.dairyapp.feature_home.model.HomeEvent
-import com.hcdisat.dairyapp.feature_home.model.HomeEventAction
-import com.hcdisat.dairyapp.feature_home.model.isFiltered
+import com.hcdisat.home.model.DiaryFilterAction
+import com.hcdisat.home.model.HomeEvent
+import com.hcdisat.home.model.HomeEventAction
+import com.hcdisat.home.model.isFiltered
 import com.hcdisat.ui.components.AppAlertDialog
 import com.hcdisat.ui.components.AppNavigationDrawer
 import com.hcdisat.ui.components.AppScaffold

@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.feature_home.domain.usecase
+package com.hcdisat.home.domain.usecase
 
 import com.hcdisat.common.settings.Constants
 import java.time.Instant

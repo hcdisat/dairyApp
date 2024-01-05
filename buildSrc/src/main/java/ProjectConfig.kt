@@ -12,4 +12,8 @@ object ProjectConfig {
     const val jvmTarget = "1.8"
 
     const val compose = "1.5.1"
+
+    const val baseNamespace = "com.hcdisat"
 }
+
+fun namespace(module: String) = "${ProjectConfig.baseNamespace}.$module"

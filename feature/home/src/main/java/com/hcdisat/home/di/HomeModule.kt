@@ -1,11 +1,11 @@
-package com.hcdisat.dairyapp.feature_home.di
+package com.hcdisat.home.di
 
-import com.hcdisat.dairyapp.feature_home.domain.usecase.DeleteAllDiariesUseCase
-import com.hcdisat.dairyapp.feature_home.domain.usecase.DeleteAllDiariesUseCaseImpl
-import com.hcdisat.dairyapp.feature_home.domain.usecase.FilterDiariesUseCase
-import com.hcdisat.dairyapp.feature_home.domain.usecase.FilterDiariesUseCaseImpl
-import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCase
-import com.hcdisat.dairyapp.feature_home.domain.usecase.GetDiariesUseCaseImpl
+import com.hcdisat.home.domain.usecase.DeleteAllDiariesUseCase
+import com.hcdisat.home.domain.usecase.DeleteAllDiariesUseCaseImpl
+import com.hcdisat.home.domain.usecase.FilterDiariesUseCase
+import com.hcdisat.home.domain.usecase.FilterDiariesUseCaseImpl
+import com.hcdisat.home.domain.usecase.GetDiariesUseCase
+import com.hcdisat.home.domain.usecase.GetDiariesUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
