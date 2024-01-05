@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="logo_size">250dp</dimen>
-    <dimen name="nav_drawer_padding">12dp</dimen>
-    <dimen name="diary_date_spacing">12dp</dimen>
-</resources>
