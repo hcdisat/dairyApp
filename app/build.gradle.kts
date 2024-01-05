@@ -54,60 +54,42 @@ android {
 }
 
 dependencies {
+    // core
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime)
+    implementation(libs.coroutines.core)
+    implementation(libs.splash.api)
+
+    // compose
+    implementation(libs.navigation.compose)
+    implementation(libs.runtime.compose)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.tooling.preview)
     implementation(libs.material3.compose)
-    implementation(libs.coroutines.core)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.junit.ext)
-    testImplementation(libs.espresso.core)
-
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.compose.ui.test)
-
     debugImplementation(libs.compose.ui.tooling)
-    androidTestImplementation(libs.compose.ui.test.manifest)
 
-    // compose
-    implementation(libs.navigation.compose)
-    implementation(libs.runtime.compose)
+    // compose libs
+    implementation(libs.messageBarCompose)
+    implementation(libs.oneTapCompose)
+    implementation(libs.coil)
 
-    // firebase
-//    implementation(libs.firebase.auth)
-//    implementation(libs.firebase.storage)
-
-    // room
-//    implementation(libs.room.runtime)
-//    kapt(libs.room.compiler)
-//    implementation(libs.room.ktx)
-
-    // splash API
-    implementation(libs.splash.api)
-
-    // MongoDb realm
-//    implementation(libs.realm.base)
-//    implementation(libs.realm.sync)
-
-    // Dagger Hilt
+    // dagger-hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
 
-    // coil
-    implementation(libs.coil)
+    // tests
+    testImplementation(libs.junit)
+    testImplementation(libs.junit.ext)
+    testImplementation(libs.espresso.core)
+    androidTestImplementation(libs.compose.ui.test.manifest)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test)
 
-    // MessageBar
-    implementation("com.github.stevdza-san:MessageBarCompose:1.0.8")
-
-    // OneTapCompose
-    implementation("com.github.stevdza-san:OneTapCompose:1.0.9")
-
+    // modules
     implementation(project(":core:ui"))
     implementation(project(":core:abstraction"))
     implementation(project(":core:common"))

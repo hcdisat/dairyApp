@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarState
 
 @Composable
@@ -25,13 +26,11 @@ fun AppScaffold(
         bottomBar = { bottomBar?.let { BottomAppBar { it() } } },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         content = { paddingValues ->
-//            messageBarState?.let { messageBarState ->
-//                ContentWithMessageBar(messageBarState = messageBarState) {
-//                    paddingValues.content()
-//                }
-//            } ?: paddingValues.content()
-
-            paddingValues.content()
+            messageBarState?.let { messageBarState ->
+                ContentWithMessageBar(messageBarState = messageBarState) {
+                    paddingValues.content()
+                }
+            } ?: paddingValues.content()
         }
     )
 }
