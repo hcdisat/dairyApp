@@ -96,4 +96,5 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:write"))
 }

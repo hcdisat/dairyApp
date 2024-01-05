@@ -14,10 +14,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.hcdisat.dairyapp.feature_write.ui.WriteScreen
-import com.hcdisat.feature.auth.ui.AuthenticationScreen
+import com.hcdisat.auth.ui.AuthenticationScreen
+import com.hcdisat.common.settings.NavigationConstants
 import com.hcdisat.home.model.HomeEvent
 import com.hcdisat.home.ui.HomeScreen
+import com.hcdisat.write.ui.WriteScreen
 import kotlinx.coroutines.launch
 
 @Composable

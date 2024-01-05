@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hcdisat.dataaccess"
+    namespace = namespace("dataaccess")
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hcdisat.feature.auth"
+    namespace = namespace("auth")
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {

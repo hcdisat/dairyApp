@@ -1,5 +1,7 @@
 package com.hcdisat.dairyapp.navigation
 
+import com.hcdisat.common.settings.NavigationConstants
+
 sealed class Screen(open val route: String) {
     data object Authentication : Screen(NavigationConstants.AUTHENTICATION_ROUTE)
     data object Home : Screen(NavigationConstants.HOME_ROUTE)

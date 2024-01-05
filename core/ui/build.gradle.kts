@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hcdisat.core.ui"
+    namespace = namespace("core.ui")
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {

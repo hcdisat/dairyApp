@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hcdisat.common"
+    namespace = namespace("common")
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = namespace("domain")
+    namespace = namespace("write")
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
@@ -32,26 +32,48 @@ android {
     kotlinOptions {
         jvmTarget = ProjectConfig.jvmTarget
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = ProjectConfig.compose
+    }
 }
 
 dependencies {
-
+// core
     implementation(libs.core.ktx)
-    implementation(libs.appcompat)
+    implementation(libs.lifecycle.runtime)
+    implementation(libs.coroutines.core)
 
-    // hilt
+    // compose
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.graphics)
+    implementation(libs.material3.compose)
+    implementation(libs.compose.tooling.preview)
+    implementation(libs.runtime.compose)
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.test.manifest)
+
+    // compose libs
+    implementation(libs.oneTapCompose)
+    implementation(libs.messageBarCompose)
+
+    // dagger-hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
 
-    implementation(libs.realm.base)
-    implementation(libs.firebase.auth)
-
-    implementation(libs.coroutines.core)
-
+    // test libs
     testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.espresso.core)
 
-    implementation(project(":core:dataaccess"))
+    // modules
     implementation(project(":core:abstraction"))
     implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+    implementation(project(":domain"))
 }

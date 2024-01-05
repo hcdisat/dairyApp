@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hcdisat.abstraction"
+    namespace = namespace("abstraction")
     compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
@@ -36,7 +36,4 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     testImplementation(libs.junit)
-
-    // to be removed
-    implementation(libs.firebase.auth)
 }
