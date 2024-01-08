@@ -1,14 +1,13 @@
 package com.hcdisat.dataaccess.firebase
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.hcdisat.abstraction.domain.repository.FirebaseAuthResult
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
 interface FirebaseSignInService {
-    val user: FirebaseUser?
+    val uid: String?
     suspend fun signInWithCredentials(tokenId: String): FirebaseAuthResult
 }
 
@@ -16,7 +15,7 @@ class FirebaseSignInServiceImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val googleCredentialService: GoogleCredentialsProvider
 ) : FirebaseSignInService {
-    override val user: FirebaseUser? get() = FirebaseAuth.getInstance().currentUser
+    override val uid: String? get() = FirebaseAuth.getInstance().currentUser?.uid
 
     override suspend fun signInWithCredentials(tokenId: String): FirebaseAuthResult =
         suspendCancellableCoroutine { continuation ->

@@ -1,6 +1,5 @@
 package com.hcdisat.domain.repository
 
-import com.google.firebase.auth.FirebaseAuth
 import com.hcdisat.abstraction.domain.repository.AuthenticationRepository
 import com.hcdisat.abstraction.domain.repository.FirebaseAuthResult
 import com.hcdisat.abstraction.networking.AccountSessionState
@@ -25,5 +24,5 @@ class AuthenticationRepositoryImpl @Inject constructor(
             FirebaseAuthResult.Success -> createWithGoogle(googleToken)
         }
 
-    override fun getUId(): String? = FirebaseAuth.getInstance().currentUser?.uid
+    override fun getUId(): String? = firebaseSignInService.uid
 }

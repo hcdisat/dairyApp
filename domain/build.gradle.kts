@@ -45,8 +45,6 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(libs.realm.base)
-    implementation(libs.firebase.auth)
-
     implementation(libs.coroutines.core)
 
     testImplementation(libs.junit)

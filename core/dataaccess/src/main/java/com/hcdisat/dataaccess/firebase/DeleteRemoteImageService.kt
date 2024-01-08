@@ -30,7 +30,7 @@ class DeleteImageServiceImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val signInService: FirebaseSignInService,
 ) : DeleteRemoteImageService {
-    private val imagesDir get() = signInService.user?.let { "images/${it.uid}" }
+    private val imagesDir get() = signInService.uid?.let { "images/$it" }
 
     override suspend fun deleteRemoteImages(
         remotePaths: List<String>,
@@ -81,7 +81,7 @@ class DeleteImageServiceImpl @Inject constructor(
         return when {
             task.isSuccessful -> Result.success(ImageDeletionResult.Success(targetPath))
 
-            error is StorageException && error.httpResultCode == 404 ->
+            (error is StorageException) && (error.httpResultCode == 404) ->
                 Result.success(ImageDeletionResult.PathNotFound(targetPath))
 
             error == null -> Result.success(ImageDeletionResult.Success(targetPath))
