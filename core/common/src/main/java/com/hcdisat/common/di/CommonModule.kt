@@ -1,4 +1,4 @@
-package com.hcdisat.dairyapp.di
+package com.hcdisat.common.di
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CoreModule {
+object CommonModule {
     @Provides
     @Singleton
     fun providesConnectivityObserverService(

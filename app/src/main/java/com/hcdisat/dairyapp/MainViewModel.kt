@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.abstraction.networking.Session
 import com.hcdisat.abstraction.networking.SessionService
-import com.hcdisat.dairyapp.di.IODispatcher
+import com.hcdisat.common.di.IODispatcher
 import com.hcdisat.domain.usecases.ResumeImagesRemovalUseCase
 import com.hcdisat.domain.usecases.RetryImageUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

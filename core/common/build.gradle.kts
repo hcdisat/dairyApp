@@ -44,6 +44,5 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
 
-//    implementation(libs.realm.sync)
     testImplementation(libs.junit)
 }
