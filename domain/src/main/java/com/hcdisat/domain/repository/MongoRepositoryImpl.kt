@@ -3,9 +3,9 @@ package com.hcdisat.domain.repository
 import com.hcdisat.abstraction.domain.model.DomainDiary
 import com.hcdisat.abstraction.domain.repository.MongoRepository
 import com.hcdisat.common.RealmGenericException
-import com.hcdisat.dairyapp.domain.extensions.toDiary
-import com.hcdisat.dairyapp.domain.extensions.toDomainDiary
 import com.hcdisat.dataaccess.realm.MongoDatabase
+import com.hcdisat.domain.extensions.toDiary
+import com.hcdisat.domain.extensions.toDomainDiary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.mongodb.kbson.ObjectId

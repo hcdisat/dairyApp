@@ -1,12 +1,13 @@
-package com.hcdisat.dairyapp.domain.extensions
+package com.hcdisat.domain.extensions
 
 import com.hcdisat.abstraction.domain.model.DomainDiary
-import com.hcdisat.common.extensions.toLocalDateTime
 import com.hcdisat.dataaccess.realm.model.Diary
 import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.internal.toDuration
 import io.realm.kotlin.types.RealmInstant
 import org.mongodb.kbson.ObjectId
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 fun Diary.toDomainDiary() = DomainDiary(
@@ -44,4 +45,10 @@ fun Instant.toRealmInstant(): RealmInstant {
             1_000_000 + nano
         )
     }
+}
+
+fun RealmInstant.toLocalDateTime(): LocalDateTime {
+    return Instant.ofEpochMilli(toDuration().inWholeMilliseconds)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime()
 }
