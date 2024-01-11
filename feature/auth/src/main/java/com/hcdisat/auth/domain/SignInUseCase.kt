@@ -6,11 +6,11 @@ import com.hcdisat.abstraction.networking.ConfigureServices
 import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
-interface SignInUseCase {
+internal interface SignInUseCase {
     suspend operator fun invoke(googleToken: String): Result<AccountSessionState>
 }
 
-class SignInUseCaseImpl @Inject constructor(
+internal class SignInUseCaseImpl @Inject constructor(
     private val authRepository: AuthenticationRepository,
     private val configureServices: ConfigureServices
 ) : SignInUseCase {

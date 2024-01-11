@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface AuthModule {
+internal interface AuthModule {
 
     @Binds
     @ViewModelScoped
@@ -23,7 +23,7 @@ interface AuthModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface ScreenModule {
+interface AuthScreenModule {
     @Binds
     @Singleton
     fun bindsAuthenticationFeature(impl: AuthenticationRouteImpl): AuthenticationRoute
