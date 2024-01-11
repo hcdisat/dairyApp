@@ -18,42 +18,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hcdisat.core.ui.R
-import com.hcdisat.home.model.DiaryFilterAction
+import com.hcdisat.home.model.DiaryState
 import com.hcdisat.home.model.HomeEvent
 import com.hcdisat.home.model.HomeEventAction
 import com.hcdisat.home.model.isFiltered
 import com.hcdisat.ui.components.AppAlertDialog
 import com.hcdisat.ui.components.AppNavigationDrawer
 import com.hcdisat.ui.components.AppScaffold
-import com.hcdisat.ui.components.DatePickerEvents
 import com.hcdisat.ui.components.DialogEvent
-import com.hcdisat.ui.components.DiaryDatePicker
 import com.hcdisat.ui.components.NavigationDrawerEvent
-import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+internal fun HomeScreen(
     modifier: Modifier = Modifier,
+    homeState: DiaryState,
     drawerState: DrawerState,
     topBarScrollBehavior: TopAppBarScrollBehavior? = null,
     onEvent: HomeEventAction,
 ) {
-    val viewModel: HomeViewModel = hiltViewModel()
-    val homeState by viewModel.homeState.collectAsStateWithLifecycle(
-        lifecycle = LocalLifecycleOwner.current.lifecycle,
-        minActiveState = Lifecycle.State.STARTED
-    )
-
     var isLogoutDialogDismissed by remember { mutableStateOf(true) }
     var isRemoveAllDialogDismissed by remember { mutableStateOf(true) }
-    var shouldOpenDatePicker by remember { mutableStateOf(false) }
 
     AppNavigationDrawer(
         drawerState = drawerState,
@@ -75,15 +62,7 @@ fun HomeScreen(
                     onEvent = {
                         when (this) {
                             is HomeEvent.MenuClicked -> HomeEvent.OpenDrawer.onEvent()
-                            is HomeEvent.DiaryFilterEvent -> {
-                                if (action == DiaryFilterAction.AttachFilter)
-                                    shouldOpenDatePicker = true
-                                else {
-                                    shouldOpenDatePicker = false
-                                    viewModel.removeFilter()
-                                }
-                            }
-
+                            is HomeEvent.DiaryFilterEvent -> onEvent(this)
                             else -> Unit
                         }
                     },
@@ -103,14 +82,8 @@ fun HomeScreen(
             HomeContent(
                 homeState = homeState,
                 paddingValues = this,
-            ) {
-                when (this) {
-                    is HomeEvent.HideGallery -> viewModel.hideGalleryImages(diary)
-                    is HomeEvent.ShowGallery -> viewModel.showGalleryImages(diary)
-                    is HomeEvent.LoadGallery -> viewModel.loadImageGallery(diary)
-                    else -> onEvent(this)
-                }
-            }
+                onEvent = onEvent
+            )
         }
     }
 
@@ -123,7 +96,6 @@ fun HomeScreen(
         onEvent = {
             isLogoutDialogDismissed = true
             if (it == DialogEvent.POSITIVE) {
-                viewModel.logout()
                 HomeEvent.Logout.onEvent()
             }
         }
@@ -138,26 +110,10 @@ fun HomeScreen(
         onEvent = {
             isRemoveAllDialogDismissed = true
             if (it == DialogEvent.POSITIVE) {
-                viewModel.removeAllDiaries()
+                onEvent(HomeEvent.RemoveAll)
             }
         }
     )
-
-    DiaryDatePicker(
-        showDatePicker = shouldOpenDatePicker,
-        selectedTimeInMillis = Instant.now().toEpochMilli()
-    ) {
-        shouldOpenDatePicker = when (this) {
-            is DatePickerEvents.DateSelected -> {
-                viewModel.filterDiaries(dateInUtcMillis)
-                false
-            }
-
-            DatePickerEvents.OnDismissed -> {
-                false
-            }
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,5 +1,7 @@
 package com.hcdisat.home.di
 
+import com.hcdisat.home.HomeRoute
+import com.hcdisat.home.HomeRouteImpl
 import com.hcdisat.home.domain.usecase.DeleteAllDiariesUseCase
 import com.hcdisat.home.domain.usecase.DeleteAllDiariesUseCaseImpl
 import com.hcdisat.home.domain.usecase.FilterDiariesUseCase
@@ -11,6 +13,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -26,4 +30,12 @@ interface HomeModule {
     @Binds
     @ViewModelScoped
     fun bindsFilterDiariesUseCase(impl: FilterDiariesUseCaseImpl): FilterDiariesUseCase
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface HomeScreenModule {
+    @Binds
+    @Singleton
+    fun bindsAuthenticationRoute(impl: HomeRouteImpl): HomeRoute
 }

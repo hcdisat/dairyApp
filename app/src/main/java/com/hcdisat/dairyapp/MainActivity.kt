@@ -8,14 +8,18 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.hcdisat.abstraction.networking.SessionState
-import com.hcdisat.dairyapp.navigation.Screen
-import com.hcdisat.dairyapp.navigation.SetupNavGraph
+import com.hcdisat.common.settings.NavigationConstants
+import com.hcdisat.dairyapp.navigation.Navigator
 import com.hcdisat.ui.theme.DairyAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var navigator: Navigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,19 +27,19 @@ class MainActivity : ComponentActivity() {
         mainViewModel.syncRemoteImages()
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        val sessionState = mainViewModel.getSession().state
         setContent {
             DairyAppTheme {
                 val navController = rememberNavController()
-                SetupNavGraph(
-                    startDestination = getStartDestination(),
+                val startDestination = when (sessionState) {
+                    SessionState.LOGGED_IN -> NavigationConstants.HOME_ROUTE
+                    SessionState.LOGGED_OUT -> NavigationConstants.AUTHENTICATION_ROUTE
+                }
+                navigator.SetupNavGraph(
+                    startDestination = startDestination,
                     navHostController = navController
                 )
             }
         }
-    }
-
-    private fun getStartDestination(): Screen = when (mainViewModel.getSession().state) {
-        SessionState.LOGGED_IN -> Screen.Home
-        SessionState.LOGGED_OUT -> Screen.Authentication
     }
 }

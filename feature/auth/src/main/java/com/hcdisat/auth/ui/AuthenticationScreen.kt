@@ -2,10 +2,10 @@ package com.hcdisat.auth.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.hcdisat.abstraction.networking.AccountSessionState
+import com.hcdisat.auth.AuthUIEvents
+import com.hcdisat.auth.AuthenticationState
 import com.hcdisat.auth.ui.components.AuthenticationContent
 import com.hcdisat.common.settings.Constants.CLIENT_ID
 import com.hcdisat.ui.components.AppScaffold
@@ -15,14 +15,12 @@ import com.stevdzasan.onetap.rememberOneTapSignInState
 import kotlinx.coroutines.delay
 
 @Composable
-fun AuthenticationScreen(
-    onLoginSuccess: () -> Unit
+internal fun AuthenticationScreen(
+    state: AuthenticationState,
+    onEvent: (AuthUIEvents) -> Unit = {},
 ) {
     val messageBarState = rememberMessageBarState()
     val oneTapState = rememberOneTapSignInState()
-
-    val viewModel: AuthenticationViewModel = hiltViewModel()
-    val state = viewModel.userSessionState.collectAsState().value
     val (sessionState, loadingState) = state
 
     AppScaffold(
@@ -33,8 +31,8 @@ fun AuthenticationScreen(
             AuthenticationContent(
                 loadingState = loadingState,
                 onButtonClick = {
+                    onEvent(AuthUIEvents.LoadingStatus(true))
                     oneTapState.open()
-                    viewModel.setLoading(true)
                 }
             )
         }
@@ -43,10 +41,10 @@ fun AuthenticationScreen(
     OneTapSignInWithGoogle(
         state = oneTapState,
         clientId = CLIENT_ID,
-        onTokenIdReceived = { token -> viewModel.signInWithAtlas(token) },
+        onTokenIdReceived = { token -> onEvent(AuthUIEvents.OnTokenReceived(token)) },
         onDialogDismissed = {
             messageBarState.addError(Exception(it))
-            viewModel.setLoading(false)
+            onEvent(AuthUIEvents.LoadingStatus(false))
         }
     )
 
@@ -56,8 +54,8 @@ fun AuthenticationScreen(
 
             AccountSessionState.LoggedIn -> {
                 messageBarState.addSuccess("Successfully Authenticated!")
-                delay(600)
-                onLoginSuccess()
+                delay(500)
+                onEvent(AuthUIEvents.SuccessLogin)
             }
 
             is AccountSessionState.Error -> {

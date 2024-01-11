@@ -36,4 +36,6 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     testImplementation(libs.junit)
+
+    implementation(libs.navigation.compose)
 }

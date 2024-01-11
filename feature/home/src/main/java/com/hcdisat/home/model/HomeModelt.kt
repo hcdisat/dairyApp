@@ -12,6 +12,7 @@ sealed interface HomeEvent {
     data object Logout : HomeEvent
     data object OpenDrawer : HomeEvent
     data object AddNewEntry : HomeEvent
+    data object RemoveAll : HomeEvent
     data class EditEntry(val entryId: String) : HomeEvent
     data class ShowGallery(val diary: PresentationDiary) : HomeEvent
     data class LoadGallery(val diary: PresentationDiary) : HomeEvent

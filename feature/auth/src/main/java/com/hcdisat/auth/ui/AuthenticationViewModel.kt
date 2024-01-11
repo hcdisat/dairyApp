@@ -3,6 +3,7 @@ package com.hcdisat.auth.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hcdisat.abstraction.networking.AccountSessionState
+import com.hcdisat.auth.AuthenticationState
 import com.hcdisat.auth.domain.SignInUseCase
 import com.hcdisat.common.di.IODispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
