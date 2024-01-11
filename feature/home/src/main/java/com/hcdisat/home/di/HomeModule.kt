@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface HomeModule {
+internal interface HomeModule {
     @Binds
     @ViewModelScoped
     fun bindGetDiariesUseCase(impl: GetDiariesUseCaseImpl): GetDiariesUseCase

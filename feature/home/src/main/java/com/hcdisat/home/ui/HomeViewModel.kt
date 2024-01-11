@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+internal class HomeViewModel @Inject constructor(
     networkObserver: ConnectivityObserverService,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val logoutAccountService: LogoutAccountService,

@@ -23,7 +23,7 @@ import com.hcdisat.home.model.HomeEventAction
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopBar(
+internal fun HomeTopBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     isFiltered: Boolean = false,

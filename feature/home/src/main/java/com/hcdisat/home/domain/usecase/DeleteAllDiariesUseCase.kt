@@ -4,11 +4,11 @@ import com.hcdisat.abstraction.domain.repository.MongoRepository
 import com.hcdisat.domain.repository.DomainImageRepository
 import javax.inject.Inject
 
-interface DeleteAllDiariesUseCase {
+internal interface DeleteAllDiariesUseCase {
     suspend operator fun invoke(): Result<Unit>
 }
 
-class DeleteAllDiariesUseCaseImpl @Inject constructor(
+internal class DeleteAllDiariesUseCaseImpl @Inject constructor(
     private val mongoRepository: MongoRepository,
     private val imageRepository: DomainImageRepository,
 ) : DeleteAllDiariesUseCase {

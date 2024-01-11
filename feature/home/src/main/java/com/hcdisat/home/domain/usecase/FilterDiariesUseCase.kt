@@ -6,11 +6,11 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
 
-interface FilterDiariesUseCase {
+internal interface FilterDiariesUseCase {
     operator fun invoke(dateTime: LocalDateTime, utcDateTimeInMillis: Long): Boolean
 }
 
-class FilterDiariesUseCaseImpl @Inject constructor() : FilterDiariesUseCase {
+internal class FilterDiariesUseCaseImpl @Inject constructor() : FilterDiariesUseCase {
     override fun invoke(dateTime: LocalDateTime, utcDateTimeInMillis: Long): Boolean {
         val utcDateTime = Instant.ofEpochMilli(utcDateTimeInMillis)
             .atZone(ZoneId.of(Constants.CONVERSION_ZONE_ID))

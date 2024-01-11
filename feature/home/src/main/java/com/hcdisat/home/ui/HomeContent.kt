@@ -41,7 +41,7 @@ import com.hcdisat.ui.model.entryKey
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeContent(
+internal fun HomeContent(
     homeState: DiaryState = DiaryState(),
     paddingValues: PaddingValues = PaddingValues(all = 0.dp),
     onEvent: HomeEventAction,
@@ -138,7 +138,7 @@ private fun EmptyPage(title: String, subtitle: String) {
     }
 }
 
-class HomeContentProvider : PreviewParameterProvider<DiaryScreenState> {
+private class HomeContentProvider : PreviewParameterProvider<DiaryScreenState> {
     override val values: Sequence<DiaryScreenState>
         get() = sequenceOf(
             DiaryScreenState.Loading,
@@ -149,6 +149,12 @@ class HomeContentProvider : PreviewParameterProvider<DiaryScreenState> {
 
 @Preview(showSystemUi = true)
 @Composable
-fun HomeContentPreview(@PreviewParameter(HomeContentProvider::class) diaryResult: DiaryState) {
-    HomeContent(diaryResult) {}
+internal fun HomeContentPreview(@PreviewParameter(HomeContentProvider::class) screenState: DiaryScreenState) {
+    HomeContent(
+        DiaryState(
+            diaries = listOf(),
+            galleryState = mapOf(),
+            screenState = screenState
+        )
+    ) {}
 }

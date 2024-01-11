@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-interface GetDiariesUseCase {
+internal interface GetDiariesUseCase {
     operator fun invoke(): Flow<Result<List<PresentationDiary>>>
 }
 
-class GetDiariesUseCaseImpl @Inject constructor(
+internal class GetDiariesUseCaseImpl @Inject constructor(
     private val mongoRepository: MongoRepository
 ) : GetDiariesUseCase {
     override operator fun invoke(): Flow<Result<List<PresentationDiary>>> =

@@ -5,9 +5,9 @@ import androidx.compose.runtime.Stable
 import com.hcdisat.ui.model.GalleryState
 import com.hcdisat.ui.model.PresentationDiary
 
-typealias HomeEventAction = HomeEvent.() -> Unit
+internal typealias HomeEventAction = HomeEvent.() -> Unit
 
-sealed interface HomeEvent {
+internal sealed interface HomeEvent {
     data object MenuClicked : HomeEvent
     data object Logout : HomeEvent
     data object OpenDrawer : HomeEvent
@@ -20,25 +20,25 @@ sealed interface HomeEvent {
     data class DiaryFilterEvent(val action: DiaryFilterAction) : HomeEvent
 }
 
-enum class DiaryFilterAction { AttachFilter, RemoveFilter }
+internal enum class DiaryFilterAction { AttachFilter, RemoveFilter }
 
-sealed interface DiaryScreenState {
+internal sealed interface DiaryScreenState {
     data object Loading : DiaryScreenState
     data class Error(val throwable: Throwable) : DiaryScreenState
     data class Loaded(val isFiltered: Boolean = false) : DiaryScreenState
 }
 
 @Stable
-data class DiaryState(
+internal data class DiaryState(
     val diaries: List<PresentationDiary> = listOf(),
     val galleryState: Map<String, GalleryStateData> = mapOf(),
     val screenState: DiaryScreenState = DiaryScreenState.Loading,
 )
 
 @Stable
-data class GalleryStateData(
+internal data class GalleryStateData(
     val images: List<Uri> = listOf(),
     val galleryState: GalleryState = GalleryState.Collapsed
 )
 
-val DiaryState.isFiltered get() = (screenState as? DiaryScreenState.Loaded)?.isFiltered == true
+internal val DiaryState.isFiltered get() = (screenState as? DiaryScreenState.Loaded)?.isFiltered == true
