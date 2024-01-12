@@ -5,5 +5,6 @@ object NavigationConstants {
     const val HOME_ROUTE = "home"
 
     const val WRITE_ARGUMENT = "dairyId"
-    const val WRITE_ROUTE = "write?$WRITE_ARGUMENT={$WRITE_ARGUMENT}"
+    const val EDIT_WRITE_ROUTE = "write?${WRITE_ARGUMENT}="
+    const val WRITE_ROUTE = "${EDIT_WRITE_ROUTE}={$WRITE_ARGUMENT}"
 }

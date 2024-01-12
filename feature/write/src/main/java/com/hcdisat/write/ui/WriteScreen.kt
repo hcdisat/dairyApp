@@ -33,11 +33,13 @@ import com.hcdisat.write.model.EntryScreenState
 import com.hcdisat.write.model.WriteEntryEvents
 
 @Composable
-fun WriteScreen(onBackPressed: () -> Unit) {
-    val viewModel: WriteViewModel = hiltViewModel()
-    val state by viewModel.state
-        .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
+fun WriteScreen(
+    onBackPressed: () -> Unit = {}
+) {
     val context = LocalContext.current
+    val viewModel: WriteViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
+    val sendAction = viewModel::receiveAction
 
     when (val screenState = state.screenState) {
         EntryScreenState.Loading -> LoadingContent()
@@ -46,22 +48,22 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                 when (event) {
                     WriteEntryEvents.OnBackPressed -> onBackPressed()
                     is WriteEntryEvents.OnDelete ->
-                        viewModel.receiveAction(EntryActions.DeleteEntry(event.presentationDiary))
+                        sendAction(EntryActions.DeleteEntry(event.presentationDiary))
 
                     is WriteEntryEvents.OnDescriptionChanged ->
-                        viewModel.receiveAction(EntryActions.UpdateDescription(event.newValue))
+                        sendAction(EntryActions.UpdateDescription(event.newValue))
 
                     is WriteEntryEvents.OnTitleChanged ->
-                        viewModel.receiveAction(EntryActions.UpdateTitle(event.newValue))
+                        sendAction(EntryActions.UpdateTitle(event.newValue))
 
                     is WriteEntryEvents.OnMoodChanged ->
-                        viewModel.receiveAction(EntryActions.UpdateMood(event.newValue))
+                        sendAction(EntryActions.UpdateMood(event.newValue))
 
                     is WriteEntryEvents.OnSave ->
-                        viewModel.receiveAction(EntryActions.SaveEntry(event.entry))
+                        sendAction(EntryActions.SaveEntry(event.entry))
 
                     is WriteEntryEvents.OnDateChanged ->
-                        viewModel.receiveAction(
+                        sendAction(
                             EntryActions.UpdateDate(
                                 dateInUtcMillis = event.dateInUtcMillis,
                                 diary = state.diaryEntry
@@ -69,7 +71,7 @@ fun WriteScreen(onBackPressed: () -> Unit) {
                         )
 
                     is WriteEntryEvents.OnTimeChanged ->
-                        viewModel.receiveAction(
+                        sendAction(
                             EntryActions.UpdateTime(
                                 hour = event.hour,
                                 minute = event.minute,
@@ -79,11 +81,11 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 
                     is WriteEntryEvents.OnImagesAdded -> {
                         val images = event.images.map { uri -> uri to context.getImageType(uri) }
-                        viewModel.receiveAction(EntryActions.AddImages(images))
+                        sendAction(EntryActions.AddImages(images))
                     }
 
                     is WriteEntryEvents.OnDeleteImage ->
-                        viewModel.receiveAction(EntryActions.DeleteImage(event.galleryImage))
+                        sendAction(EntryActions.DeleteImage(event.galleryImage))
                 }
             }
         }
@@ -93,13 +95,13 @@ fun WriteScreen(onBackPressed: () -> Unit) {
 
 
         EntryScreenState.Deleted -> {
-            onBackPressed()
             LocalContext.current.showMessage(R.string.diary_deleted_message)
+            onBackPressed()
         }
 
         EntryScreenState.Saved -> {
-            onBackPressed()
             LocalContext.current.showMessage(R.string.diary_added_message)
+            onBackPressed()
         }
     }
 }

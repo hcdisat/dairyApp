@@ -1,6 +1,8 @@
 package com.hcdisat.write.di
 
 import android.content.Context
+import com.hcdisat.write.WriteRoute
+import com.hcdisat.write.WriteRouteImpl
 import com.hcdisat.write.domain.usecase.DeleteDiaryUseCase
 import com.hcdisat.write.domain.usecase.DeleteDiaryUseCaseImpl
 import com.hcdisat.write.domain.usecase.DeleteImageUseCase
@@ -24,6 +26,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -69,4 +73,12 @@ class ViewModelUtilsModule {
     @Provides
     @ViewModelScoped
     fun providesResources(@ApplicationContext context: Context) = context.resources
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface WriteScreenModule {
+    @Binds
+    @Singleton
+    fun bindsWriteRoute(impl: WriteRouteImpl): WriteRoute
 }
