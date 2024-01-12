@@ -21,8 +21,10 @@ import com.hcdisat.ui.model.GalleryState
 import com.hcdisat.ui.model.PresentationDiary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -121,9 +123,10 @@ internal class HomeViewModel @Inject constructor(
         observeDiaries()
     }
 
+    @OptIn(FlowPreview::class)
     private fun observeDiaries() {
         viewModelScope.launch {
-            withContext(dispatcher) { getDiaries() }.collect { result ->
+            withContext(dispatcher) { getDiaries().debounce(1000) }.collect { result ->
                 result.fold(
                     onSuccess = { diaries ->
                         updateState {
