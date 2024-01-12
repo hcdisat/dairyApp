@@ -5,7 +5,7 @@ import com.hcdisat.ui.model.GalleryImage
 import com.hcdisat.ui.model.Mood
 import com.hcdisat.ui.model.PresentationDiary
 
-sealed interface EntryActions {
+internal sealed interface EntryActions {
     data class UpdateTitle(val newValue: String) : EntryActions
     data class UpdateDescription(val newValue: String) : EntryActions
     data class UpdateMood(val newValue: Mood) : EntryActions

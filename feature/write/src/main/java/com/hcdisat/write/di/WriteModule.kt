@@ -1,6 +1,7 @@
 package com.hcdisat.write.di
 
 import android.content.Context
+import android.content.res.Resources
 import com.hcdisat.write.WriteRoute
 import com.hcdisat.write.WriteRouteImpl
 import com.hcdisat.write.domain.usecase.DeleteDiaryUseCase
@@ -31,7 +32,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
-interface WriteModule {
+internal interface WriteModule {
     @Binds
     @ViewModelScoped
     fun bindsGetSingleDiaryUseCase(impl: GetSingleDiaryUseCaseImpl): GetSingleDiaryUseCase
@@ -69,10 +70,10 @@ interface WriteModule {
 
 @Module
 @InstallIn(ViewModelComponent::class)
-class ViewModelUtilsModule {
+internal class ViewModelUtilsModule {
     @Provides
     @ViewModelScoped
-    fun providesResources(@ApplicationContext context: Context) = context.resources
+    fun providesResources(@ApplicationContext context: Context): Resources = context.resources
 }
 
 @Module

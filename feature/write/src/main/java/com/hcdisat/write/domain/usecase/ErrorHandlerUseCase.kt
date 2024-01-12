@@ -6,11 +6,11 @@ import com.hcdisat.common.UserNotAuthenticatedException
 import com.hcdisat.core.ui.R
 import javax.inject.Inject
 
-interface ErrorHandlerUseCase {
+internal interface ErrorHandlerUseCase {
     operator fun invoke(throwable: Throwable): String
 }
 
-class ErrorHandlerUseCaseImpl @Inject constructor(
+internal class ErrorHandlerUseCaseImpl @Inject constructor(
     private val resources: Resources
 ) : ErrorHandlerUseCase {
     override fun invoke(throwable: Throwable): String {

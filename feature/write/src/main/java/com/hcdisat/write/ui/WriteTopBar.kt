@@ -35,7 +35,7 @@ import com.hcdisat.ui.components.DialogEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteTopBar(
+internal fun WriteTopBar(
     modifier: Modifier = Modifier,
     title: String,
     subtitle: String,
@@ -88,7 +88,7 @@ fun WriteTopBar(
 }
 
 @Composable
-fun DeleteDiaryAction(diaryTitle: String?, onDeleteClicked: () -> Unit) {
+internal fun DeleteDiaryAction(diaryTitle: String?, onDeleteClicked: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var confirmedDialog by remember { mutableStateOf(true) }
     val message = """
@@ -147,12 +147,12 @@ private fun WriteTopBarPreview(@PreviewParameter(WriteTopBarProvider::class) sta
     WriteTopBar(title = state.title, subtitle = state.subtitle)
 }
 
-data class WriteState(
+private data class WriteState(
     val title: String = "",
     val subtitle: String = "",
 )
 
-class WriteTopBarProvider : PreviewParameterProvider<WriteState> {
+private class WriteTopBarProvider : PreviewParameterProvider<WriteState> {
     override val values: Sequence<WriteState>
         get() = sequenceOf(
             WriteState(

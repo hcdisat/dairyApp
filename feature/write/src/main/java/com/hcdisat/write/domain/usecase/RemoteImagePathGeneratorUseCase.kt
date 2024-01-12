@@ -7,16 +7,16 @@ import com.hcdisat.ui.model.GalleryImage
 import javax.inject.Inject
 
 @JvmInline
-value class ImageData(val uri: Uri)
+internal value class ImageData(val uri: Uri)
 
 @JvmInline
-value class ImageExtension(val value: String)
+internal value class ImageExtension(val value: String)
 
-interface RemoteImagePathGeneratorUseCase {
+internal interface RemoteImagePathGeneratorUseCase {
     operator fun invoke(images: List<Pair<ImageData, ImageExtension>>): List<GalleryImage>
 }
 
-class RemoteImagePathGeneratorUseCaseImpl @Inject constructor(
+internal class RemoteImagePathGeneratorUseCaseImpl @Inject constructor(
     private val authenticationRepository: AuthenticationRepository,
 ) : RemoteImagePathGeneratorUseCase {
     override fun invoke(images: List<Pair<ImageData, ImageExtension>>): List<GalleryImage> {

@@ -5,7 +5,7 @@ import com.hcdisat.ui.model.GalleryImage
 import com.hcdisat.ui.model.Mood
 import com.hcdisat.ui.model.PresentationDiary
 
-sealed interface WriteEntryEvents {
+internal sealed interface WriteEntryEvents {
     data object OnBackPressed : WriteEntryEvents
     data class OnSave(val entry: PresentationDiary) : WriteEntryEvents
     data class OnDelete(val presentationDiary: PresentationDiary) : WriteEntryEvents

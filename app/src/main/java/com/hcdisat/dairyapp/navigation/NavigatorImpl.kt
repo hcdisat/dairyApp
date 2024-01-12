@@ -71,6 +71,6 @@ class NavigatorImpl @Inject constructor(
     }
 
     private fun NavGraphBuilder.registerWrite(navHostController: NavHostController) {
-        register(writeRoute) { navHostController.navigate(homeRoute.route) }
+        register(writeRoute) { navHostController.popBackStack() }
     }
 }

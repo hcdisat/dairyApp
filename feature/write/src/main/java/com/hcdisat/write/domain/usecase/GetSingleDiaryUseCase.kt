@@ -6,11 +6,11 @@ import com.hcdisat.write.model.DiaryEntryState
 import com.hcdisat.write.model.EntryScreenState
 import javax.inject.Inject
 
-interface GetSingleDiaryUseCase {
+internal interface GetSingleDiaryUseCase {
     suspend operator fun invoke(entryId: String): Result<DiaryEntryState>
 }
 
-class GetSingleDiaryUseCaseImpl @Inject constructor(
+internal class GetSingleDiaryUseCaseImpl @Inject constructor(
     private val mongoRepository: MongoRepository
 ) : GetSingleDiaryUseCase {
     override suspend fun invoke(entryId: String): Result<DiaryEntryState> =

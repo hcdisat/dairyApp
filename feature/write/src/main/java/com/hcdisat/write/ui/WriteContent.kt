@@ -31,6 +31,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,7 +50,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
-fun WriteContent(
+internal fun WriteContent(
     modifier: Modifier = Modifier,
     diary: PresentationDiary = PresentationDiary(),
     images: Set<GalleryImage> = setOf(),
@@ -63,6 +64,7 @@ fun WriteContent(
         val scrollState = rememberScrollState()
         val placeHolderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
         val focusManager = LocalFocusManager.current
+        val keyboardController = LocalSoftwareKeyboardController.current
         val scope = rememberCoroutineScope()
 
         val imageModalState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -159,7 +161,10 @@ fun WriteContent(
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
                     .height(54.dp),
-                onClick = { WriteEntryEvents.OnSave(diary).onEvent() },
+                onClick = {
+                    keyboardController?.hide()
+                    WriteEntryEvents.OnSave(diary).onEvent()
+                },
                 shape = Shapes().small,
                 enabled = diary.title.isNotBlank() && diary.description.isNotBlank()
             ) {

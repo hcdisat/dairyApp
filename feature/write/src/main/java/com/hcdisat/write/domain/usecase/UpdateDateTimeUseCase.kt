@@ -6,11 +6,11 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
 
-interface UpdateDateTimeUseCase {
+internal interface UpdateDateTimeUseCase {
     operator fun invoke(diaryTime: LocalDateTime, utcMillis: Long): Result<LocalDateTime>
 }
 
-class UpdateDateTimeUseCaseImpl @Inject constructor() : UpdateDateTimeUseCase {
+internal class UpdateDateTimeUseCaseImpl @Inject constructor() : UpdateDateTimeUseCase {
     override fun invoke(diaryTime: LocalDateTime, utcMillis: Long): Result<LocalDateTime> =
         runCatching {
             Instant.ofEpochMilli(utcMillis)

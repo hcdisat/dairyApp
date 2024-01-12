@@ -33,7 +33,7 @@ import com.hcdisat.write.model.EntryScreenState
 import com.hcdisat.write.model.WriteEntryEvents
 
 @Composable
-fun WriteScreen(
+internal fun WriteScreen(
     onBackPressed: () -> Unit = {}
 ) {
     val context = LocalContext.current

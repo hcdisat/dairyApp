@@ -35,7 +35,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class WriteViewModel @Inject constructor(
+internal class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val getSingleDiary: GetSingleDiaryUseCase,
