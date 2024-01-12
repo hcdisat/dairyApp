@@ -9,11 +9,17 @@ import com.hcdisat.common.settings.NavigationConstants
 import com.hcdisat.write.ui.WriteScreen
 import javax.inject.Inject
 
-interface WriteRoute : RouteApi<Unit>
+interface WriteRoute : RouteApi<Unit> {
+    fun passDiaryId(entryId: String?): String
+}
 
 class WriteRouteImpl @Inject constructor() : WriteRoute {
     override val route: String
         get() = NavigationConstants.WRITE_ROUTE
+
+    override fun passDiaryId(entryId: String?): String =
+        entryId?.let { "${NavigationConstants.EDIT_WRITE_ROUTE}=$it" }
+            ?: NavigationConstants.WRITE_ROUTE
 
     override fun register(navGraphBuilder: NavGraphBuilder, onEvent: (Unit) -> Unit) {
         navGraphBuilder.composable(

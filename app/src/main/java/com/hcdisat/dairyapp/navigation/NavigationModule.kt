@@ -9,5 +9,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface NavigationModule {
     @Binds
-    fun bindsNavigator(impl: NavigatorImpl): Navigator
+    fun bindsNavigator(impl: RouterImpl): Router
 }

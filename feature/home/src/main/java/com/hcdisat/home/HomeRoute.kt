@@ -18,8 +18,6 @@ import androidx.navigation.compose.composable
 import com.hcdisat.abstraction.navigation.RouteApi
 import com.hcdisat.abstraction.navigation.events.HomeNavigationEvent
 import com.hcdisat.common.settings.NavigationConstants
-import com.hcdisat.common.settings.NavigationConstants.EDIT_WRITE_ROUTE
-import com.hcdisat.common.settings.NavigationConstants.WRITE_ROUTE
 import com.hcdisat.home.model.DiaryFilterAction
 import com.hcdisat.home.model.HomeEvent
 import com.hcdisat.home.ui.HomeScreen
@@ -30,15 +28,10 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Inject
 
-interface HomeRoute : RouteApi<HomeNavigationEvent> {
-    fun passDiaryId(entryId: String?): String
-}
+interface HomeRoute : RouteApi<HomeNavigationEvent>
 
 class HomeRouteImpl @Inject constructor() : HomeRoute {
     override val route: String = NavigationConstants.HOME_ROUTE
-
-    override fun passDiaryId(entryId: String?): String =
-        entryId?.let { "${EDIT_WRITE_ROUTE}=$it" } ?: WRITE_ROUTE
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun register(

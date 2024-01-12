@@ -9,7 +9,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.hcdisat.abstraction.networking.SessionState
 import com.hcdisat.common.settings.NavigationConstants
-import com.hcdisat.dairyapp.navigation.Navigator
+import com.hcdisat.dairyapp.navigation.Router
 import com.hcdisat.ui.theme.DairyAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
 
     @Inject
-    lateinit var navigator: Navigator
+    lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     SessionState.LOGGED_IN -> NavigationConstants.HOME_ROUTE
                     SessionState.LOGGED_OUT -> NavigationConstants.AUTHENTICATION_ROUTE
                 }
-                navigator.SetupNavGraph(
+                router.SetupNavGraph(
                     startDestination = startDestination,
                     navHostController = navController
                 )

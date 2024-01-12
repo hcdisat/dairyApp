@@ -12,7 +12,7 @@ import com.hcdisat.home.HomeRoute
 import com.hcdisat.write.WriteRoute
 import javax.inject.Inject
 
-fun interface Navigator {
+fun interface Router {
     @Composable
     fun SetupNavGraph(
         startDestination: String,
@@ -20,11 +20,11 @@ fun interface Navigator {
     )
 }
 
-class NavigatorImpl @Inject constructor(
+class RouterImpl @Inject constructor(
     private val authRoute: AuthenticationRoute,
     private val homeRoute: HomeRoute,
     private val writeRoute: WriteRoute
-) : Navigator {
+) : Router {
     @Composable
     override fun SetupNavGraph(
         startDestination: String,
@@ -62,7 +62,7 @@ class NavigatorImpl @Inject constructor(
                     navHostController.navigate(NavigationConstants.WRITE_ROUTE)
 
                 is HomeNavigationEvent.EditEntry ->
-                    navHostController.navigate(homeRoute.passDiaryId(it.entryId))
+                    navHostController.navigate(writeRoute.passDiaryId(it.entryId))
 
                 is HomeNavigationEvent.Logout ->
                     navHostController.navigate(NavigationConstants.AUTHENTICATION_ROUTE)
