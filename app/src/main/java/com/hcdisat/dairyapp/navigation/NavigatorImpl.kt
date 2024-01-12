@@ -12,13 +12,21 @@ import com.hcdisat.home.HomeRoute
 import com.hcdisat.write.WriteRoute
 import javax.inject.Inject
 
-class Navigator @Inject constructor(
+fun interface Navigator {
+    @Composable
+    fun SetupNavGraph(
+        startDestination: String,
+        navHostController: NavHostController
+    )
+}
+
+class NavigatorImpl @Inject constructor(
     private val authRoute: AuthenticationRoute,
     private val homeRoute: HomeRoute,
     private val writeRoute: WriteRoute
-) {
+) : Navigator {
     @Composable
-    fun SetupNavGraph(
+    override fun SetupNavGraph(
         startDestination: String,
         navHostController: NavHostController
     ) {
@@ -66,33 +74,3 @@ class Navigator @Inject constructor(
         register(writeRoute) { navHostController.navigate(homeRoute.route) }
     }
 }
-
-//@Composable
-//fun SetupNavGraph(startDestination: Screen, navHostController: NavHostController) {
-//    NavHost(navController = navHostController, startDestination = startDestination.route) {
-//        registerWrite { navHostController.popBackStack() }
-//        //authentication { navHostController.navigate(Screen.Home.route) }
-////        home(
-////            onAddNewEntry = {
-////                navHostController.navigate(Screen.Write.route)
-////            },
-////            onEditEntry = {
-////                navHostController.navigate(Screen.Write.passDiaryId(it))
-////            },
-////            onLoggedOut = { navHostController.navigate(Screen.Authentication.route) }
-////        )
-//    }
-//}
-
-//fun NavGraphBuilder.registerWrite(onBackPressed: () -> Unit) {
-//    composable(
-//        route = Screen.Write.route,
-//        arguments = listOf(navArgument(name = NavigationConstants.WRITE_ARGUMENT) {
-//            type = NavType.StringType
-//            nullable = true
-//            defaultValue = null
-//        })
-//    ) {
-//        WriteScreen(onBackPressed = onBackPressed)
-//    }
-//}
