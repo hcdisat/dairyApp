@@ -1,5 +1,6 @@
 [versions]
 kotlin = "1.9.0"
+ksp = "1.9.0-1.0.13"
 core-ktx = "1.12.0"
 lifecycle-runtime = "2.6.2"
 activity-compose = "1.8.1"
@@ -22,9 +23,7 @@ one-tap-compose = "1.0.9"
 agp = "8.2.0"
 android-library = "7.3.1"
 appcompat = "1.6.1"
-material = "1.11.0"
 compose-bom = "2023.08.00"
-inject = "1"
 googleServices = "4.4.0"
 com-google-android-material-material = "1.11.0"
 
@@ -56,13 +55,11 @@ realm-base = { module = "io.realm.kotlin:library-base", version.ref = "realm" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
-javaxInject = { module = "javax.inject:javax.inject", version.ref = "inject" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 messageBarCompose = { module = "com.github.stevdza-san:MessageBarCompose", version.ref = "message-bar-compose" }
 oneTapCompose = { module = "com.github.stevdza-san:OneTapCompose", version.ref = "one-tap-compose" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-material = { group = "com.google.android.material", name = "material", version.ref = "com-google-android-material-material" }
 
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "android-library" }
@@ -70,3 +67,5 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidApp = { id = "com.android.application", version.ref = "agp" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 realm = { id = "io.realm.kotlin", version.ref = "realm" }
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

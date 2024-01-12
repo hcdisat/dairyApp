@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.androidApp)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.googleServices)
-    id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.realm)
 }
 
@@ -79,7 +79,7 @@ dependencies {
     // dagger-hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // tests
     testImplementation(libs.junit)
