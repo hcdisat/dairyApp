@@ -44,7 +44,6 @@ internal class HomeViewModel @Inject constructor(
 
     private var networkState by mutableStateOf(ConnectivityStatus.UNAVAILABLE)
 
-
     init {
         observeDiaries()
         viewModelScope.launch {
